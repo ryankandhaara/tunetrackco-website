@@ -11,11 +11,36 @@ echo ""
 git status
 
 echo ""
-read -p "Commit message: " MESSAGE
+echo "Pilih jenis update:"
+echo ""
+echo "  1)  Fix UI / UX"
+echo "  2)  New Section"
+echo "  3)  Add Product"
+echo "  4)  Fix Database"
+echo ""
 
-if [ -z "$MESSAGE" ]; then
-    MESSAGE="update website"
-fi
+read -p "Pilih [1-4]: " CHOICE
+
+case $CHOICE in
+    1)
+        MESSAGE="fix ui ux"
+        ;;
+    2)
+        MESSAGE="new section"
+        ;;
+    3)
+        MESSAGE="add product"
+        ;;
+    4)
+        MESSAGE="fix database"
+        ;;
+    *)
+        echo ""
+        echo "❌ Pilihan tidak valid."
+        read -p "Press Enter to close..."
+        exit 1
+        ;;
+esac
 
 echo ""
 echo "Adding files..."
