@@ -6,7 +6,7 @@ const products = [
     "category": [
       "worship"
     ],
-    "image": "assets/thumbnail/dia sanggup.jpg",
+    "image": "assets/images/thumbnail/dia sanggup.jpg",
     "link": "exclusive.html",
     "youtube": "",
     "exclusive": true,
@@ -19,7 +19,7 @@ const products = [
     "category": [
       "worship"
     ],
-    "image": "assets/thumbnail/02_Yesus-Raja-JPCC.jpg",
+    "image": "assets/images/thumbnail/02_Yesus-Raja-JPCC.jpg",
     "link": "exclusive.html",
     "youtube": "",
     "exclusive": true,
@@ -32,7 +32,20 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/003_HIS-LIFE-Christmas-Medley.jpg",
+    "image": "assets/images/thumbnail/003_HIS-LIFE-Christmas-Medley.jpg",
+    "link": "exclusive.html",
+    "youtube": "",
+    "exclusive": true,
+    "exclusivePage": "exclusive.html"
+  },
+  {
+    "title": "NOEL med. Gloria",
+    "artist": "Various Artist",
+    "price": "Exclusive Item",
+    "category": [
+      "praise"
+    ],
+    "image": "assets/images/thumbnail/005_NOEL-med-Gloria.jpg",
     "link": "exclusive.html",
     "youtube": "",
     "exclusive": true,
@@ -45,24 +58,11 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/004_Sambutlah-Dia.jpg",
-    "myprod-thumb": "assets/thumbnail/004_Sambutlah-Dia.jpg",
+    "image": "assets/images/thumbnail/004_Sambutlah-Dia.jpg",
+    "myprod-thumb": "assets/images/thumbnail/004_Sambutlah-Dia.jpg",
     "link": "exclusive.html",
     "drive-link": "",
     "youtube": "https://www.youtube.com/watch?v=evAdnJ1CGl4",
-    "exclusive": true,
-    "exclusivePage": "exclusive.html"
-  },
-  {
-    "title": "NOEL med. Gloria",
-    "artist": "Various Artist",
-    "price": "Exclusive Item",
-    "category": [
-      "praise"
-    ],
-    "image": "assets/thumbnail/005_NOEL-med-Gloria.jpg",
-    "link": "exclusive.html",
-    "youtube": "",
     "exclusive": true,
     "exclusivePage": "exclusive.html"
   },
@@ -73,7 +73,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/006_Allah-Sanggup-GKDI-Concert.jpg",
+    "image": "assets/images/thumbnail/006_Allah-Sanggup-GKDI-Concert.jpg",
     "link": "exclusive.html",
     "youtube": "",
     "exclusive": true,
@@ -86,7 +86,7 @@ const products = [
     "category": [
       "worship"
     ],
-    "image": "assets/thumbnail/fajar terangi dunia.jpg",
+    "image": "assets/images/thumbnail/fajar terangi dunia.jpg",
     "link": "http://lynk.id/gudangsequencer/43dpxgq5g8ox",
     "youtube": "8VMIEMFqCbk",
     "imageCredit": "Assets of Steve Tabalujan & Friends",
@@ -101,8 +101,8 @@ const products = [
       "worship",
       "freebies"
     ],
-    "image": "assets/thumbnail/008_Yang-Terutama.jpg",
-    "myprod-thumb": "assets/thumbnail/008_Yang-Terutama.jpg",
+    "image": "assets/images/thumbnail/008_Yang-Terutama.jpg",
+    "myprod-thumb": "assets/images/thumbnail/008_Yang-Terutama.jpg",
     "link": "pg-yangterutamasw2.html",
     "drive-link": "",
     "youtube": "",
@@ -116,8 +116,8 @@ const products = [
       "praise",
       "freebies"
     ],
-    "image": "assets/thumbnail/planetshaker.jpg",
-    "myprod-thumb": "assets/thumbnail/planetshaker.jpg",
+    "image": "assets/images/thumbnail/planetshaker.jpg",
+    "myprod-thumb": "assets/images/thumbnail/planetshaker.jpg",
     "link": "https://lynk.id/gudangsequencer/kld9dpk4gp79",
     "drive-link": "",
     "youtube": "https://www.youtube.com/watch?v=AX_9JU4VEY8"
@@ -129,7 +129,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/010_Puji-dia-Yesus-Sukacitaku.jpg",
+    "image": "assets/images/thumbnail/010_Puji-dia-Yesus-Sukacitaku.jpg",
     "link": "https://lynk.id/gudangsequencer/4vrx9x4v1lv9",
     "youtube": ""
   },
@@ -141,8 +141,8 @@ const products = [
       "praise",
       "freebies"
     ],
-    "image": "assets/thumbnail/penulis hidupku.jpg",
-    "myprod-thumb": "assets/thumbnail/penulis hidupku.jpg",
+    "image": "assets/images/thumbnail/penulis hidupku.jpg",
+    "myprod-thumb": "assets/images/thumbnail/penulis hidupku.jpg",
     "link": "pg-penulishidupku.html",
     "drive-link": "",
     "youtube": ""
@@ -155,7 +155,7 @@ const products = [
       "praise",
       "freebies"
     ],
-    "image": "assets/thumbnail/this is living.jpg",
+    "image": "assets/images/thumbnail/this is living.jpg",
     "link": "https://lynk.id/gudangsequencer/zy845zp59d8g",
     "youtube": "https://www.youtube.com/watch?v=vWOt21Gbjkk"
   },
@@ -166,7 +166,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/013_Yesus-Kumenyembahmu.jpg",
+    "image": "assets/images/thumbnail/013_Yesus-Kumenyembahmu.jpg",
     "link": "https://lynk.id/gudangsequencer/43dpxgq5g8ox",
     "youtube": "https://www.youtube.com/watch?v=B21Vo4dePno"
   },
@@ -178,8 +178,8 @@ const products = [
       "praise",
       "freebies"
     ],
-    "image": "assets/thumbnail/nothing is impossible.jpg",
-    "myprod-thumb": "assets/thumbnail/nothing is impossible.jpg",
+    "image": "assets/images/thumbnail/nothing is impossible.jpg",
+    "myprod-thumb": "assets/images/thumbnail/nothing is impossible.jpg",
     "link": "https://lynk.id/gudangsequencer/k2l48wg2317o",
     "drive-link": "",
     "youtube": "https://www.youtube.com/watch?v=uRvnYO50Dg8"
@@ -192,7 +192,7 @@ const products = [
       "praise",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/015_Lebih-dari-Pemenang-2026.jpg",
+    "image": "assets/images/thumbnail/015_Lebih-dari-Pemenang-2026.jpg",
     "link": "https://lynk.id/gudangsequencer/8dv8w2kyl3kd",
     "youtube": "https://www.youtube.com/watch?v=9rxBhGfH_ss",
     "imageCredit": "Assets of Symphony Worship"
@@ -204,7 +204,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/016_Allah-Sanggup.jpg",
+    "image": "assets/images/thumbnail/016_Allah-Sanggup.jpg",
     "link": "https://lynk.id/gudangsequencer/w08zo73m7y7z",
     "youtube": "https://www.youtube.com/watch?v=anrvF7cCHrI"
   },
@@ -215,7 +215,7 @@ const products = [
     "category": [
       "worship"
     ],
-    "image": "assets/thumbnail/017_Sperti-Bapa-Sayang-Anaknya.jpg",
+    "image": "assets/images/thumbnail/017_Sperti-Bapa-Sayang-Anaknya.jpg",
     "link": "https://lynk.id/gudangsequencer/olm3qd20r82y",
     "youtube": "https://www.youtube.com/watch?v=uEVEO4Nu5iU"
   },
@@ -227,7 +227,7 @@ const products = [
       "praise",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/018_Mari-Menari-2-0.jpg",
+    "image": "assets/images/thumbnail/018_Mari-Menari-2-0.jpg",
     "link": "https://lynk.id/gudangsequencer/gw6onoo5meng",
     "youtube": "https://www.youtube.com/watch?v=-hl-HCpqr3I"
   },
@@ -238,7 +238,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/019_Api-Pantekosta-Medley.jpg",
+    "image": "assets/images/thumbnail/019_Api-Pantekosta-Medley.jpg",
     "link": "https://lynk.id/gudangsequencer/m07l2dmr83n6",
     "youtube": "https://www.youtube.com/watch?v=NzUfqjbt-m0"
   },
@@ -249,7 +249,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/020_Kecaplah-dan-Lihatlah.jpg",
+    "image": "assets/images/thumbnail/020_Kecaplah-dan-Lihatlah.jpg",
     "link": "https://lynk.id/gudangsequencer/e5ke29g86jxd",
     "youtube": "https://www.youtube.com/watch?v=t3QKjMOMAas"
   },
@@ -260,8 +260,8 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/021_Bukti-Kasihmu.jpg",
-    "myprod-thumb": "assets/thumbnail/021_Bukti-Kasihmu.jpg",
+    "image": "assets/images/thumbnail/021_Bukti-Kasihmu.jpg",
+    "myprod-thumb": "assets/images/thumbnail/021_Bukti-Kasihmu.jpg",
     "link": "https://lynk.id/gudangsequencer/49zn00oe0207",
     "drive-link": "",
     "youtube": "https://www.youtube.com/watch?v=6zy1qXeNXSc"
@@ -274,8 +274,8 @@ const products = [
       "worship",
       "freebies"
     ],
-    "image": "assets/thumbnail/022_Trima-kasih-Tuhan.jpg",
-    "myprod-thumb": "assets/thumbnail/022_Trima-kasih-Tuhan.jpg",
+    "image": "assets/images/thumbnail/022_Trima-kasih-Tuhan.jpg",
+    "myprod-thumb": "assets/images/thumbnail/022_Trima-kasih-Tuhan.jpg",
     "link": "https://lynk.id/gudangsequencer/okx7yo67kwjo",
     "drive-link": "",
     "youtube": "https://www.youtube.com/watch?v=T97RUz3B_FM"
@@ -288,8 +288,8 @@ const products = [
       "freebies",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/023_Tiap-Langkahku.jpg",
-    "myprod-thumb": "assets/thumbnail/023_Tiap-Langkahku.jpg",
+    "image": "assets/images/thumbnail/023_Tiap-Langkahku.jpg",
+    "myprod-thumb": "assets/images/thumbnail/023_Tiap-Langkahku.jpg",
     "link": "https://lynk.id/gudangsequencer/210x2gjnokle",
     "drive-link": "",
     "youtube": ""
@@ -301,7 +301,7 @@ const products = [
     "category": [
       "rearrangement"
     ],
-    "image": "assets/thumbnail/allah kita heran dan besar gospel project.jpg",
+    "image": "assets/images/thumbnail/allah kita heran dan besar gospel project.jpg",
     "link": "https://lynk.id/gudangsequencer/3v9kv95403qo",
     "youtube": ""
   },
@@ -312,8 +312,8 @@ const products = [
     "category": [
       "rearrangement"
     ],
-    "image": "assets/thumbnail/allah sumber kuatku gospel project.jpg",
-    "myprod-thumb": "assets/thumbnail/allah sumber kuatku gospel project.jpg",
+    "image": "assets/images/thumbnail/allah sumber kuatku gospel project.jpg",
+    "myprod-thumb": "assets/images/thumbnail/allah sumber kuatku gospel project.jpg",
     "link": "https://lynk.id/gudangsequencer/jn0p6yd769rm",
     "drive-link": "",
     "youtube": ""
@@ -325,7 +325,7 @@ const products = [
     "category": [
       "rearrangement"
     ],
-    "image": "assets/thumbnail/026_Friend-of-God-Arr.jpg",
+    "image": "assets/images/thumbnail/026_Friend-of-God-Arr.jpg",
     "link": "https://lynk.id/gudangsequencer/oykp3mvv9mwd",
     "youtube": "https://www.youtube.com/watch?v=_4fPtZ1SMhI"
   },
@@ -337,7 +337,7 @@ const products = [
       "praise",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/planetshaker.jpg",
+    "image": "assets/images/thumbnail/planetshaker.jpg",
     "link": "https://lynk.id/gudangsequencer/oykp3mvv9mwd",
     "youtube": "https://www.youtube.com/watch?v=p70yhv3bxz4"
   },
@@ -349,7 +349,7 @@ const products = [
       "praise",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/028_NOEL.jpg",
+    "image": "assets/images/thumbnail/028_NOEL.jpg",
     "link": "https://lynk.id/gudangsequencer/mryvlqgjw772",
     "youtube": "https://www.youtube.com/watch?v=16psPH-ZiJc"
   },
@@ -361,7 +361,7 @@ const products = [
       "praise",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/029_Joy-to-the-World-2017.jpg",
+    "image": "assets/images/thumbnail/029_Joy-to-the-World-2017.jpg",
     "link": "https://lynk.id/gudangsequencer/wmpg0404o2jv",
     "youtube": "https://www.youtube.com/watch?v=6Fhb8_Ccytk"
   },
@@ -373,7 +373,7 @@ const products = [
       "praise",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/030_O-Holy-Night.jpg",
+    "image": "assets/images/thumbnail/030_O-Holy-Night.jpg",
     "link": "https://lynk.id/gudangsequencer/1rzjn7n8edx2",
     "youtube": "https://www.youtube.com/watch?v=ycdlT8vn1HA"
   },
@@ -385,7 +385,7 @@ const products = [
       "praise",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/031_Silent-Night.jpg",
+    "image": "assets/images/thumbnail/031_Silent-Night.jpg",
     "link": "https://lynk.id/gudangsequencer/1rzjn7n8edx2",
     "youtube": "https://www.youtube.com/watch?v=ycdlT8vn1HA"
   },
@@ -397,7 +397,7 @@ const products = [
       "praise",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/032_Angels-We-Have-Heard-On-High.jpg",
+    "image": "assets/images/thumbnail/032_Angels-We-Have-Heard-On-High.jpg",
     "link": "https://lynk.id/gudangsequencer/n3r1k444dr3n",
     "youtube": "https://www.youtube.com/watch?v=npmCb4yhJjw"
   },
@@ -409,7 +409,7 @@ const products = [
       "praise",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/planetshaker.jpg",
+    "image": "assets/images/thumbnail/planetshaker.jpg",
     "link": "https://lynk.id/gudangsequencer/okn2roo0ojg1",
     "youtube": "https://www.youtube.com/watch?v=b831MMtXdaw"
   },
@@ -421,7 +421,7 @@ const products = [
       "praise",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/its christmas.jpg",
+    "image": "assets/images/thumbnail/its christmas.jpg",
     "link": "https://lynk.id/gudangsequencer/vdngnrgkjkk1",
     "youtube": "https://www.youtube.com/watch?v=_SDgCQh74-w"
   },
@@ -432,7 +432,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/elevation worship 2.jpg",
+    "image": "assets/images/thumbnail/elevation worship 2.jpg",
     "link": "https://lynk.id/gudangsequencer/6z1lyz9j4k12",
     "youtube": "https://www.youtube.com/watch?v=U0n1__DcfAI"
   },
@@ -443,7 +443,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/planetshaker.jpg",
+    "image": "assets/images/thumbnail/planetshaker.jpg",
     "link": "https://lynk.id/gudangsequencer/woqlqdkedrzp",
     "youtube": ""
   },
@@ -454,7 +454,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/037_Praise-Opening.jpg",
+    "image": "assets/images/thumbnail/037_Praise-Opening.jpg",
     "link": "https://lynk.id/gudangsequencer/21lklwv7yg6l",
     "youtube": "https://www.youtube.com/watch?v=asV-MhzSDYY"
   },
@@ -465,7 +465,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/in jesus name asia.jpg",
+    "image": "assets/images/thumbnail/in jesus name asia.jpg",
     "link": "https://lynk.id/gudangsequencer/523vkzqj9m9y",
     "youtube": "https://www.youtube.com/watch?v=1ll4EqvxvDk"
   },
@@ -477,7 +477,7 @@ const products = [
       "praise",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/039_This-is-the-Day-Reimagined.jpg",
+    "image": "assets/images/thumbnail/039_This-is-the-Day-Reimagined.jpg",
     "link": "https://lynk.id/gudangsequencer/nyxyzxqkpop4",
     "youtube": ""
   },
@@ -488,7 +488,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/planetshaker.jpg",
+    "image": "assets/images/thumbnail/planetshaker.jpg",
     "link": "https://lynk.id/gudangsequencer/9kqon61317me",
     "youtube": "https://www.youtube.com/watch?v=P56B3_nYYuM"
   },
@@ -499,7 +499,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/041_Real-Love-HXL-25.jpg",
+    "image": "assets/images/thumbnail/041_Real-Love-HXL-25.jpg",
     "link": "https://lynk.id/gudangsequencer/x9rv4o160kp0",
     "youtube": "https://www.youtube.com/watch?v=6y73U5KwPKU"
   },
@@ -510,7 +510,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/elevation worship 2.jpg",
+    "image": "assets/images/thumbnail/elevation worship 2.jpg",
     "link": "https://lynk.id/gudangsequencer/l9w339mkkzy3",
     "youtube": "https://www.youtube.com/watch?v=U0n1__DcfAI"
   },
@@ -521,7 +521,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/043_Fill-the-Room.jpg",
+    "image": "assets/images/thumbnail/043_Fill-the-Room.jpg",
     "link": "https://lynk.id/gudangsequencer/wxv3d8lmk9y1",
     "youtube": "https://www.youtube.com/watch?v=v0XYCvjMxCM"
   },
@@ -532,7 +532,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/044_Now-Aint-that-Something.jpg",
+    "image": "assets/images/thumbnail/044_Now-Aint-that-Something.jpg",
     "link": "https://lynk.id/gudangsequencer/j6p02601zn32",
     "youtube": "https://www.youtube.com/watch?v=jwD0jRME674"
   },
@@ -543,7 +543,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/045_Goodbye-Yesterday.jpg",
+    "image": "assets/images/thumbnail/045_Goodbye-Yesterday.jpg",
     "link": "https://lynk.id/gudangsequencer/qe85oo2xz88l",
     "youtube": "https://www.youtube.com/watch?v=1qjOJP2qyeE"
   },
@@ -554,7 +554,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/this is living.jpg",
+    "image": "assets/images/thumbnail/this is living.jpg",
     "link": "https://lynk.id/gudangsequencer/qe85oo2xz88l",
     "youtube": "https://www.youtube.com/watch?v=Uf01L4lsetM"
   },
@@ -565,7 +565,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/047_O-Come-Medley-Carol-of-The-Bells.jpg",
+    "image": "assets/images/thumbnail/047_O-Come-Medley-Carol-of-The-Bells.jpg",
     "link": "https://lynk.id/gudangsequencer/k67pqnk1xd1j",
     "youtube": "https://www.youtube.com/watch?v=f2M9YjNKSMc"
   },
@@ -576,7 +576,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/048_In-Jesus-Name-Darlene.jpg",
+    "image": "assets/images/thumbnail/048_In-Jesus-Name-Darlene.jpg",
     "link": "https://lynk.id/gudangsequencer/592pl7k9qm8r",
     "youtube": "https://www.youtube.com/watch?v=1ll4EqvxvDk"
   },
@@ -587,7 +587,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/049_I-Speak-Jesus.jpg",
+    "image": "assets/images/thumbnail/049_I-Speak-Jesus.jpg",
     "link": "https://lynk.id/gudangsequencer/o4xzq3zdg36w",
     "youtube": "https://www.youtube.com/watch?v=2G4QoUhy2Ac"
   },
@@ -598,7 +598,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/lakewood.jpg",
+    "image": "assets/images/thumbnail/lakewood.jpg",
     "link": "https://lynk.id/gudangsequencer/3417ervkxq64",
     "youtube": "https://www.youtube.com/watch?v=XG7NnClqymE"
   },
@@ -609,7 +609,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/051_You-Are-Good-in-LA.jpg",
+    "image": "assets/images/thumbnail/051_You-Are-Good-in-LA.jpg",
     "link": "https://lynk.id/gudangsequencer/9248oz68oz1z",
     "youtube": "https://www.youtube.com/watch?v=40FwQ03nkPg"
   },
@@ -620,7 +620,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/052_You-Are-Good-Original.jpg",
+    "image": "assets/images/thumbnail/052_You-Are-Good-Original.jpg",
     "link": "https://lynk.id/gudangsequencer/9248oz68oz1z",
     "youtube": "https://www.youtube.com/watch?v=-hl-HCpqr3I"
   },
@@ -631,7 +631,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/053_Impossible-Possible.jpg",
+    "image": "assets/images/thumbnail/053_Impossible-Possible.jpg",
     "link": "https://lynk.id/gudangsequencer/q20wwz5p6kpv",
     "youtube": "https://www.youtube.com/watch?v=rsnpOg0elQQ"
   },
@@ -642,7 +642,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/echo elevation.jpg",
+    "image": "assets/images/thumbnail/echo elevation.jpg",
     "link": "https://lynk.id/gudangsequencer/r054qee22vrz",
     "youtube": "https://www.youtube.com/watch?v=uCpk8AEwMV4"
   },
@@ -653,7 +653,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/055_In-Jesus-Name-DOE.jpg",
+    "image": "assets/images/thumbnail/055_In-Jesus-Name-DOE.jpg",
     "link": "https://lynk.id/gudangsequencer/36v97ozy1n7x",
     "youtube": "https://www.youtube.com/watch?v=RFk-1ZBvJco"
   },
@@ -664,7 +664,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/kamsahamnida.jpg",
+    "image": "assets/images/thumbnail/kamsahamnida.jpg",
     "link": "https://lynk.id/gudangsequencer/0nv6vwezvy75",
     "youtube": "https://www.youtube.com/watch?v=4jiSNvl2rFs"
   },
@@ -675,7 +675,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/057_This-is-our-Time.jpg",
+    "image": "assets/images/thumbnail/057_This-is-our-Time.jpg",
     "link": "https://lynk.id/gudangsequencer/0v3m7n37r606",
     "youtube": "https://www.youtube.com/watch?v=MeP4C6XOwNo"
   },
@@ -686,7 +686,7 @@ const products = [
     "category": [
       "worship"
     ],
-    "image": "assets/thumbnail/058_Trust-in-God.jpg",
+    "image": "assets/images/thumbnail/058_Trust-in-God.jpg",
     "link": "https://lynk.id/gudangsequencer/32jn4zewe1n3",
     "youtube": "https://www.youtube.com/watch?v=-vSvhs8vmtA"
   },
@@ -697,7 +697,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/059_Terangmu.jpg",
+    "image": "assets/images/thumbnail/059_Terangmu.jpg",
     "link": "https://lynk.id/gudangsequencer/d3rgvnx61v3m",
     "youtube": "https://www.youtube.com/watch?v=FBT6IhDIvvc"
   },
@@ -708,7 +708,7 @@ const products = [
     "category": [
       "worship"
     ],
-    "image": "assets/thumbnail/060_Selidiki-Aku.jpg",
+    "image": "assets/images/thumbnail/060_Selidiki-Aku.jpg",
     "link": "https://lynk.id/gudangsequencer/3o3z826jojwr",
     "youtube": "https://www.youtube.com/watch?v=UY6Bl9rfYWs"
   },
@@ -719,7 +719,7 @@ const products = [
     "category": [
       "worship"
     ],
-    "image": "assets/thumbnail/061_Nyata-Sempurna.jpg",
+    "image": "assets/images/thumbnail/061_Nyata-Sempurna.jpg",
     "link": "https://lynk.id/gudangsequencer/ovro6541or6g",
     "youtube": "https://www.youtube.com/watch?v=hXEh9H2rqUk"
   },
@@ -730,7 +730,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/hari terbaik.jpg",
+    "image": "assets/images/thumbnail/hari terbaik.jpg",
     "link": "https://lynk.id/gudangsequencer/p5xjj25e22g1",
     "youtube": "https://www.youtube.com/watch?v=cXbOneetRg4"
   },
@@ -741,7 +741,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/bangkit dan puji dia.jpg",
+    "image": "assets/images/thumbnail/bangkit dan puji dia.jpg",
     "link": "https://lynk.id/gudangsequencer/zkddzxk1xwk9",
     "youtube": "https://www.youtube.com/watch?v=cOL_k5rF0k8"
   },
@@ -752,7 +752,7 @@ const products = [
     "category": [
       "worship"
     ],
-    "image": "assets/thumbnail/ndc worship.jpg",
+    "image": "assets/images/thumbnail/ndc worship.jpg",
     "link": "https://lynk.id/gudangsequencer/rp2x7v3v652p",
     "youtube": "https://www.youtube.com/watch?v=sCT7BUfys3c"
   },
@@ -763,7 +763,7 @@ const products = [
     "category": [
       "worship"
     ],
-    "image": "assets/thumbnail/065_Raja-atas-Sgalanya.jpg",
+    "image": "assets/images/thumbnail/065_Raja-atas-Sgalanya.jpg",
     "link": "https://lynk.id/gudangsequencer/mwjr892o57lk",
     "youtube": "https://www.youtube.com/watch?v=Hu-abx9EvkE"
   },
@@ -774,7 +774,7 @@ const products = [
     "category": [
       "worship"
     ],
-    "image": "assets/thumbnail/066_Sejarah-Hidupku.jpg",
+    "image": "assets/images/thumbnail/066_Sejarah-Hidupku.jpg",
     "link": "https://lynk.id/gudangsequencer/v5wwqmno7n72",
     "youtube": "https://www.youtube.com/watch?v=5X1osyPwl1E"
   },
@@ -786,8 +786,8 @@ const products = [
       "praise",
       "freebies"
     ],
-    "image": "assets/thumbnail/elevation worship 2.jpg",
-    "myprod-thumb": "assets/thumbnail/elevation worship 2.jpg",
+    "image": "assets/images/thumbnail/elevation worship 2.jpg",
+    "myprod-thumb": "assets/images/thumbnail/elevation worship 2.jpg",
     "link": "https://lynk.id/gudangsequencer/nk89qpwwd06n",
     "drive-link": "https://drive.google.com/drive/folders/1ocbPybyfMwEb0spqovbvImOwZTb1kK5C?usp=sharing",
     "youtube": "https://www.youtube.com/watch?v=b01nYd3Lv14"
@@ -799,7 +799,7 @@ const products = [
     "category": [
       "worship"
     ],
-    "image": "assets/thumbnail/068_Bukti-Kasihmu-NDC.jpg",
+    "image": "assets/images/thumbnail/068_Bukti-Kasihmu-NDC.jpg",
     "link": "https://lynk.id/gudangsequencer/pq0l8or7m184",
     "youtube": "https://www.youtube.com/watch?v=oIoyodPbsqc"
   },
@@ -810,7 +810,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/bestindo music.jpg",
+    "image": "assets/images/thumbnail/bestindo music.jpg",
     "link": "https://lynk.id/gudangsequencer/nywv21v0k6x8",
     "youtube": "https://www.youtube.com/watch?v=tEgeFrkJOv0"
   },
@@ -821,7 +821,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/02_Yesus-Raja-JPCC.jpg",
+    "image": "assets/images/thumbnail/02_Yesus-Raja-JPCC.jpg",
     "link": "https://lynk.id/gudangsequencer/g4yl32on4kod",
     "youtube": "https://www.youtube.com/watch?v=7cGejz0xUIE"
   },
@@ -832,7 +832,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/071_Satu-Persembahan.jpg",
+    "image": "assets/images/thumbnail/071_Satu-Persembahan.jpg",
     "link": "https://lynk.id/gudangsequencer/vrdn2qwpr515",
     "youtube": "https://www.youtube.com/watch?v=DdzOXzUvR-g"
   },
@@ -843,7 +843,7 @@ const products = [
     "category": [
       "praise"
     ],
-    "image": "assets/thumbnail/kuteringat.jpg",
+    "image": "assets/images/thumbnail/kuteringat.jpg",
     "link": "https://lynk.id/gudangsequencer/6qk6ldgroy1g",
     "youtube": "https://www.youtube.com/watch?v=dZ9uosoi-Pk"
   },
@@ -855,7 +855,7 @@ const products = [
       "praise",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/073_Dia-Raja-WN.jpg",
+    "image": "assets/images/thumbnail/073_Dia-Raja-WN.jpg",
     "link": "https://lynk.id/gudangsequencer/pr4211y82ye2",
     "youtube": "https://www.youtube.com/watch?v=O9fCbsDVkhU"
   },
@@ -867,8 +867,8 @@ const products = [
       "praise",
       "freebies"
     ],
-    "image": "assets/thumbnail/074_Praise.jpg",
-    "myprod-thumb": "assets/thumbnail/074_Praise.jpg",
+    "image": "assets/images/thumbnail/074_Praise.jpg",
+    "myprod-thumb": "assets/images/thumbnail/074_Praise.jpg",
     "link": "https://lynk.id/gudangsequencer/1o35kj6v9jm3",
     "drive-link": "",
     "youtube": "https://www.youtube.com/watch?v=O9fCbsDVkhU"
@@ -881,7 +881,7 @@ const products = [
       "praise",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/075_Aku-Diberkati-2025-Remix.jpg",
+    "image": "assets/images/thumbnail/075_Aku-Diberkati-2025-Remix.jpg",
     "link": "https://lynk.id/gudangsequencer/lj309y3vnpvd",
     "youtube": "https://www.youtube.com/watch?v=Kl-cyDe4IZ8"
   },
@@ -893,7 +893,7 @@ const products = [
       "praise",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/076_Nyalakan-Apimu.jpg",
+    "image": "assets/images/thumbnail/076_Nyalakan-Apimu.jpg",
     "link": "https://lynk.id/gudangsequencer/vp0xlye26vjk",
     "youtube": "https://www.youtube.com/watch?v=jAeh7dFrJtQ"
   },
@@ -905,7 +905,7 @@ const products = [
       "praise",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/077_Kunaikkan-Syukurku-2025.jpg",
+    "image": "assets/images/thumbnail/077_Kunaikkan-Syukurku-2025.jpg",
     "link": "https://lynk.id/gudangsequencer/lwelm3rlddgk",
     "youtube": ""
   },
@@ -917,7 +917,7 @@ const products = [
       "praise",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/078_Dari-Pulau-Gita-Sorga.jpg",
+    "image": "assets/images/thumbnail/078_Dari-Pulau-Gita-Sorga.jpg",
     "link": "https://lynk.id/gudangsequencer/vkvoex2704zq",
     "youtube": "https://www.youtube.com/watch?v=mvLgfT6osAY"
   },
@@ -929,7 +929,7 @@ const products = [
       "praise",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/079_Ajaib-kau-Tuhan.jpg",
+    "image": "assets/images/thumbnail/079_Ajaib-kau-Tuhan.jpg",
     "link": "https://lynk.id/gudangsequencer/0vdrz2krz9rn",
     "youtube": "https://www.youtube.com/watch?v=gWkFx5drzLU"
   },
@@ -941,7 +941,7 @@ const products = [
       "praise",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/080_Endless-Praise.jpg",
+    "image": "assets/images/thumbnail/080_Endless-Praise.jpg",
     "link": "https://lynk.id/gudangsequencer/p1d6okxxd054",
     "youtube": "https://www.youtube.com/watch?v=KxjMZ87WWKY"
   },
@@ -953,21 +953,17 @@ const products = [
       "praise",
       "rearrangement"
     ],
-    "image": "assets/thumbnail/081_Oleh-Darah-Anak-Domba.jpg",
+    "image": "assets/images/thumbnail/081_Oleh-Darah-Anak-Domba.jpg",
     "link": "https://lynk.id/gudangsequencer/l20mv78q6y56",
     "youtube": "https://www.youtube.com/watch?v=k7gZphY-Cvg"
   }
 ];
 
-
-
 if (typeof module !== "undefined") {
-
   module.exports = products;
-
 }
 
-
-
 // Dashboard bridge
-window.TuneTrackCatalog = products;
+if (typeof window !== "undefined") {
+  window.TuneTrackCatalog = products;
+}
