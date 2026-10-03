@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuneTrack - Workspace</title>
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+
+    <!-- GSAP for Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+        <script src="assets/js/gsap-register.js"></script>
+
+    <!-- Preload Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- 
+      Note: Akira Extended is expected to be loaded locally via CSS 
+      @font-face if it's a custom font file.
+    -->
+
+        <link rel="stylesheet" href="assets/css/firebase-auth-guard-style.css">
+
+        <link rel="stylesheet" href="assets/css/tt-home-icon-fix.css">
+
+
+        <link rel="stylesheet" href="assets/css/tt-avatar-settings-fix.css">
+        <link rel="stylesheet" href="assets/css/tt-avatar-spacing-only.css">
+
+
+
+        <link rel="stylesheet" href="assets/css/tt-settings-security-ui.css">
+
+
+<style id="TT-OWNED-PRODUCTS-TYPOGRAPHY">
+.tt-owned-list{display:flex;flex-direction:column;margin-top:28px;border-top:1px solid rgba(255,255,255,.10)}
+.tt-owned-item{display:grid;grid-template-columns:58px minmax(0,1fr) auto;gap:18px;align-items:center;padding:18px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.tt-owned-index{font:700 10px/1 'Space Mono',monospace;color:#555;letter-spacing:.08em}
+.tt-owned-copy{min-width:0;display:flex;flex-direction:column;gap:5px}
+.tt-owned-title{font-size:17px;line-height:1.2;font-weight:500;letter-spacing:-.02em}
+.tt-owned-artist{font:400 10px/1.4 'Space Mono',monospace;color:#666;text-transform:uppercase;letter-spacing:.06em}
+.tt-owned-meta{font:400 10px/1.4 'Space Mono',monospace;color:#777;text-transform:uppercase;text-align:right}
+.tt-owned-link{font:600 10px/1 'Space Mono',monospace;color:#fff;text-decoration:none;letter-spacing:.06em}
+.tt-owned-link:hover{text-decoration:underline}
+@media(max-width:700px){.tt-owned-item{grid-template-columns:38px minmax(0,1fr);gap:12px}.tt-owned-meta{grid-column:2;text-align:left}.tt-owned-link{display:inline-block;margin-top:8px}}
+</style>
+
+
+<style id="TT-CORE-FREEBIE-OWNERSHIP-UI">
+/* Core ownership UI — scoped only to My Products + Freebies claim state. */
+#user-products-list.tt-owned-list,
+.tt-owned-list {
+    display:grid !important;
+    grid-template-columns:repeat(1,minmax(0,1fr));
+    gap:12px;
+    margin-top:28px;
+    border-top:0;
+}
+.tt-owned-card {
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:18px;
+    background:#090909;
+    overflow:hidden;
+    transition:transform .32s cubic-bezier(.22,1,.36,1),border-color .32s ease,background .32s ease;
+}
+.tt-owned-card:hover { transform:scale(1.005); border-color:rgba(255,255,255,.22); }
+.tt-owned-card.is-open { border-color:rgba(255,255,255,.24); }
+.tt-owned-card-head {
+    width:100%; display:grid; grid-template-columns:44px 92px minmax(0,1fr) 1px 28px;
+    align-items:center; gap:18px; padding:14px; border:0; background:transparent; color:#fff; text-align:left; cursor:pointer;
+}
+.tt-owned-card-number,.tt-owned-card-artist,.tt-owned-card-panel-label,.tt-owned-option-note {
+    font:600 10px/1.35 'Space Mono',monospace; letter-spacing:.08em; text-transform:uppercase;
+}
+.tt-owned-card-number { color:#555; }
+.tt-owned-card-media { width:92px; aspect-ratio:16/10; overflow:hidden; border-radius:11px; background:#111; }
+.tt-owned-card-thumb { width:100%; height:100%; display:block; object-fit:cover; }
+.tt-owned-card-thumb-empty { background:linear-gradient(135deg,#111,#1b1b1b); }
+.tt-owned-card-copy { min-width:0; display:flex; flex-direction:column; gap:6px; }
+.tt-owned-card-title { font-size:18px; line-height:1.15; font-weight:500; letter-spacing:-.025em; }
+.tt-owned-card-artist { color:#666; }
+.tt-owned-card-chevron { color:#777; font-size:17px; transition:transform .32s cubic-bezier(.22,1,.36,1); }
+.tt-owned-card-separator {
+    width:1px;
+    height:28px;
+    background:rgba(255,255,255,.10);
+    justify-self:center;
+}
+.tt-owned-card-thumb-broken { opacity:.35; }
+.tt-owned-card.is-open .tt-owned-card-chevron { transform:rotate(45deg); color:#fff; }
+.tt-owned-claim-meta {
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:1px;
+    margin-bottom:18px;
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:12px;
+    overflow:hidden;
+    background:rgba(255,255,255,.05);
+}
+.tt-owned-claim-meta-item {
+    min-width:0;
+    padding:12px 14px;
+    background:#0a0a0a;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+.tt-owned-claim-meta-item span {
+    color:#555;
+    font:600 9px/1.3 'Space Mono',monospace;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.tt-owned-claim-meta-item strong {
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    color:#ddd;
+    font:500 11px/1.4 'Space Mono',monospace;
+}
+.tt-owned-card-panel { border-top:1px solid rgba(255,255,255,.08); }
+.tt-owned-card-panel-inner { padding:16px 18px 18px 168px; }
+.tt-owned-card-panel-label { color:#555; margin-bottom:10px; }
+.tt-owned-downloads { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.tt-owned-option {
+    min-height:48px; padding:0 15px; border:1px solid rgba(255,255,255,.10); border-radius:12px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px; color:#fff; background:#0d0d0d;
+    text-decoration:none; font-size:13px; transition:border-color .25s ease,background .25s ease,transform .25s ease;
+}
+.tt-owned-option:hover:not(.is-disabled) { border-color:rgba(255,255,255,.28); background:#121212; transform:translateY(-1px); }
+.tt-owned-option.is-disabled { color:#555; cursor:not-allowed; }
+.tt-owned-option-arrow { color:#888; }
+.tt-owned-option-note { color:#555; }
+.tt-freebie-claimed {
+    position:relative !important;
+    filter:grayscale(1) !important;
+    opacity:.58 !important;
+    cursor:not-allowed !important;
+    pointer-events:none !important;
+    transform:none !important;
+    transition:none !important;
+}
+.tt-freebie-claimed * {
+    pointer-events:none !important;
+}
+.tt-freebie-claimed:hover,
+.tt-freebie-claimed:focus,
+.tt-freebie-claimed:active {
+    filter:grayscale(1) !important;
+    opacity:.58 !important;
+    transform:none !important;
+    box-shadow:none !important;
+}
+.tt-freebie-claim-pending {
+    pointer-events:none !important;
+    cursor:default !important;
+}
+.tt-freebie-claimed > *:not(.tt-freebie-claimed-overlay) {
+    pointer-events:none !important;
+}
+.tt-freebie-claimed-overlay {
+    position:absolute !important;
+    inset:0 !important;
+    z-index:50 !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:7px !important;
+    pointer-events:none !important;
+    background:rgba(0,0,0,.16) !important;
+    border-radius:inherit !important;
+    color:#fff !important;
+    text-align:center !important;
+}
+.tt-freebie-claimed-overlay strong {
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:8px 13px !important;
+    border:1px solid rgba(255,255,255,.48) !important;
+    border-radius:999px !important;
+    background:rgba(0,0,0,.58) !important;
+    font:700 10px/1 'Space Mono',monospace !important;
+    letter-spacing:.12em !important;
+}
+.tt-freebie-claimed-overlay span {
+    color:rgba(255,255,255,.72) !important;
+    font:500 8px/1.3 'Space Mono',monospace !important;
+    letter-spacing:.08em !important;
+}
+
+@media(max-width:700px){
+    .tt-owned-card-head { grid-template-columns:30px 76px minmax(0,1fr) 1px 22px; gap:11px; padding:12px; }
+    .tt-owned-card-media { width:76px; }
+    .tt-owned-card-title { font-size:15px; }
+    .tt-owned-claim-meta { grid-template-columns:1fr; }
+    .tt-owned-card-panel-inner { padding:14px; }
+    .tt-owned-downloads { grid-template-columns:1fr; }
+}
+</style>
+
+</head>
+
+<body>
+        <script src="assets/js/auth-pending.js"></script>
+
+    <!-- Preloader -->
+    <div class="tt-dashboard-preload" aria-live="polite" role="status">
+        <div class="tt-dashboard-preload__inner">
+            <div class="tt-dashboard-preload__kicker">TuneTrack Universal Account</div>
+            <h1 class="tt-dashboard-preload__title">INITIALIZING SPACE.</h1>
+            <div class="tt-dashboard-preload__status">Synchronizing your product library...</div>
+            <div class="tt-dashboard-preload__bar" aria-hidden="true"></div>
+        </div>
+    </div>
+
+    <!-- TuneTrack announcement marquee -->
+    <div aria-label="Tunetrack announcement" class="tnco-top-marquee">
+        <div class="tnco-top-marquee-track" id="tncoTopMarqueeTrack">
+            <!-- 8 identical sets for infinite loop -->
+            <div class="tnco-top-marquee-set">
+                <span class="tnco-top-marquee-item">
+                    <a href="catalog-tnts.html"
+                        style="font-family:'Space Mono', monospace !important; letter-spacing:-0.04em !important;">
+                        <u>
+                            <strong>
+                                Christmas Sale
+                            </strong>
+                        </u>
+                        is coming — special deals await
+                    </a>
+                </span>
+                <span aria-hidden="true" class="tnco-top-marquee-smile">
+                    <svg fill="none" viewbox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"></circle>
+                        <circle cx="9" cy="10" fill="currentColor" r="0.9"></circle>
+                        <circle cx="15" cy="10" fill="currentColor" r="0.9"></circle>
+                        <path d="M8.5 14c1 1.5 2.3 2.2 3.5 2.2S14.5 15.5 15.5 14" stroke="currentColor"
+                            stroke-linecap="round" stroke-width="1.5"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class="tnco-top-marquee-set">
+                <span class="tnco-top-marquee-item">
+                    <a href="catalog-tnts.html"
+                        style="font-family:'Space Mono', monospace !important; letter-spacing:-0.04em !important;">
+                        <u>
+                            <strong>
+                                Christmas Sale
+                            </strong>
+                        </u>
+                        is coming — special deals await
+                    </a>
+                </span>
+                <span aria-hidden="true" class="tnco-top-marquee-smile">
+                    <svg fill="none" viewbox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"></circle>
+                        <circle cx="9" cy="10" fill="currentColor" r="0.9"></circle>
+                        <circle cx="15" cy="10" fill="currentColor" r="0.9"></circle>
+                        <path d="M8.5 14c1 1.5 2.3 2.2 3.5 2.2S14.5 15.5 15.5 14" stroke="currentColor"
+                            stroke-linecap="round" stroke-width="1.5"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class="tnco-top-marquee-set">
+                <span class="tnco-top-marquee-item">
+                    <a href="catalog-tnts.html"
+                        style="font-family:'Space Mono', monospace !important; letter-spacing:-0.04em !important;">
+                        <u>
+                            <strong>
+                                Christmas Sale
+                            </strong>
+                        </u>
+                        is coming — special deals await
+                    </a>
+                </span>
+                <span aria-hidden="true" class="tnco-top-marquee-smile">
+                    <svg fill="none" viewbox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"></circle>
+                        <circle cx="9" cy="10" fill="currentColor" r="0.9"></circle>
+                        <circle cx="15" cy="10" fill="currentColor" r="0.9"></circle>
+                        <path d="M8.5 14c1 1.5 2.3 2.2 3.5 2.2S14.5 15.5 15.5 14" stroke="currentColor"
+                            stroke-linecap="round" stroke-width="1.5"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class="tnco-top-marquee-set">
+                <span class="tnco-top-marquee-item">
+                    <a href="catalog-tnts.html"
+                        style="font-family:'Space Mono', monospace !important; letter-spacing:-0.04em !important;">
+                        <u>
+                            <strong>
+                                Christmas Sale
+                            </strong>
+                        </u>
+                        is coming — special deals await
+                    </a>
+                </span>
+                <span aria-hidden="true" class="tnco-top-marquee-smile">
+                    <svg fill="none" viewbox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"></circle>
+                        <circle cx="9" cy="10" fill="currentColor" r="0.9"></circle>
+                        <circle cx="15" cy="10" fill="currentColor" r="0.9"></circle>
+                        <path d="M8.5 14c1 1.5 2.3 2.2 3.5 2.2S14.5 15.5 15.5 14" stroke="currentColor"
+                            stroke-linecap="round" stroke-width="1.5"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class="tnco-top-marquee-set">
+                <span class="tnco-top-marquee-item">
+                    <a href="catalog-tnts.html"
+                        style="font-family:'Space Mono', monospace !important; letter-spacing:-0.04em !important;">
+                        <u>
+                            <strong>
+                                Christmas Sale
+                            </strong>
+                        </u>
+                        is coming — special deals await
+                    </a>
+                </span>
+                <span aria-hidden="true" class="tnco-top-marquee-smile">
+                    <svg fill="none" viewbox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"></circle>
+                        <circle cx="9" cy="10" fill="currentColor" r="0.9"></circle>
+                        <circle cx="15" cy="10" fill="currentColor" r="0.9"></circle>
+                        <path d="M8.5 14c1 1.5 2.3 2.2 3.5 2.2S14.5 15.5 15.5 14" stroke="currentColor"
+                            stroke-linecap="round" stroke-width="1.5"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class="tnco-top-marquee-set">
+                <span class="tnco-top-marquee-item">
+                    <a href="catalog-tnts.html"
+                        style="font-family:'Space Mono', monospace !important; letter-spacing:-0.04em !important;">
+                        <u>
+                            <strong>
+                                Christmas Sale
+                            </strong>
+                        </u>
+                        is coming — special deals await
+                    </a>
+                </span>
+                <span aria-hidden="true" class="tnco-top-marquee-smile">
+                    <svg fill="none" viewbox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"></circle>
+                        <circle cx="9" cy="10" fill="currentColor" r="0.9"></circle>
+                        <circle cx="15" cy="10" fill="currentColor" r="0.9"></circle>
+                        <path d="M8.5 14c1 1.5 2.3 2.2 3.5 2.2S14.5 15.5 15.5 14" stroke="currentColor"
+                            stroke-linecap="round" stroke-width="1.5"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class="tnco-top-marquee-set">
+                <span class="tnco-top-marquee-item">
+                    <a href="catalog-tnts.html"
+                        style="font-family:'Space Mono', monospace !important; letter-spacing:-0.04em !important;">
+                        <u>
+                            <strong>
+                                Christmas Sale
+                            </strong>
+                        </u>
+                        is coming — special deals await
+                    </a>
+                </span>
+                <span aria-hidden="true" class="tnco-top-marquee-smile">
+                    <svg fill="none" viewbox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"></circle>
+                        <circle cx="9" cy="10" fill="currentColor" r="0.9"></circle>
+                        <circle cx="15" cy="10" fill="currentColor" r="0.9"></circle>
+                        <path d="M8.5 14c1 1.5 2.3 2.2 3.5 2.2S14.5 15.5 15.5 14" stroke="currentColor"
+                            stroke-linecap="round" stroke-width="1.5"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class="tnco-top-marquee-set">
+                <span class="tnco-top-marquee-item">
+                    <a href="catalog-tnts.html"
+                        style="font-family:'Space Mono', monospace !important; letter-spacing:-0.04em !important;">
+                        <u>
+                            <strong>
+                                Christmas Sale
+                            </strong>
+                        </u>
+                        is coming — special deals await
+                    </a>
+                </span>
+                <span aria-hidden="true" class="tnco-top-marquee-smile">
+                    <svg fill="none" viewbox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"></circle>
+                        <circle cx="9" cy="10" fill="currentColor" r="0.9"></circle>
+                        <circle cx="15" cy="10" fill="currentColor" r="0.9"></circle>
+                        <path d="M8.5 14c1 1.5 2.3 2.2 3.5 2.2S14.5 15.5 15.5 14" stroke="currentColor"
+                            stroke-linecap="round" stroke-width="1.5"></path>
+                    </svg>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="dashboard-layout">
+
+        <!-- UI Header (Logo, Nav Pills, Working Button) -->
+        <header class="ui-header">
+            <!-- Left: Logo -->
+            <div class="ui-header-left">
+                <div class="logo">tunetrack©</div>
+            </div>
+
+            <!-- Center: Navigation Pills -->
+            <div class="ui-header-center">
+                <nav class="nav-pill-container">
+                    <a href="#my-account" class="nav-pill active" data-target="my-account">My Account</a>
+                    <a href="#my-products" class="nav-pill" data-target="my-products">My Products</a>
+                    <a href="#catalogue" class="nav-pill" data-target="catalogue">Catalogue</a>
+                    <a href="#freebies" class="nav-pill" data-target="freebies">Freebies</a>
+                    <a href="#orders" class="nav-pill" data-target="orders">Orders & Receipt</a>
+                    <a href="#discovery" class="nav-pill disabled" data-target="discovery">Discovery <span
+                            class="badge">Coming Soon</span></a>
+                    <a href="#settings" class="nav-pill" data-target="settings">Settings</a>
+                </nav>
+            </div>
+
+            <!-- Right: Working Button -->
+            <div class="ui-header-right">
+                <a href="index.html" class="pill-btn outline tt-home-btn" aria-label="Home" title="Home">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 10.5 12 3l9 7.5"></path>
+                        <path d="M5.5 9.5V21h13V9.5"></path>
+                        <path d="M9.5 21v-6h5v6"></path>
+                    </svg>
+                </a>
+                <div class="tt-notification" id="ttNotification">
+                    <button class="tt-notification-trigger" id="ttNotificationTrigger" type="button"
+                        aria-label="Notifications" aria-expanded="false" aria-controls="ttNotificationMenu">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                            <path d="M10 21h4"></path>
+                        </svg>
+                        <span class="tt-notification-count" id="ttNotificationCount" hidden>0</span>
+                    </button>
+
+                    <div class="tt-notification-menu" id="ttNotificationMenu" hidden>
+                        <div class="tt-notification-menu-head">Notifications</div>
+                        <div class="tt-notification-menu-body" id="ttNotificationList">
+                            <div class="tt-notification-empty">You’ve got no messages yet!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="logoutBtn" class="pill-btn outline">Logout</button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+
+            <!-- ============================================== -->
+            <!-- 1. MY ACCOUNT SECTION (Profile & Overview) -->
+            <!-- ============================================== -->
+            <section id="my-account" class="tab-content">
+                <div class="editorial-header">
+                    <h1 class="display-title">USER IDENTITY.</h1>
+                    <p class="mono-meta" id="dashboardWelcome">Verifying clearance level...</p>
+                </div>
+
+                <div class="account-overview-grid">
+                    <!-- Left Column: Identity Card -->
+                    <div class="identity-card">
+                        <div class="avatar-display" id="current-avatar">
+                            <!-- Placeholder avatar image -->
+                            <img src="https://ui-avatars.com/api/?name=User&background=333&color=fff&size=150"
+                                alt="User Avatar">
+                        </div>
+                        <div class="identity-info">
+                            <h2 class="identity-name" id="displayUsername">...</h2>
+                            <p class="mono-meta identity-email" id="displayEmail">loading...</p>
+
+                            <div class="identity-badges">
+                                <span class="status-badge verified">STATUS: VERIFIED</span>
+                                <span class="status-badge member-since">MEMBER SINCE 2026</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Stats & Actions -->
+                    <div class="overview-stats">
+                        <div class="stat-block">
+                            <span class="mono-meta">PRODUCT OWNERSHIP</span>
+                            <h3 class="stat-number">0 <span class="stat-label">ASSETS</span></h3>
+                        </div>
+                        <div class="stat-block">
+                            <span class="mono-meta">FREEBIES CLAIMED</span>
+                            <h3 class="stat-number">0 <span class="stat-label">ASSETS</span></h3>
+                        </div>
+
+                        <div class="recent-activity-block">
+                            <span class="mono-meta">RECENT ACTIVITY</span>
+                            <ul class="activity-list">
+                                <li class="body-text">Account created successfully.</li>
+                                <!-- Dynamically populated later -->
+                            </ul>
+                        </div>
+
+                        <div class="quick-actions">
+                            <span class="mono-meta" style="margin-bottom: 12px; display: block;">QUICK ACTIONS</span>
+                            <div style="display: flex; gap: 12px;">
+                                <a href="#my-products" class="pill-btn outline small inline-nav"
+                                    data-target="my-products">View Vault</a>
+                                <a href="#catalogue" class="pill-btn outline small inline-nav"
+                                    data-target="catalogue">Browse Catalogue</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ============================================== -->
+            <!-- 2. MY PRODUCTS SECTION (Core) -->
+            <!-- ============================================== -->
+            <section id="my-products" class="tab-content active">
+                <div class="editorial-header">
+                    <h1 class="display-title">THE VAULT.</h1>
+                    <p class="mono-meta">YOUR CURATED COLLECTION OF OWNED ASSETS.</p>
+                </div>
+
+                <!-- Fallback Empty State -->
+                <div class="empty-state" id="empty-vault-state">
+                    <h2 class="display-subtitle">YOUR VAULT IS EMPTY.</h2>
+                    <p class="body-text">Begin exploring the catalogue to acquire new assets.</p>
+                    <a href="#catalogue" class="pill-btn inline-nav" data-target="catalogue">EXPLORE CATALOGUE</a>
+                </div>
+
+                <!-- Product Ownership List -->
+                <div class="tt-owned-list" id="user-products-list" hidden aria-live="polite"></div>
+
+                <!-- Legacy grid kept as a compatibility fallback; ownership is now rendered above. -->
+                <div class="product-grid" id="user-products-grid" style="display: none;"></div>
+            </section>
+
+
+            <!-- ============================================== -->
+            <!-- 3. CATALOGUE BRIDGE SECTION -->
+            <!-- ============================================== -->
+            <section id="catalogue" class="tab-content catalogue-section">
+                <div class="catalogue-editorial-header">
+                    <h1 class="display-title">CATALOGUE.</h1>
+                    <p class="mono-meta">EXPLORE THE FULL TUNETRACK COLLECTION.</p>
+                </div>
+                <div id="catalogue-explore" class="catalogue-explore-card" role="button" tabindex="0"
+                    aria-expanded="false">
+                    <div>
+                        <span class="catalogue-explore-kicker">TUNETRACK / MULTITRACK SEQUENCERS</span>
+                        <h2>EXPLORE THE<br>CATALOGUE.</h2>
+                        <span class="catalogue-explore-meta">ALL PRODUCTS / OPEN INDEX</span>
+                    </div>
+                    <span class="catalogue-explore-arrow">↗</span>
+                </div>
+                <div id="catalogue-index" class="catalogue-index" hidden>
+                    <div class="catalogue-index-head">
+                        <div>
+                            <span class="mono-meta">ALL PRODUCTS.</span>
+                            <span class="catalogue-count" id="catalogue-count">0 ASSETS</span>
+                        </div>
+                        <button type="button" class="pill-btn outline small" id="catalogue-close">CLOSE</button>
+                    </div>
+                    <div class="product-grid catalogue-product-grid" id="catalogue-grid"></div>
+                </div>
+            </section>
+
+
+            <!-- ============================================== -->
+            <!-- 4. FREEBIES SECTION -->
+            <!-- ============================================== -->
+            <section id="freebies" class="tab-content">
+                <div class="editorial-header">
+                    <h1 class="display-title">OPEN ASSETS.</h1>
+                    <p class="mono-meta">AVAILABLE FOR CLAIM AND INTEGRATION.</p>
+                </div>
+
+                <div class="product-grid" id="freebies-grid"></div>
+            </section>
+
+
+            <!-- ============================================== -->
+            <!-- 5. ORDERS & RECEIPT SECTION -->
+            <!-- ============================================== -->
+            <section id="orders" class="tab-content">
+                <div class="editorial-header">
+                    <h1 class="display-title">TRANSACTIONS.</h1>
+                    <p class="mono-meta">HISTORICAL LOG OF ACQUISITIONS.</p>
+                </div>
+
+                <div class="list-container">
+                    <div class="list-item">
+                        <div class="list-meta">
+                            <span class="mono-meta order-id">#TRK-8921</span>
+                            <span class="mono-meta order-date">OCT 24, 2026</span>
+                        </div>
+                        <div class="list-details">
+                            <h4 class="list-title">Ableton Live Template - Symphony Worship</h4>
+                            <span class="list-price">PAID</span>
+                        </div>
+                        <button class="pill-btn outline small">Download Receipt</button>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ============================================== -->
+            <!-- 6. DISCOVERY (Coming Soon) -->
+            <!-- ============================================== -->
+            <section id="discovery" class="tab-content">
+                <div class="center-content">
+                    <h1 class="display-title disabled-text">SYSTEM OFFLINE.</h1>
+                    <p class="mono-meta">DISCOVERY MODULE IN DEVELOPMENT.</p>
+                </div>
+            </section>
+
+
+            <!-- ============================================== -->
+            <!-- 7. ACCOUNT SETTINGS SECTION -->
+            <!-- ============================================== -->
+            <section id="settings" class="tab-content">
+                <div class="editorial-header">
+                    <h1 class="display-title">SYSTEM CONFIG.</h1>
+                    <p class="mono-meta">PREFERENCES AND SECURITY.</p>
+                </div>
+
+                <div class="settings-grid">
+                    <!-- Column 1: Identity & Profile -->
+                    <div class="settings-column">
+                        <div class="settings-group">
+                            <h3 class="settings-group-title">IDENTITY</h3>
+
+                            <div class="form-group">
+                                <label class="mono-label">DISPLAY NAME</label>
+                                <input type="text" class="editorial-input" id="settingUsername"
+                                    placeholder="Enter display name">
+                                <button id="updateNameBtn" class="pill-btn outline small mt-2">Update Name</button>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="mono-label">AVATAR SELECTION</label>
+                                <div class="avatar-selector" id="avatarSelector">
+                                    <button type="button" class="avatar-option selected" data-avatar-id="1"
+                                        aria-label="Avatar 1" aria-pressed="true"><img
+                                            src="assets/images/avatar/avatar-01.png" alt="Avatar 1"></button>
+                                    <button type="button" class="avatar-option" data-avatar-id="2" aria-label="Avatar 2"
+                                        aria-pressed="false"><img src="assets/images/avatar/avatar-02.png"
+                                            alt="Avatar 2"></button>
+                                    <button type="button" class="avatar-option" data-avatar-id="3" aria-label="Avatar 3"
+                                        aria-pressed="false"><img src="assets/images/avatar/avatar-03.png"
+                                            alt="Avatar 3"></button>
+                                    <button type="button" class="avatar-option" data-avatar-id="4" aria-label="Avatar 4"
+                                        aria-pressed="false"><img src="assets/images/avatar/avatar-04.png"
+                                            alt="Avatar 4"></button>
+                                    <button type="button" class="avatar-option" data-avatar-id="5" aria-label="Avatar 5"
+                                        aria-pressed="false"><img src="assets/images/avatar/avatar-05.png"
+                                            alt="Avatar 5"></button>
+                                    <button type="button" class="avatar-option" data-avatar-id="6" aria-label="Avatar 6"
+                                        aria-pressed="false"><img src="assets/images/avatar/avatar-06.png"
+                                            alt="Avatar 6"></button>
+                                    <button type="button" class="avatar-option" data-avatar-id="7" aria-label="Avatar 7"
+                                        aria-pressed="false"><img src="assets/images/avatar/avatar-07.png"
+                                            alt="Avatar 7"></button>
+                                    <button type="button" class="avatar-option" data-avatar-id="8" aria-label="Avatar 8"
+                                        aria-pressed="false"><img src="assets/images/avatar/avatar-08.png"
+                                            alt="Avatar 8"></button>
+                                    <button type="button" class="avatar-option" data-avatar-id="9" aria-label="Avatar 9"
+                                        aria-pressed="false"><img src="assets/images/avatar/avatar-09.png"
+                                            alt="Avatar 9"></button>
+                                    <button type="button" class="avatar-option" data-avatar-id="10"
+                                        aria-label="Avatar 10" aria-pressed="false"><img
+                                            src="assets/images/avatar/avatar-10.png" alt="Avatar 10"></button>
+                                </div>
+                                <div class="avatar-change-actions" id="avatarChangeActions" hidden>
+                                    <button type="button" class="pill-btn outline small"
+                                        id="cancelAvatarBtn">Cancel</button>
+                                    <button type="button" class="pill-btn small" id="confirmAvatarBtn">Confirm
+                                        Changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: About You -->
+                    <div class="settings-column">
+                        <div class="settings-group about-you-settings-group">
+                            <h3 class="settings-group-title">ABOUT YOU</h3>
+
+                            <div class="form-group about-you-group">
+                                <label class="mono-label" for="settingBio">BIO</label>
+                                <textarea id="settingBio" class="editorial-input about-you-bio" maxlength="150" rows="3"
+                                    placeholder="Tell the community a little about you..."></textarea>
+                                <div class="about-you-meta"><span>MAX 150 CHARACTERS</span><span id="bioCharCount">0 /
+                                        150</span></div>
+                            </div>
+
+                            <div class="form-group about-you-group about-you-instruments">
+                                <div class="about-you-instruments-head">
+                                    <label class="mono-label">WHAT ARE YOU PLAYING?</label>
+                                    <span class="about-you-meta-inline" id="instrumentCount">0 SELECTED</span>
+                                </div>
+                                <div class="instrument-pill-grid instrument-pill-grid--compact" id="instrumentSelector"
+                                    role="group" aria-label="What are you playing?"></div>
+                                <button type="button" class="instrument-read-more" id="instrumentReadMore"
+                                    aria-expanded="false"><span>READ MORE</span><svg viewBox="0 0 24 24"
+                                        aria-hidden="true">
+                                        <path d="m6 9 6 6 6-6" />
+                                    </svg></button>
+                                <div class="about-you-save-row">
+                                    <button type="button" class="pill-btn small about-you-save-main"
+                                        id="saveAboutYouBtn">Save About You</button>
+                                    <span class="about-you-save-status" id="aboutYouSaveStatus"
+                                        aria-live="polite"></span>
+                                </div>
+
+                                <div class="instrument-picker-backdrop" id="instrumentPickerBackdrop" hidden></div>
+                                <aside class="instrument-picker" id="instrumentPicker" hidden aria-hidden="true"
+                                    aria-label="Choose instruments">
+                                    <div class="instrument-picker-panel">
+                                        <div class="instrument-picker-head">
+                                            <div><span class="mono-label">INSTRUMENT LIBRARY</span>
+                                                <h4>WHAT ARE YOU PLAYING?</h4>
+                                            </div>
+                                            <button type="button" class="instrument-picker-close"
+                                                id="instrumentPickerClose" aria-label="Close">×</button>
+                                        </div>
+                                        <div class="instrument-picker-toolbar">
+                                            <div class="instrument-search-wrap"><svg viewBox="0 0 24 24"
+                                                    aria-hidden="true">
+                                                    <path
+                                                        d="m21 21-4.3-4.3m2.3-5.2a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" />
+                                                </svg><input id="instrumentSearch" type="search" autocomplete="off"
+                                                    placeholder="Search instrument..." aria-label="Search instrument">
+                                            </div>
+                                            <div class="instrument-category-filter" id="instrumentCategoryFilter"
+                                                role="group" aria-label="Instrument category">
+                                                <button type="button" class="instrument-filter-btn is-active"
+                                                    data-category="All">All</button><button type="button"
+                                                    class="instrument-filter-btn"
+                                                    data-category="Worship">Worship</button><button type="button"
+                                                    class="instrument-filter-btn"
+                                                    data-category="Band">Band</button><button type="button"
+                                                    class="instrument-filter-btn"
+                                                    data-category="Orchestral">Orchestral</button><button type="button"
+                                                    class="instrument-filter-btn"
+                                                    data-category="Indonesian">Indonesian</button>
+                                            </div>
+                                        </div>
+                                        <div class="instrument-picker-grid" id="instrumentPickerGrid"></div>
+                                        <div class="instrument-picker-foot"><span>SELECT ALL THAT APPLY</span><button
+                                                type="button" class="pill-btn outline small"
+                                                id="instrumentPickerDoneBtn">Done</button></div>
+                                    </div>
+                                </aside>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Full-width Security + Danger Zone; contained only inside Settings -->
+                    <div class="settings-column settings-security-column">
+                        <div class="settings-group">
+                            <h3 class="settings-group-title">SECURITY</h3>
+                            <div class="form-group">
+                                <label class="mono-label">AUTHENTICATION</label>
+                                <button type="button" id="openChangePasswordBtn"
+                                    class="pill-btn outline full-width text-left mb-2">Change Password</button>
+                                <p class="body-text" id="passwordChangedMeta" style="font-size: 12px;">Last changed:
+                                    Never</p>
+                            </div>
+                            <div class="form-group">
+                                <label class="mono-label">ACTIVE SESSIONS</label>
+                                <div id="activeSessionsList" class="tt-session-list">
+                                    <div class="session-item body-text tt-session-loading">Loading active sessions…
+                                    </div>
+                                </div>
+                                <button type="button" id="signOutOtherSessionsBtn"
+                                    class="pill-btn outline small mt-2">Sign out other sessions</button>
+                                <p id="sessionSecurityNotice" class="mono-meta tt-session-notice" aria-live="polite">
+                                </p>
+                            </div>
+                        </div>
+                        <div class="settings-group danger-zone">
+                            <h3 class="settings-group-title text-danger">DANGER ZONE</h3>
+                            <p class="body-text mb-3">Permanently delete your account and all associated data, including
+                                product ownership.</p>
+                            <button type="button" id="deleteAccountBtn" class="pill-btn danger full-width">Delete Account</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+
+    <!-- Delete Account — destructive action only. Existing dashboard UI remains untouched. -->
+    <style id="TT-DELETE-ACCOUNT-UI">
+        body.tt-delete-modal-open { overflow:hidden; }
+        .tt-delete-account-modal[hidden] { display:none !important; }
+        .tt-delete-account-modal {
+            position:fixed; inset:0; z-index:99999; display:flex; align-items:center; justify-content:center;
+            padding:24px; background:rgba(0,0,0,.82); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+        }
+        .tt-delete-account-panel {
+            width:min(620px,100%); max-height:min(720px,calc(100vh - 48px)); overflow:auto;
+            background:#0b0606; border:1px solid rgba(255,38,38,.42); border-radius:18px;
+            box-shadow:0 28px 90px rgba(0,0,0,.72),0 0 0 1px rgba(255,0,0,.06) inset;
+            padding:28px;
+        }
+        .tt-delete-account-kicker {
+            font:700 9px/1.4 'Space Mono',monospace; letter-spacing:.16em; color:#ff3434; text-transform:uppercase;
+        }
+        .tt-delete-account-title {
+            margin:8px 0 10px; color:#fff; font-size:clamp(28px,4vw,42px); line-height:.98; letter-spacing:-.045em;
+        }
+        .tt-delete-account-warning {
+            margin:0 0 22px; color:#a88989; font:400 11px/1.7 'Space Mono',monospace; text-transform:uppercase; letter-spacing:.025em;
+        }
+        .tt-delete-account-warning strong { color:#ff3434; }
+        .tt-delete-account-step {
+            border-top:1px solid rgba(255,54,54,.16); padding-top:18px; margin-top:18px;
+        }
+        .tt-delete-account-step-label {
+            display:block; margin-bottom:8px; color:#ff4a4a; font:700 9px/1.3 'Space Mono',monospace; letter-spacing:.13em;
+        }
+        .tt-delete-account-input {
+            width:100%; min-height:48px; border:1px solid rgba(255,70,70,.28); border-radius:12px;
+            background:#100909; color:#fff; outline:none; padding:0 14px; font:500 12px/1 'Space Mono',monospace;
+            transition:border-color .2s ease,box-shadow .2s ease,background .2s ease;
+        }
+        .tt-delete-account-input::placeholder { color:#684e4e; }
+        .tt-delete-account-input:focus { border-color:#ff3838; box-shadow:0 0 0 3px rgba(255,42,42,.08); background:#130a0a; }
+        .tt-delete-account-input:disabled { opacity:.5; cursor:not-allowed; }
+        .tt-delete-account-actions { display:flex; gap:10px; margin-top:22px; }
+        .tt-delete-account-actions button { flex:1; }
+        .tt-delete-confirm {
+            border-color:#ff3030 !important; color:#ff4545 !important; background:rgba(255,24,24,.035) !important;
+        }
+        .tt-delete-confirm:hover:not(:disabled) { background:rgba(255,24,24,.11) !important; border-color:#ff5555 !important; }
+        .tt-delete-confirm:disabled { opacity:.42; cursor:not-allowed; }
+        .tt-delete-account-status {
+            min-height:16px; margin-top:14px; color:#705555; font:700 9px/1.55 'Space Mono',monospace; letter-spacing:.04em;
+            text-transform:uppercase;
+        }
+        .tt-delete-account-status.error { color:#ff4545; }
+        .tt-delete-account-status.working { color:#ff9b9b; }
+        @media(max-width:600px){
+            .tt-delete-account-modal{padding:14px}.tt-delete-account-panel{padding:20px;border-radius:15px}
+            .tt-delete-account-actions{flex-direction:column}.tt-delete-account-actions button{width:100%}
+        }
+    </style>
+    <div class="tt-delete-account-modal" id="deleteAccountModal" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="deleteAccountTitle">
+        <div class="tt-delete-account-panel">
+            <div class="tt-delete-account-kicker">SECURITY / IRREVERSIBLE ACTION</div>
+            <h2 class="tt-delete-account-title" id="deleteAccountTitle">DELETE ACCOUNT.</h2>
+            <p class="tt-delete-account-warning">
+                This will permanently remove your <strong>Tunetrack account</strong>, profile, ownership records,
+                notifications, active sessions, and other TuneTrack data stored under your account. This action cannot be undone.
+            </p>
+
+            <div class="tt-delete-account-step">
+                <span class="tt-delete-account-step-label">01 / CONFIRM USERNAME</span>
+                <input id="deleteAccountUsername" class="tt-delete-account-input" type="text" autocomplete="username" spellcheck="false" placeholder="Re-enter your username">
+            </div>
+
+            <div class="tt-delete-account-step">
+                <span class="tt-delete-account-step-label">02 / VERIFY PASSWORD</span>
+                <input id="deleteAccountPassword" class="tt-delete-account-input" type="password" autocomplete="current-password" placeholder="Re-enter your current password">
+            </div>
+
+            <div id="deleteAccountStatus" class="tt-delete-account-status" aria-live="polite"></div>
+
+            <div class="tt-delete-account-actions">
+                <button type="button" id="cancelDeleteAccountBtn" class="pill-btn outline">Cancel</button>
+                <button type="button" id="confirmDeleteAccountBtn" class="pill-btn danger tt-delete-confirm">Delete Permanently</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account deletion farewell screen — shown only after Firebase deletion succeeds. -->
+    <style id="TT-DELETE-ACCOUNT-FAREWELL-UI">
+        .tt-delete-farewell[hidden] { display:none !important; }
+        .tt-delete-farewell {
+            position:fixed; inset:0; z-index:100000; display:flex; align-items:center; justify-content:center;
+            padding:24px; background:#050505; color:#fff; text-align:center;
+            font-family:'Inter',Arial,sans-serif;
+        }
+        .tt-delete-farewell-inner {
+            width:min(680px,100%); display:flex; flex-direction:column; align-items:center;
+            animation:ttFarewellIn .7s cubic-bezier(.22,1,.36,1) both;
+        }
+        .tt-delete-farewell-kicker {
+            margin-bottom:18px; color:#ff3c3c; font:700 9px/1.4 'Space Mono',monospace;
+            letter-spacing:.18em; text-transform:uppercase;
+        }
+        .tt-delete-farewell-emojis { display:flex; align-items:flex-end; justify-content:center; gap:14px; margin-bottom:26px; }
+        .tt-farewell-face { width:64px; height:64px; animation:ttTearFloat 2.6s ease-in-out infinite; }
+        .tt-farewell-wave { width:70px; height:70px; transform-origin:72% 82%; animation:ttWave 1.25s ease-in-out infinite; }
+        .tt-delete-farewell-title {
+            margin:0; max-width:650px; font-size:clamp(30px,5vw,58px); line-height:1.02;
+            letter-spacing:-.055em; font-weight:600;
+        }
+        .tt-delete-farewell-copy {
+            margin:18px 0 0; color:#8b8b8b; font:400 11px/1.7 'Space Mono',monospace;
+            letter-spacing:.02em; text-transform:uppercase;
+        }
+        .tt-delete-farewell-name { color:#fff; }
+        .tt-delete-farewell-progress {
+            width:min(360px,80vw); height:2px; margin-top:34px; overflow:hidden; background:#202020;
+        }
+        .tt-delete-farewell-progress-bar {
+            width:100%; height:100%; transform-origin:left center; transform:scaleX(0);
+            background:#ff3434; animation:ttFarewellProgress 10s linear forwards;
+        }
+        .tt-delete-farewell-countdown {
+            margin-top:12px; color:#555; font:700 9px/1 'Space Mono',monospace; letter-spacing:.12em;
+        }
+        @keyframes ttFarewellIn { from{opacity:0;transform:translateY(14px) scale(.985)} to{opacity:1;transform:none} }
+        @keyframes ttFarewellProgress { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+        @keyframes ttTearFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+        @keyframes ttWave { 0%,100%{transform:rotate(0deg)} 20%{transform:rotate(12deg)} 40%{transform:rotate(-10deg)} 60%{transform:rotate(9deg)} 80%{transform:rotate(-5deg)} }
+        @media(max-width:600px){
+            .tt-delete-farewell{padding:18px}.tt-delete-farewell-title{font-size:32px}.tt-farewell-face{width:52px;height:52px}.tt-farewell-wave{width:58px;height:58px}
+        }
+    </style>
+    <div class="tt-delete-farewell" id="deleteAccountFarewell" hidden aria-hidden="true" role="status">
+        <div class="tt-delete-farewell-inner">
+            <div class="tt-delete-farewell-kicker">ACCOUNT DELETED / FINALIZING</div>
+            <div class="tt-delete-farewell-emojis" aria-hidden="true">
+                <svg class="tt-farewell-face" viewBox="0 0 64 64" fill="none">
+                    <circle cx="32" cy="32" r="28" stroke="#ff3c3c" stroke-width="2"/>
+                    <circle cx="23" cy="27" r="2.5" fill="#ff3c3c"/>
+                    <circle cx="41" cy="27" r="2.5" fill="#ff3c3c"/>
+                    <path d="M22 43c3.3-3.7 6.7-5.5 10-5.5S38.7 39.3 42 43" stroke="#ff3c3c" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M20 33c1.8 2.2 3.6 3.1 5.3 3.1" stroke="#ff8d8d" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M44 33c-1.8 2.2-3.6 3.1-5.3 3.1" stroke="#ff8d8d" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M23 35c-1 3.2-1 5.7 0 7.4" stroke="#65b7ff" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M41 35c1 3.2 1 5.7 0 7.4" stroke="#65b7ff" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+                <svg class="tt-farewell-wave" viewBox="0 0 72 72" fill="none">
+                    <path d="M28 57c-5-4-7-10-6-16l2-12c.3-2 2-3.2 3.7-2.9 1.7.3 2.8 1.9 2.5 3.7l-1 7.1 4.1-20.5c.4-2 2.2-3.2 3.9-2.8 1.7.4 2.7 2.1 2.3 4l-2.5 13.2 3.4-15.8c.4-1.9 2.1-3 3.8-2.6 1.7.4 2.6 2 2.2 3.9l-2.6 14.4 2.6-10.4c.5-1.8 2.2-2.8 3.8-2.3 1.7.5 2.5 2.1 2 3.9l-3.2 13.2c-.5 2.2.3 4.2 2.1 5.9l2.4 2.2c3.6 3.3 3.7 8.9.4 12.5l-1.4 1.5c-3.2 3.5-8.6 4.3-12.8 2l-7.7-4.2Z" stroke="#ff3c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M18 16c-3.4 1.1-6.1 3.8-7.2 7.2M20 10c-4.9.6-9.2 3.1-12.1 6.8" stroke="#ff6a6a" stroke-width="2" stroke-linecap="round" opacity=".8"/>
+                </svg>
+            </div>
+            <h2 class="tt-delete-farewell-title">It's sad to see you go,<br>maybe in another time right?</h2>
+            <p class="tt-delete-farewell-copy">Farewell, <span class="tt-delete-farewell-name" id="deleteAccountFarewellName">friend</span>.</p>
+            <div class="tt-delete-farewell-progress" aria-hidden="true"><div class="tt-delete-farewell-progress-bar"></div></div>
+            <div class="tt-delete-farewell-countdown" id="deleteAccountFarewellCountdown">REDIRECTING IN 10S</div>
+        </div>
+    </div>
+
+    <!-- Settings security slide panels: same HTML document, revealed only when opened. -->
+    <div class="tt-settings-slider" id="settingsSecuritySlider" aria-hidden="true">
+        <div class="tt-settings-slide" id="changeEmailSlide" data-slide="email">
+            <div class="tt-settings-slide-head">
+                <div>
+                    <span class="mono-meta">ACCOUNT SECURITY / 01</span>
+                    <h2 class="display-title tt-settings-slide-title">CHANGE EMAIL.</h2>
+                    <p class="mono-meta">Update the email address attached to your TuneTrack account.</p>
+                </div>
+                <button type="button" class="pill-btn outline tt-settings-close"
+                    data-close-settings-slide>Close</button>
+            </div>
+            <div class="tt-settings-form">
+                <label class="mono-label" for="changeEmailCurrent">CURRENT EMAIL</label>
+                <input id="changeEmailCurrent" class="editorial-input" type="email" readonly>
+                <label class="mono-label" for="changeEmailNew">NEW EMAIL</label>
+                <input id="changeEmailNew" class="editorial-input" type="email" autocomplete="email"
+                    placeholder="you@example.com">
+                <label class="mono-label" for="changeEmailPassword">CURRENT PASSWORD</label>
+                <input id="changeEmailPassword" class="editorial-input" type="password" autocomplete="current-password"
+                    placeholder="Required for security">
+                <p class="mono-meta tt-settings-helper">For your protection, Firebase requires recent authentication
+                    before changing a sensitive account field.</p>
+                <div id="changeEmailStatus" class="tt-settings-status" aria-live="polite"></div>
+                <div class="tt-settings-actions">
+                    <button type="button" class="pill-btn outline" data-close-settings-slide>Cancel</button>
+                    <button type="button" class="pill-btn" id="submitChangeEmailBtn">Update Email</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tt-settings-slide" id="changePasswordSlide" data-slide="password">
+            <div class="tt-settings-slide-head">
+                <div>
+                    <span class="mono-meta">ACCOUNT SECURITY / 02</span>
+                    <h2 class="display-title tt-settings-slide-title">CHANGE PASSWORD.</h2>
+                    <p class="mono-meta">Set a new password for your TuneTrack account.</p>
+                </div>
+                <button type="button" class="pill-btn outline tt-settings-close"
+                    data-close-settings-slide>Close</button>
+            </div>
+            <div class="tt-settings-form">
+                <label class="mono-label" for="changePasswordCurrent">CURRENT PASSWORD</label>
+                <input id="changePasswordCurrent" class="editorial-input" type="password"
+                    autocomplete="current-password" placeholder="Current password">
+                <label class="mono-label" for="changePasswordNew">NEW PASSWORD</label>
+                <input id="changePasswordNew" class="editorial-input" type="password" autocomplete="new-password"
+                    placeholder="Minimum 6 characters">
+                <label class="mono-label" for="changePasswordConfirm">CONFIRM NEW PASSWORD</label>
+                <input id="changePasswordConfirm" class="editorial-input" type="password" autocomplete="new-password"
+                    placeholder="Repeat new password">
+                <p class="mono-meta tt-settings-helper">Changing your password requires recent authentication and
+                    updates the account credential immediately.</p>
+                <div id="changePasswordStatus" class="tt-settings-status" aria-live="polite"></div>
+                <div class="tt-settings-actions">
+                    <button type="button" class="pill-btn outline" data-close-settings-slide>Cancel</button>
+                    <button type="button" class="pill-btn" id="submitChangePasswordBtn">Update Password</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Unlock Gate Overlay -->
+    <div class="gate-overlay" id="gate-overlay">
+        <div class="gate-content">
+            <button class="close-gate" id="close-gate">✕</button>
+            <div class="gate-visual" id="gate-visual">
+                <!-- Product image injected here -->
+            </div>
+            <div class="gate-info">
+                <h2 class="gate-title">Unlock this product.</h2>
+                <p class="gate-desc">Complete one of the requirements below to add this asset to your vault.</p>
+
+                <div class="gate-actions">
+                    <button class="pill-btn outline action-btn" id="watch-video-btn">
+                        <span class="mono-meta">01</span> Watch 1-minute video
+                    </button>
+                    <button class="pill-btn outline action-btn" id="follow-ig-btn">
+                        <span class="mono-meta">02</span> Follow @tunetrackco
+                    </button>
+                </div>
+                <div class="unlock-status mono-meta" id="unlock-status">AWAITING VERIFICATION...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Local catalogue data -->
+    <script src="assets/js/data-catalog-local.js"></script>
+
+    <!-- Freebie artist display normalization: source data stays untouched. -->
+    <script>
+    (() => {
+        const products = Array.isArray(window.TuneTrackCatalog) ? window.TuneTrackCatalog : [];
+        const capArtist = (value) => {
+            let artist = String(value || '').trim();
+            artist = artist.replace(/\s+(?:ft\.?|feat\.?|featuring)\b.*$/i, '').trim();
+            return artist.split(/\s+/).filter(Boolean).slice(0, 2).join(' ').slice(0, 20).trim();
+        };
+        products.forEach(item => {
+            const categories = Array.isArray(item?.category) ? item.category : [];
+            if (String(item?.price || '').toLowerCase() === 'free' || categories.some(c => String(c).toLowerCase() === 'freebies')) {
+                item.__displayArtist = capArtist(item.artist);
+            }
+        });
+    })();
+    </script>
+
+    <!-- Catalogue / Freebies UI bridge. Uses local JPG thumbnails under assets/images/thumbnail/. -->
+        <script src="assets/js/catalogue-render.js"></script>
+
+    <!-- Freebies category UI — scoped only to the Freebies section. -->
+        <link rel="stylesheet" href="assets/css/tt-freebies-category-ui.css">
+
+        <script src="assets/js/freebies-categories.js"></script>
+
+
+        <link rel="stylesheet" href="assets/css/tt-freebies-premium-transition.css">
+
+    <!-- Exact Freebie -> Unlock bridge. Uses the clicked catalog card as the sole source of product identity. -->
+    <script>
+    (() => {
+        const normalize = (value) => String(value || '').trim().toLowerCase();
+        const slugify = (value) => String(value || '')
+            .normalize('NFKD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+
+        document.addEventListener('click', (event) => {
+            const trigger = event.target.closest('.claim-trigger, #freebies-grid .catalog-data-card');
+            if (!trigger) return;
+
+            // Category cards are handled by the existing Freebies category flow.
+            if (trigger.classList.contains('tt-freebie-category-card')) return;
+
+            const card = trigger.closest('.catalog-data-card');
+            if (!card) return;
+
+            const title = String(card.dataset.productTitle || card.querySelector('.card-title')?.textContent || '').trim();
+            if (!title) return;
+
+            const catalog = Array.isArray(window.TuneTrackCatalog) ? window.TuneTrackCatalog : [];
+            const product = catalog.find(item => normalize(item?.title) === normalize(title));
+            if (!product) return;
+
+            event.preventDefault();
+            event.stopImmediatePropagation();
+
+            const params = new URLSearchParams();
+            params.set('productKey', slugify(product.title));
+            params.set('product', product.title);
+            params.set('return', 'dashboard.html#freebies');
+
+            window.location.assign('unlock-gate-user-fb.html?' + params.toString());
+        }, true);
+    })();
+    </script>
+
+    <!-- Firebase Logic -->
+    <script type="module" src="assets/js/dashboard.js"></script>
+
+    <!-- UI Logic Script -->
+    <script src="assets/js/dashboard-ui.js"></script>
+
+    <!-- Navigation fallback: keeps every dashboard section usable even if optional UI script fails. -->
+        <script src="assets/js/navigation-fallback.js"></script>
+
+    <!-- Notification UI (isolated; no Firebase/Auth dependency) -->
+        <link rel="stylesheet" href="assets/css/tt-notification-ui.css">
+
+        <script src="assets/js/notifications-ui.js"></script>
+
+        <link rel="stylesheet" href="assets/css/tt-login-marquee-fix.css">
+
+        <link rel="stylesheet" href="assets/css/dashboard-inline-10.css">
+
+        <script src="assets/js/freebies-scroll-lock.js"></script>
+
+        <script src="assets/js/freebies-back-scroll-lock.js"></script>
+
+
+</body>
+
+</html>

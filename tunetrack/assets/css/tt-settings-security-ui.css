@@ -1,0 +1,151 @@
+        /* Security panels: hidden by default; opened only from the Settings buttons. */
+        body.tt-settings-slide-open {
+            overflow: hidden !important;
+        }
+
+        .tt-settings-slider {
+            position: fixed;
+            inset: 0;
+            z-index: 10050;
+            background: #090909;
+            color: #fff;
+            transform: translateX(100%);
+            opacity: 0;
+            visibility: hidden;
+            transition: transform .55s cubic-bezier(.22, 1, .36, 1), opacity .35s ease, visibility 0s linear .55s;
+            overflow-y: auto;
+            overflow-x: hidden;
+            overscroll-behavior: contain;
+        }
+
+        .tt-settings-slider.is-open {
+            transform: translateX(0);
+            opacity: 1;
+            visibility: visible;
+            transition: transform .55s cubic-bezier(.22, 1, .36, 1), opacity .35s ease;
+        }
+
+        .tt-settings-slide {
+            position: absolute;
+            inset: 0;
+            min-height: 100%;
+            padding: clamp(110px, 13vh, 150px) clamp(24px, 8vw, 120px) 80px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(32px);
+            transition: opacity .35s ease, transform .55s cubic-bezier(.22, 1, .36, 1);
+        }
+
+        .tt-settings-slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateX(0);
+        }
+
+        .tt-settings-slide-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 28px;
+            padding-bottom: 26px;
+            margin-bottom: 42px;
+            border-bottom: 1px solid var(--border-light, rgba(255, 255, 255, .12));
+        }
+
+        .tt-settings-slide-title {
+            margin: 8px 0 8px;
+            font-size: clamp(48px, 7vw, 104px);
+            line-height: .92;
+        }
+
+        .tt-settings-form {
+            max-width: 900px;
+            display: grid;
+            gap: 13px;
+        }
+
+        .tt-settings-form .editorial-input {
+            width: 100%;
+            margin-bottom: 18px;
+        }
+
+        .tt-settings-helper {
+            max-width: 760px;
+            margin: 2px 0 12px;
+            line-height: 1.6;
+        }
+
+        .tt-settings-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .tt-settings-status {
+            min-height: 18px;
+            font: 11px/1.5 var(--font-mono, monospace);
+            letter-spacing: .03em;
+        }
+
+        .tt-settings-status.error {
+            color: #ff6666;
+        }
+
+        .tt-settings-status.success {
+            color: #9fe3b1;
+        }
+
+        .tt-session-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .tt-session-item {
+            position: relative;
+        }
+
+        .tt-session-badge {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 3px 6px;
+            border: 1px solid rgba(255, 255, 255, .22);
+            border-radius: 999px;
+            font: 8px var(--font-mono, monospace);
+            letter-spacing: .08em;
+        }
+
+        .tt-session-notice {
+            display: block;
+            min-height: 16px;
+            margin-top: 10px;
+        }
+
+        .tt-session-loading {
+            opacity: .55;
+        }
+
+        @media (max-width: 700px) {
+            .tt-settings-slide {
+                padding: 92px 22px 50px;
+            }
+
+            .tt-settings-slide-head {
+                flex-direction: column;
+            }
+
+            .tt-settings-slide-title {
+                font-size: clamp(42px, 13vw, 72px);
+            }
+
+            .tt-settings-actions {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .tt-settings-slider,
+            .tt-settings-slide {
+                transition: none !important;
+            }
+        }

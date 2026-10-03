@@ -1,0 +1,111 @@
+        /* Hentikan efek rubber-band (tarik ke atas/bawah yang memunculkan blank space) */
+        html,
+        body {
+            overscroll-behavior-y: none !important;
+        }
+
+        /* Beri jarak pada body dan turunkan UI header supaya tidak tertimpa marquee */
+        body {
+            padding-top: 38px !important;
+        }
+
+        .ui-header {
+            top: 38px !important;
+        }
+
+        /* Marquee-only fix: top of page, blue strip, white text, seamless infinite loop. */
+        .tnco-top-marquee {
+            position: fixed !important;
+            /* FIXED: Diubah jadi fixed agar selalu di atas */
+            top: 0 !important;
+            left: 0 !important;
+            z-index: 9999 !important;
+            /* FIXED: Index diperbesar untuk menghindari tumpang tindih */
+            display: block !important;
+            overflow: hidden !important;
+            width: 100vw !important;
+            /* Gunakan vw untuk lebar absolut */
+            max-width: none !important;
+            margin: 0 !important;
+            padding: 8px 0 !important;
+            /* FIXED: Added subtle vertical padding */
+            background: #131313 !important;
+            color: #fff !important;
+        }
+
+        .tnco-top-marquee-track {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            width: max-content !important;
+            max-width: none !important;
+            min-width: max-content !important;
+            gap: 2rem !important;
+            /* FIXED: Added distance between duplicated sets */
+            animation: ttLoginTopMarquee 20s linear infinite !important;
+            transform: translate3d(0, 0, 0);
+            will-change: transform;
+        }
+
+        .tnco-top-marquee-set {
+            flex: 0 0 auto !important;
+            width: max-content !important;
+            min-width: max-content !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 2rem !important;
+            /* FIXED: Added distance between text and icon */
+        }
+
+        .tnco-top-marquee-item,
+        .tnco-top-marquee-item a,
+        .tnco-top-marquee-item strong,
+        .tnco-top-marquee-item u {
+            color: #fff !important;
+        }
+
+        .tnco-top-marquee-item a {
+            font-family: 'Space Mono', monospace !important;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 2px;
+            white-space: nowrap !important;
+            font-size: 14px;
+            /* Maintain readable size */
+        }
+
+        .tnco-top-marquee-smile {
+            color: #fff !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 20px !important;
+            /* FIXED: Strict width so icon doesn't shrink */
+            height: 20px !important;
+        }
+
+        .tnco-top-marquee-smile svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        @keyframes ttLoginTopMarquee {
+            from {
+                transform: translate3d(0, 0, 0);
+            }
+
+            to {
+                transform: translate3d(-12.5%, 0, 0);
+            }
+        }
+
+        @media (max-width: 767px) {
+            .tnco-top-marquee-track {
+                animation-duration: 22s !important;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .tnco-top-marquee-track {
+                animation: none !important;
+                transform: none !important;
+            }
+        }

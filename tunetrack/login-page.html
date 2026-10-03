@@ -1,0 +1,2710 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>
+        Login — Tunetrack ecosystem
+    </title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet" />
+    <link href="assets/css/index-style.css" rel="stylesheet" />
+    <style id="tt-login-page-style">
+        .tt-login-main {
+            min-height: calc(100vh - 76px);
+            background: #070707;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 88px 24px 96px;
+            box-sizing: border-box;
+        }
+    </style>
+
+    <style id="tt-staged-animation">
+        /* =========================================================
+   TUNETRACK AUTH — STAGED ENTRANCE ANIMATION
+   ~1 SECOND TOTAL
+   LOGIN / SIGNUP / FORGOT
+   ========================================================= */
+
+        @keyframes ttStagedSlideUp {
+            0% {
+                opacity: 0;
+                transform: translate3d(0, 10px, 0);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+
+        /* =========================================================
+   ANIMATED ELEMENTS
+   ========================================================= */
+
+        .tt-auth-view.tt-staged-active>.tt-login-kicker,
+        .tt-auth-view.tt-staged-active>h1,
+        .tt-auth-view.tt-staged-active>.tt-login-copy,
+        .tt-auth-view.tt-staged-active .tt-field,
+        .tt-auth-view.tt-staged-active .tt-auth-row,
+        .tt-auth-view.tt-staged-active .tt-auth-message,
+        .tt-auth-view.tt-staged-active .tt-submit-btn,
+        .tt-auth-view.tt-staged-active .tt-passkey-btn,
+        .tt-auth-view.tt-staged-active .tt-secondary-btn,
+        .tt-auth-view.tt-staged-active>.tt-switch-copy {
+
+            opacity: 0;
+
+            animation-name: ttStagedSlideUp;
+            animation-duration: 0.40s;
+            animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+            animation-fill-mode: forwards;
+
+            will-change: transform, opacity;
+        }
+
+
+        /* =========================================================
+   STAGE 1
+   Kicker + Heading + Copy
+   0.00s
+   ========================================================= */
+
+        .tt-auth-view.tt-staged-active>.tt-login-kicker,
+        .tt-auth-view.tt-staged-active>h1,
+        .tt-auth-view.tt-staged-active>.tt-login-copy {
+            animation-delay: 0s;
+        }
+
+
+        /* =========================================================
+   STAGE 2
+   First field
+   0.15s
+   ========================================================= */
+
+        .tt-auth-view.tt-staged-active .tt-field:nth-of-type(1) {
+            animation-delay: 0.15s;
+        }
+
+
+        /* =========================================================
+   STAGE 3
+   Second field
+   0.30s
+   ========================================================= */
+
+        .tt-auth-view.tt-staged-active .tt-field:nth-of-type(2) {
+            animation-delay: 0.30s;
+        }
+
+
+        /* =========================================================
+   STAGE 4
+   Third field
+   0.45s
+   ========================================================= */
+
+        .tt-auth-view.tt-staged-active .tt-field:nth-of-type(3) {
+            animation-delay: 0.45s;
+        }
+
+
+        /* =========================================================
+   STAGE 5
+   Buttons / Actions
+   0.60s
+   ========================================================= */
+
+        .tt-auth-view.tt-staged-active .tt-auth-row,
+        .tt-auth-view.tt-staged-active .tt-auth-message,
+        .tt-auth-view.tt-staged-active .tt-submit-btn,
+        .tt-auth-view.tt-staged-active .tt-passkey-btn,
+        .tt-auth-view.tt-staged-active .tt-secondary-btn,
+        .tt-auth-view.tt-staged-active>.tt-switch-copy {
+            animation-delay: 0.60s;
+        }
+
+
+        /* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .tt-auth-view.tt-staged-active>*,
+            .tt-auth-view.tt-staged-active .tt-field,
+            .tt-auth-view.tt-staged-active .tt-auth-row,
+            .tt-auth-view.tt-staged-active .tt-auth-message,
+            .tt-auth-view.tt-staged-active .tt-submit-btn,
+            .tt-auth-view.tt-staged-active .tt-passkey-btn,
+            .tt-auth-view.tt-staged-active .tt-secondary-btn {
+
+                opacity: 1 !important;
+                animation: none !important;
+                transform: none !important;
+
+            }
+
+        }
+    </style>
+
+
+    <script>
+        (function () {
+
+            /* =======================================================
+               GET ALL AUTH VIEWS
+               ======================================================= */
+
+            function getViews() {
+
+                return [
+                    document.getElementById('loginView'),
+                    document.getElementById('signupView'),
+                    document.getElementById('forgotView')
+                ].filter(Boolean);
+
+            }
+
+
+            /* =======================================================
+               PLAY / REPLAY ANIMATION
+               ======================================================= */
+
+            function play(view) {
+
+                if (!view) return;
+
+                /*
+                  Remove previous animation state.
+                  This allows the animation to replay every time.
+                */
+                view.classList.remove('tt-staged-active');
+
+                /*
+                  Force browser reflow.
+                  Required to restart CSS animation reliably.
+                */
+                void view.offsetWidth;
+
+                /*
+                  Start animation on next frame.
+                */
+                requestAnimationFrame(function () {
+
+                    view.classList.add('tt-staged-active');
+
+                });
+
+            }
+
+
+            /* =======================================================
+               FIND CURRENT AUTH VIEW
+               ======================================================= */
+
+            function getCurrentView() {
+
+                const views = getViews();
+
+                return views.find(function (view) {
+
+                    return !view.hidden;
+
+                }) || document.getElementById('loginView');
+
+            }
+
+
+            /* =======================================================
+               REPLAY CURRENT VIEW
+               ======================================================= */
+
+            function replayCurrentView() {
+
+                const currentView = getCurrentView();
+
+                if (!currentView) return;
+
+                play(currentView);
+
+            }
+
+
+            /* =======================================================
+               WATCH AUTH VIEW SWITCHING
+               ======================================================= */
+
+            function startObserver() {
+
+                getViews().forEach(function (view) {
+
+                    const observer = new MutationObserver(function (mutations) {
+
+                        let changed = false;
+
+                        mutations.forEach(function (mutation) {
+
+                            if (
+                                mutation.type === 'attributes' &&
+                                mutation.attributeName === 'hidden'
+                            ) {
+
+                                changed = true;
+
+                            }
+
+                        });
+
+                        if (!changed) return;
+
+                        requestAnimationFrame(function () {
+
+                            replayCurrentView();
+
+                        });
+
+                    });
+
+
+                    observer.observe(view, {
+
+                        attributes: true,
+                        attributeFilter: ['hidden']
+
+                    });
+
+                });
+
+
+                /*
+                  Initial page animation
+                */
+                replayCurrentView();
+
+            }
+
+
+            /* =======================================================
+               INIT
+               ======================================================= */
+
+            if (document.readyState === 'loading') {
+
+                document.addEventListener(
+                    'DOMContentLoaded',
+                    startObserver,
+                    { once: true }
+                );
+
+            } else {
+
+                startObserver();
+
+            }
+
+        })();
+    </script>
+
+    <style>
+        .tt-login-shell {
+            width: 100%;
+            max-width: 460px;
+        }
+
+        .tt-login-card {
+            width: 100%;
+            box-sizing: border-box;
+            background: #111111;
+            border: 1px solid rgba(255, 255, 255, .11);
+            border-radius: 18px;
+            padding: 38px;
+            box-shadow: 0 28px 80px rgba(0, 0, 0, .28);
+        }
+
+        .tt-auth-view[hidden] {
+            display: none !important;
+        }
+
+        .tt-login-kicker {
+            margin-bottom: 13px;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            line-height: 1;
+            letter-spacing: .08em;
+            color: rgba(255, 255, 255, .42);
+        }
+
+        .tt-login-card h1 {
+            margin: 0 0 10px;
+            font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            line-height: .98;
+            letter-spacing: -.055em;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .tt-login-copy {
+            margin: 0 0 28px;
+            color: rgba(255, 255, 255, .48);
+            font: 400 13px/1.55 Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .tt-field {
+            margin-bottom: 11px;
+        }
+
+        .tt-field input {
+            width: 100%;
+            height: 50px;
+            box-sizing: border-box;
+            border: 1px solid rgba(255, 255, 255, .12);
+            border-radius: 10px;
+            outline: none;
+            background: #0b0b0b;
+            color: #fff;
+            padding: 0 15px;
+            font: 400 13px Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+            transition: border-color .2s ease, background .2s ease;
+        }
+
+        .tt-field input::placeholder {
+            color: rgba(255, 255, 255, .34);
+        }
+
+        .tt-field input:focus {
+            border-color: rgba(255, 255, 255, .38);
+            background: #0d0d0d;
+        }
+
+        .tt-auth-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin: 5px 0 18px;
+        }
+
+        .tt-remember {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: rgba(255, 255, 255, .45);
+            font: 400 11px Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+            cursor: pointer;
+        }
+
+        .tt-remember input {
+            accent-color: #fff;
+        }
+
+        .tt-auth-link {
+            border: 0;
+            padding: 0;
+            background: none;
+            color: rgba(255, 255, 255, .72);
+            font: 500 11px Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .tt-auth-link:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        .tt-auth-link-strong {
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .tt-auth-message {
+            min-height: 18px;
+            margin: 0 0 10px;
+            color: rgba(255, 255, 255, .48);
+            font: 400 11px/1.4 Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .tt-auth-message.is-error {
+            color: #ff8d8d;
+        }
+
+        .tt-auth-message.is-success {
+            color: #9be6a7;
+        }
+
+        .tt-submit-btn,
+        .tt-passkey-btn,
+        .tt-secondary-btn {
+            width: 100%;
+            height: 48px;
+            box-sizing: border-box;
+            border-radius: 999px;
+            font: 600 12px Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+            cursor: pointer;
+            transition: transform .2s ease, opacity .2s ease, background .2s ease;
+        }
+
+        .tt-submit-btn:hover,
+        .tt-passkey-btn:hover,
+        .tt-secondary-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .tt-submit-btn {
+            border: 1px solid #fff;
+            background: #fff;
+            color: #0a0a0a;
+            margin-bottom: 10px;
+        }
+
+        .tt-passkey-btn,
+        .tt-secondary-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid rgba(255, 255, 255, .12);
+            background: transparent;
+            color: #fff;
+        }
+
+        .tt-secondary-btn {
+            margin-top: 10px;
+        }
+
+        .tt-switch-copy {
+            margin: 27px 0 0;
+            text-align: center;
+            color: rgba(255, 255, 255, .42);
+            font: 400 11px Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        @media (max-width: 640px) {
+            .tt-login-main {
+                padding: 56px 16px 72px;
+                align-items: flex-start;
+            }
+
+            .tt-login-card {
+                padding: 28px 22px;
+                border-radius: 15px;
+            }
+
+            .tt-auth-row {
+                align-items: flex-start;
+            }
+        }
+    </style>
+
+    <style id="tt-login-footer-hard-reset">
+        /* =========================================================
+   LOGIN PAGE FOOTER — SELF CONTAINED / HARD RESET
+   Prevents index/global image rules from blowing up payment logos.
+========================================================= */
+        body>.swiss-footer.tunetrack-footer {
+            display: block !important;
+            position: relative !important;
+            width: 100% !important;
+            max-width: none !important;
+            min-height: 0 !important;
+            height: auto !important;
+            margin: 0 !important;
+            padding: 72px 52px 28px !important;
+            box-sizing: border-box !important;
+            overflow: hidden !important;
+            background: #f4f4f4 !important;
+            color: #18181b !important;
+            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+        }
+
+        body>.swiss-footer.tunetrack-footer *,
+        body>.swiss-footer.tunetrack-footer *::before,
+        body>.swiss-footer.tunetrack-footer *::after {
+            box-sizing: border-box !important;
+        }
+
+        body>.swiss-footer.tunetrack-footer .container {
+            width: 100% !important;
+            max-width: 1400px !important;
+            margin: 0 auto !important;
+            padding: 0 !important;
+        }
+
+        body>.swiss-footer.tunetrack-footer .footer-grid {
+            display: grid !important;
+            grid-template-columns: minmax(240px, 1.45fr) minmax(170px, 1fr) minmax(170px, 1fr) minmax(280px, 1.35fr) !important;
+            gap: 48px !important;
+            width: 100% !important;
+            align-items: start !important;
+        }
+
+        body>.swiss-footer.tunetrack-footer .footer-col-5,
+        body>.swiss-footer.tunetrack-footer .footer-col-2,
+        body>.swiss-footer.tunetrack-footer .footer-col-3,
+        body>.swiss-footer.tunetrack-footer .footer-col-4 {
+            min-width: 0 !important;
+            width: auto !important;
+            height: auto !important;
+        }
+
+        body>.swiss-footer.tunetrack-footer .footer-col-title {
+            display: block !important;
+            margin: 0 0 14px !important;
+            padding: 0 !important;
+            color: #18181b !important;
+            font: 700 11px/1.2 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+        }
+
+        body>.swiss-footer.tunetrack-footer .footer-link-list {
+            display: block !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            list-style: none !important;
+        }
+
+        body>.swiss-footer.tunetrack-footer .footer-link-list li {
+            display: block !important;
+            margin: 0 0 7px !important;
+            padding: 0 !important;
+            list-style: none !important;
+        }
+
+        body>.swiss-footer.tunetrack-footer .footer-link-list a {
+            display: inline !important;
+            width: auto !important;
+            height: auto !important;
+            color: #52525b !important;
+            font: 400 12px/1.45 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+            text-decoration: none !important;
+        }
+
+        body>.swiss-footer.tunetrack-footer .font-columns-grid {
+            display: block !important;
+            columns: 2 !important;
+            column-gap: 28px !important;
+            color: #52525b !important;
+            font: 400 11px/1.7 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+        }
+
+        body>.swiss-footer.tunetrack-footer .mt-tag {
+            display: inline !important;
+            width: auto !important;
+            height: auto !important;
+            font-size: .72em !important;
+            opacity: .55 !important;
+            white-space: nowrap !important;
+        }
+
+        /* Payment area: hard-lock all dimensions. */
+        body>.swiss-footer.tunetrack-footer .payment-bar {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 24px !important;
+            width: 100% !important;
+            min-height: 44px !important;
+            height: auto !important;
+            margin: 44px 0 0 !important;
+            padding: 18px 0 0 !important;
+            border-top: 1px solid #e4e4e7 !important;
+        }
+
+        body>.swiss-footer.tunetrack-footer .payment-badges {
+            display: flex !important;
+            align-items: center !important;
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+            width: auto !important;
+            max-width: 75% !important;
+            height: 30px !important;
+            min-height: 30px !important;
+            overflow: visible !important;
+        }
+
+        body>.swiss-footer.tunetrack-footer .pay-logo {
+            display: inline-flex !important;
+            flex: 0 0 auto !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: auto !important;
+            min-width: 58px !important;
+            max-width: 112px !important;
+            height: 30px !important;
+            max-height: 30px !important;
+            margin: 0 10px 0 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+        }
+
+        body>.swiss-footer.tunetrack-footer .pay-logo img,
+        body>.swiss-footer.tunetrack-footer .payment-badges img,
+        body>.swiss-footer.tunetrack-footer img[alt="QRIS"],
+        body>.swiss-footer.tunetrack-footer img[alt="GoPay"],
+        body>.swiss-footer.tunetrack-footer img[alt="DANA"],
+        body>.swiss-footer.tunetrack-footer img[alt="OVO"],
+        body>.swiss-footer.tunetrack-footer img[alt="ShopeePay"],
+        body>.swiss-footer.tunetrack-footer img[alt="BCA"],
+        body>.swiss-footer.tunetrack-footer img[alt="VISA"],
+        body>.swiss-footer.tunetrack-footer img[alt="Mastercard"] {
+            display: block !important;
+            flex: 0 0 auto !important;
+            width: auto !important;
+            min-width: 0 !important;
+            max-width: 112px !important;
+            height: 24px !important;
+            min-height: 0 !important;
+            max-height: 24px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            object-fit: contain !important;
+            object-position: center !important;
+            transform: none !important;
+        }
+
+        body>.swiss-footer.tunetrack-footer .copyright-text {
+            flex: 0 0 auto !important;
+            width: auto !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            color: #a1a1aa !important;
+            font: 400 10px/1.4 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+            white-space: nowrap !important;
+        }
+
+        body>.swiss-footer.tunetrack-footer .newsletter-pill-form {
+            display: flex !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 38px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            border: 1px solid #d4d4d8 !important;
+            border-radius: 999px !important;
+            background: #fff !important;
+        }
+
+        body>.swiss-footer.tunetrack-footer .newsletter-pill-form input {
+            flex: 1 1 auto !important;
+            width: auto !important;
+            min-width: 0 !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 13px !important;
+            border: 0 !important;
+            outline: 0 !important;
+            background: transparent !important;
+            color: #18181b !important;
+        }
+
+        body>.swiss-footer.tunetrack-footer .newsletter-pill-form button {
+            flex: 0 0 38px !important;
+            width: 38px !important;
+            height: 38px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: 0 !important;
+            border-radius: 50% !important;
+            background: #18181b !important;
+            color: #fff !important;
+        }
+
+        @media (max-width: 900px) {
+            body>.swiss-footer.tunetrack-footer {
+                padding: 56px 28px 24px !important;
+            }
+
+            body>.swiss-footer.tunetrack-footer .footer-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 36px 28px !important;
+            }
+
+            body>.swiss-footer.tunetrack-footer .payment-bar {
+                align-items: flex-start !important;
+                flex-direction: column !important;
+            }
+
+            body>.swiss-footer.tunetrack-footer .payment-badges {
+                max-width: 100% !important;
+            }
+        }
+
+        @media (max-width: 560px) {
+            body>.swiss-footer.tunetrack-footer {
+                padding: 46px 20px 22px !important;
+            }
+
+            body>.swiss-footer.tunetrack-footer .footer-grid {
+                grid-template-columns: 1fr !important;
+                gap: 28px !important;
+            }
+
+            body>.swiss-footer.tunetrack-footer .font-columns-grid {
+                columns: 1 !important;
+            }
+
+            body>.swiss-footer.tunetrack-footer .copyright-text {
+                white-space: normal !important;
+            }
+        }
+    </style>
+
+
+<style id="tt-login-marquee-fix">
+    .tnco-top-marquee {
+        overflow: hidden !important;
+        width: 100% !important;
+        white-space: nowrap !important;
+    }
+
+    .tnco-top-marquee-track {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        width: max-content !important;
+        min-width: max-content !important;
+        max-width: none !important;
+
+        will-change: transform !important;
+        transform: translate3d(0, 0, 0);
+    }
+
+    .tnco-top-marquee-set {
+        flex: 0 0 auto !important;
+        display: flex !important;
+        align-items: center !important;
+
+        width: max-content !important;
+        min-width: max-content !important;
+        max-width: none !important;
+
+        white-space: nowrap !important;
+
+        /* AUTO GAP */
+        margin-right: 100px !important;
+    }
+
+    .tnco-top-marquee-item,
+    .tnco-top-marquee-smile {
+        flex: 0 0 auto !important;
+        white-space: nowrap !important;
+    }
+
+    /* Animation dibuat oleh JS berdasarkan ukuran SET asli */
+    @keyframes ttLoginTopMarquee {
+        from {
+            transform: translate3d(0, 0, 0);
+        }
+
+        to {
+            transform: translate3d(var(--tt-marquee-distance), 0, 0);
+        }
+    }
+
+    .tnco-top-marquee-track {
+        animation:
+            ttLoginTopMarquee
+            var(--tt-marquee-duration, 20s)
+            linear
+            infinite !important;
+    }
+
+    @media (max-width: 767px) {
+        .tnco-top-marquee-track {
+            animation-duration: var(--tt-marquee-mobile-duration, 22s) !important;
+        }
+
+        .tnco-top-marquee-set {
+            margin-right: 70px !important;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .tnco-top-marquee-track {
+            animation: none !important;
+            transform: none !important;
+        }
+    }
+</style>
+
+<style id="tt-login-marquee-fix">
+    .tnco-top-marquee {
+        width: 100% !important;
+        overflow: hidden !important;
+        white-space: nowrap !important;
+    }
+
+    .tnco-top-marquee-track {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        width: max-content !important;
+        min-width: max-content !important;
+        max-width: none !important;
+
+        animation: ttMarquee 20s linear infinite !important;
+        will-change: transform !important;
+    }
+
+    .tnco-top-marquee-set {
+        flex: 0 0 auto !important;
+        display: flex !important;
+        align-items: center !important;
+
+        width: max-content !important;
+        min-width: max-content !important;
+        max-width: none !important;
+
+        white-space: nowrap !important;
+
+        /*
+         * JARAK ANTAR ITEM
+         */
+        margin-right: 140px !important;
+    }
+
+    .tnco-top-marquee-item,
+    .tnco-top-marquee-smile {
+        flex: 0 0 auto !important;
+        white-space: nowrap !important;
+    }
+
+    /*
+     * Kalau sekarang memang ada 3 SET:
+     * 1 / 3 = 33.333%
+     */
+    @keyframes ttMarquee {
+        from {
+            transform: translate3d(0, 0, 0);
+        }
+
+        to {
+            transform: translate3d(-33.333333%, 0, 0);
+        }
+    }
+
+    @media (max-width: 767px) {
+        .tnco-top-marquee-set {
+            margin-right: 90px !important;
+        }
+
+        .tnco-top-marquee-track {
+            animation-duration: 22s !important;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .tnco-top-marquee-track {
+            animation: none !important;
+        }
+    }
+</style>
+
+
+<style id="tt-account-cooking-style">
+    .tt-cooking-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background:
+            radial-gradient(circle at 50% 42%, rgba(255,255,255,.055), transparent 34%),
+            rgba(5,5,5,.94);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity .45s ease, visibility .45s ease;
+    }
+
+    .tt-cooking-overlay.is-active {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    .tt-cooking-panel {
+        width: min(520px, 100%);
+        text-align: center;
+        padding: 42px 28px 34px;
+    }
+
+    .tt-cooking-emoji {
+        position: relative;
+        display: inline-grid;
+        place-items: center;
+        width: 76px;
+        height: 76px;
+        margin-bottom: 24px;
+        font-size: 42px;
+        animation: ttCookBob 1.05s ease-in-out infinite;
+        filter: drop-shadow(0 12px 24px rgba(0,0,0,.4));
+    }
+
+    .tt-cooking-emoji::after {
+        content: "♨";
+        position: absolute;
+        right: -7px;
+        top: -12px;
+        font-size: 20px;
+        opacity: .48;
+        animation: ttSteam 1.4s ease-in-out infinite;
+    }
+
+    .tt-cooking-kicker {
+        margin-bottom: 12px;
+        color: rgba(255,255,255,.38);
+        font: 700 9px/1 'Space Mono', monospace;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+    }
+
+    .tt-cooking-title {
+        margin: 0;
+        color: #fff;
+        font: 800 clamp(26px, 5vw, 42px)/.98 Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+        letter-spacing: -.055em;
+    }
+
+    .tt-cooking-status {
+        min-height: 22px;
+        margin: 16px 0 26px;
+        color: rgba(255,255,255,.52);
+        font: 400 12px/1.5 Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .tt-cooking-progress {
+        width: 100%;
+        height: 3px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(255,255,255,.10);
+    }
+
+    .tt-cooking-progress-fill {
+        width: 0%;
+        height: 100%;
+        border-radius: inherit;
+        background: #fff;
+        transform-origin: left center;
+        will-change: width;
+    }
+
+    .tt-cooking-percent {
+        margin-top: 10px;
+        color: rgba(255,255,255,.30);
+        font: 700 9px/1 'Space Mono', monospace;
+        letter-spacing: .08em;
+    }
+
+    .tt-auth-message.is-error {
+        color: #ff8d8d;
+    }
+
+    .tt-auth-message.is-success {
+        color: #9be6a7;
+    }
+
+    @keyframes ttCookBob {
+        0%, 100% { transform: translateY(0) rotate(-2deg); }
+        50% { transform: translateY(-9px) rotate(2deg); }
+    }
+
+    @keyframes ttSteam {
+        0%, 100% { transform: translateY(3px) scale(.9); opacity: .20; }
+        50% { transform: translateY(-7px) scale(1); opacity: .62; }
+    }
+</style>
+
+<style id="tt-auth-animation-force">
+/* TuneTrack requirement: auth animations are ALWAYS ON. */
+.tt-auth-view.tt-staged-active > .tt-login-kicker,
+.tt-auth-view.tt-staged-active > h1,
+.tt-auth-view.tt-staged-active > .tt-login-copy,
+.tt-auth-view.tt-staged-active .tt-field,
+.tt-auth-view.tt-staged-active .tt-auth-row,
+.tt-auth-view.tt-staged-active .tt-auth-message,
+.tt-auth-view.tt-staged-active .tt-submit-btn,
+.tt-auth-view.tt-staged-active .tt-passkey-btn,
+.tt-auth-view.tt-staged-active .tt-secondary-btn,
+.tt-auth-view.tt-staged-active > .tt-switch-copy {
+    animation-name: ttStagedSlideUp !important;
+    animation-fill-mode: forwards !important;
+}
+
+.tt-cooking-emoji {
+    animation: ttCookBob 1.05s ease-in-out infinite !important;
+}
+.tt-cooking-emoji::after {
+    animation: ttSteam 1.4s ease-in-out infinite !important;
+}
+</style>
+
+
+<style id="tt-login-preparing-style">
+    .tt-cooking-overlay.is-preparing .tt-cooking-emoji {
+        animation-duration: 1.35s;
+    }
+
+    .tt-cooking-overlay.is-preparing .tt-cooking-title {
+        letter-spacing: -.06em;
+    }
+</style>
+
+
+<style id="tt-login-video-bg">
+    /* Login-area-only video background. It never extends into the footer. */
+    .tt-login-main {
+        position: relative !important;
+        isolation: isolate !important;
+        overflow: hidden !important;
+        background: #070707 !important;
+    }
+
+    .tt-login-main > .tt-login-shell {
+        position: relative !important;
+        z-index: 3 !important;
+    }
+
+    .tt-login-video-bg {
+        position: absolute !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        z-index: 0 !important;
+        pointer-events: none !important;
+        overflow: hidden !important;
+        background: #070707;
+    }
+
+    #ttLoginBgCanvas,
+    #ttLoginBgVideoFallback {
+        position: absolute !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+        transform: rotate(180deg);
+    }
+
+    #ttLoginBgCanvas {
+        opacity: 0;
+        transition: opacity .35s ease;
+    }
+
+    #ttLoginBgVideoFallback {
+        object-fit: cover !important;
+        opacity: 1;
+        transition: opacity .35s ease;
+    }
+
+    .tt-login-video-bg::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        background: linear-gradient(180deg, rgba(0,0,0,.34), rgba(0,0,0,.18) 48%, rgba(0,0,0,.48));
+        pointer-events: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        #ttLoginBgCanvas { transition: none; }
+    }
+</style>
+
+
+<style id="tt-login-video-scope-fix">
+    .tt-login-main {
+        position: relative !important;
+        isolation: isolate !important;
+        overflow: hidden !important;
+    }
+
+    .tt-login-main .tt-login-video-bg {
+        position: absolute !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        z-index: 0 !important;
+        pointer-events: none !important;
+        overflow: hidden !important;
+    }
+
+    .tt-login-main .tt-login-video-bg canvas,
+    .tt-login-main .tt-login-video-bg video {
+        position: absolute !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        display: block !important;
+    }
+
+    .tt-login-main > *:not(.tt-login-video-bg) {
+        position: relative;
+        z-index: 2;
+    }
+</style>
+
+</head>
+
+<body>
+    <div aria-label="Tunetrack announcement" class="tnco-top-marquee">
+        <div class="tnco-top-marquee-track" id="tncoTopMarqueeTrack">
+            <div class="tnco-top-marquee-set">
+                <span class="tnco-top-marquee-item">
+                    <a href="catalog-tnts.html"
+                        style="font-family:'Space Mono', monospace !important; letter-spacing:-0.04em !important;">
+                        <u>
+                            <strong>
+                                Christmas Sale
+                            </strong>
+                        </u>
+                        is coming — special deals await
+                    </a>
+                </span>
+                <span aria-hidden="true" class="tnco-top-marquee-smile">
+                    <svg fill="none" viewbox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5">
+                        </circle>
+                        <circle cx="9" cy="10" fill="currentColor" r="0.9">
+                        </circle>
+                        <circle cx="15" cy="10" fill="currentColor" r="0.9">
+                        </circle>
+                        <path d="M8.5 14c1 1.5 2.3 2.2 3.5 2.2S14.5 15.5 15.5 14" stroke="currentColor"
+                            stroke-linecap="round" stroke-width="1.5">
+                        </path>
+                    </svg>
+                </span>
+            </div>
+            <div class="tnco-top-marquee-set">
+                <span class="tnco-top-marquee-item">
+                    <a href="catalog-tnts.html"
+                        style="font-family:'Space Mono', monospace !important; letter-spacing:-0.04em !important;">
+                        <u>
+                            <strong>
+                                Christmas Sale
+                            </strong>
+                        </u>
+                        is coming — special deals await
+                    </a>
+                </span>
+                <span aria-hidden="true" class="tnco-top-marquee-smile">
+                    <svg fill="none" viewbox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5">
+                        </circle>
+                        <circle cx="9" cy="10" fill="currentColor" r="0.9">
+                        </circle>
+                        <circle cx="15" cy="10" fill="currentColor" r="0.9">
+                        </circle>
+                        <path d="M8.5 14c1 1.5 2.3 2.2 3.5 2.2S14.5 15.5 15.5 14" stroke="currentColor"
+                            stroke-linecap="round" stroke-width="1.5">
+                        </path>
+                    </svg>
+                </span>
+            </div>
+            <div class="tnco-top-marquee-set">
+                <span class="tnco-top-marquee-item">
+                    <a href="catalog-tnts.html"
+                        style="font-family:'Space Mono', monospace !important; letter-spacing:-0.04em !important;">
+                        <u>
+                            <strong>
+                                Christmas Sale
+                            </strong>
+                        </u>
+                        is coming — special deals await
+                    </a>
+                </span>
+                <span aria-hidden="true" class="tnco-top-marquee-smile">
+                    <svg fill="none" viewbox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5">
+                        </circle>
+                        <circle cx="9" cy="10" fill="currentColor" r="0.9">
+                        </circle>
+                        <circle cx="15" cy="10" fill="currentColor" r="0.9">
+                        </circle>
+                        <path d="M8.5 14c1 1.5 2.3 2.2 3.5 2.2S14.5 15.5 15.5 14" stroke="currentColor"
+                            stroke-linecap="round" stroke-width="1.5">
+                        </path>
+                    </svg>
+                </span>
+            </div>
+        </div>
+    </div>
+    <header class="swiss-header" id="tnco-header">
+        <div class="swiss-header-left">
+            <a aria-label="Tunetrack Home" class="swiss-header-logo" href="index.html">
+                <span class="swiss-logo-text">
+                    tunetrack©
+                </span>
+            </a>
+        </div>
+        <nav aria-label="Main navigation" class="swiss-header-nav">
+            <a class="is-active" href="index.html">
+                Home
+            </a>
+            <a href="catalog-tntsco.html" style="font-weight:800;">
+                Discover on Tracks
+            </a>
+            <a href="blog-list.html">
+                Communities
+            </a>
+            <a href="blog-list.html">
+                Store
+            </a>
+            <a href="contactus.html">
+                Papers
+            </a>
+            <a href="contactus.html">
+                Contact
+            </a>
+        </nav>
+        <div class="swiss-header-right">
+            <!-- Search Trigger -->
+            <button aria-label="Open search dialog" class="swiss-icon-btn" id="swissSearchBtn" type="button">
+                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="1.6" viewbox="0 0 24 24" width="20">
+                    <circle cx="11" cy="11" r="7">
+                    </circle>
+                    <line x1="21" x2="16.3" y1="21" y2="16.3">
+                    </line>
+                </svg>
+            </button>
+            <!-- Cart / Checkout Trigger -->
+            <!-- Account Trigger -->
+            <button aria-label="Open account login" class="swiss-icon-btn" id="swissAccountBtn" type="button">
+                <svg aria-hidden="true" class="swiss-account-icon" fill="none" height="20" id="swissAccountIcon"
+                    stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"
+                    viewbox="0 0 24 24" width="20">
+                    <circle cx="12" cy="8" r="3.5">
+                    </circle>
+                    <path d="M5 21c.7-4 3-6 7-6s6.3 2 7 6">
+                    </path>
+                </svg>
+                <span class="swiss-account-label" hidden="" id="swissAccountLabel">
+                </span>
+            </button>
+            <!-- Menu Drawer Trigger (Hamburger: 3 horizontal lines) -->
+            <button aria-expanded="false" aria-label="Open navigation menu" class="swiss-icon-btn swiss-menu-toggle"
+                id="tncoHeaderMenuButton" type="button">
+                <svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-width="1.6"
+                    viewbox="0 0 24 24" width="22">
+                    <line x1="3" x2="21" y1="6" y2="6">
+                    </line>
+                    <line x1="3" x2="21" y1="12" y2="12">
+                    </line>
+                    <line x1="3" x2="21" y1="18" y2="18">
+                    </line>
+                </svg>
+            </button>
+        </div>
+    </header>
+    <main class="tt-login-main">
+        <section aria-labelledby="loginTitle" class="tt-login-shell">
+            <div class="tt-login-card">
+                <div class="tt-auth-view" id="loginView">
+                    <div class="tt-login-kicker">
+                        UNIVERSAL ACCOUNT
+                    </div>
+                    <h1 id="loginTitle">
+                        Welcome back.
+                    </h1>
+                    <p class="tt-login-copy">
+                        Sign in to your universal account to access your Secret Stash and Orders.
+                    </p>
+                    <form id="loginForm" novalidate="">
+                        <div class="tt-field">
+                            <input autocomplete="email" id="email" placeholder="Email address" required=""
+                                type="email" />
+                        </div>
+                        <div class="tt-field">
+                            <input autocomplete="current-password" id="password" placeholder="Password" required=""
+                                type="password" />
+                        </div>
+                        <div class="tt-auth-row">
+                            <label class="tt-remember">
+                                <input checked="" id="remember" type="checkbox" />
+                                <span>
+                                    Remember Session
+                                </span>
+                            </label>
+                            <button class="tt-auth-link" id="forgotPasswordBtn" type="button">
+                                Forgot Password?
+                            </button>
+                        </div>
+                        <div aria-live="polite" class="tt-auth-message" id="loginMessage">
+                        </div>
+                        <button class="tt-submit-btn" type="submit">
+                            Sign In
+                        </button>
+                        <button class="tt-passkey-btn" id="passkeyBtn" type="button">
+                            <svg aria-hidden="true" fill="none" height="19" stroke="currentColor" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="19">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z">
+                                </path>
+                            </svg>
+                            <span>
+                                Sign in with Face ID / Passkey
+                            </span>
+                        </button>
+                    </form>
+                    <p class="tt-switch-copy">
+                        Don't have an account?
+                        <button class="tt-auth-link tt-auth-link-strong" id="showSignupBtn" type="button">
+                            Sign up
+                        </button>
+                    </p>
+                </div>
+                <div class="tt-auth-view" hidden="" id="signupView">
+                    <div class="tt-login-kicker">
+                        UNIVERSAL ACCOUNT
+                    </div>
+                    <h1>
+                        Create account.
+                    </h1>
+                    <p class="tt-login-copy">
+                        Create your local account for testing. This can later be connected to the real online auth
+                        system.
+                    </p>
+                    <form id="signupForm" novalidate="">
+                        <div class="tt-field">
+                            <input autocomplete="username" id="signupUsername" placeholder="Username" required=""
+                                type="text" />
+                        </div>
+                        <div class="tt-field">
+                            <input autocomplete="email" id="signupEmail" placeholder="Email address" required=""
+                                type="email" />
+                        </div>
+                        <div class="tt-field">
+                            <input autocomplete="new-password" id="signupPassword" placeholder="Password" required=""
+                                type="password" />
+                        </div>
+                        <div class="tt-field">
+                            <input autocomplete="new-password" id="signupPasswordConfirm" placeholder="Confirm password"
+                                required="" type="password" />
+                        </div>
+                        <div aria-live="polite" class="tt-auth-message" id="signupMessage">
+                        </div>
+                        <button class="tt-submit-btn" type="submit">
+                            Create Account
+                        </button>
+                        <button class="tt-secondary-btn" id="backToLoginBtn" type="button">
+                            Back to Sign In
+                        </button>
+                    </form>
+                </div>
+                <div class="tt-auth-view" hidden="" id="forgotView">
+                    <div class="tt-login-kicker">
+                        UNIVERSAL ACCOUNT
+                    </div>
+                    <h1>
+                        Reset password.
+                    </h1>
+                    <p class="tt-login-copy">
+                        Enter your account email and we'll send you a secure password reset link.
+                    </p>
+                    <form id="forgotForm" novalidate="">
+                        <div class="tt-field">
+                            <input autocomplete="email" id="forgotEmail" placeholder="Email address" required=""
+                                type="email" />
+                        </div>
+                        <div class="tt-field">
+                            <input autocomplete="new-password" id="forgotNewPassword" placeholder="New password (not needed)"
+                                disabled type="password" />
+                        </div>
+                        <div class="tt-field">
+                            <input autocomplete="new-password" id="forgotNewPasswordConfirm"
+                                placeholder="Confirm new password (not needed)" disabled type="password" />
+                        </div>
+                        <div aria-live="polite" class="tt-auth-message" id="forgotMessage">
+                        </div>
+                        <button class="tt-submit-btn" type="submit">
+                            Reset Password
+                        </button>
+                        <button class="tt-secondary-btn" id="backFromForgotBtn" type="button">
+                            Back to Sign In
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="swiss-footer tunetrack-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col-5">
+                    <h4 class="footer-col-title">All Multitracks</h4>
+                    <div class="font-columns-grid">
+                        <div>Yesus Raja (JPCC) <span class="mt-tag">(MT)</span><br>
+                            NOEL med. Gloria <span class="mt-tag">(MT)</span><br>
+                            Yang Terutama <span class="mt-tag">(MT)</span><br>
+                            Penulis Hidupku <span class="mt-tag">(MT)</span><br>
+                            Nothing Is Impossible <span class="mt-tag">(MT)</span><br>
+                            Sperti Bapa Sayang <span class="mt-tag">(MT)</span><br>
+                            Kecaplah dan Lihatlah <span class="mt-tag">(MT)</span><br>
+                            Tiap Langkahku <span class="mt-tag">(MT)</span><br>
+                            Friend of God (Arr) <span class="mt-tag">(MT)</span><br>
+                            Joy to the World 2017 <span class="mt-tag">(MT)</span><br>
+                            Angels We Have Heard <span class="mt-tag">(MT)</span><br>
+                            New Things Coming <span class="mt-tag">(MT)</span><br>
+                            In Jesus Name Asia <span class="mt-tag">(MT)</span><br>
+                            Real Love HXL 25 <span class="mt-tag">(MT)</span><br>
+                            Now Aint that Something <span class="mt-tag">(MT)</span><br>
+                            O Come med. Carol <span class="mt-tag">(MT)</span><br>
+                            This is the Day <span class="mt-tag">(MT)</span><br>
+                            Impossible Possible <span class="mt-tag">(MT)</span><br>
+                            KAMSAHAMNIDA <span class="mt-tag">(MT)</span><br>
+                            Terangmu <span class="mt-tag">(MT)</span><br>
+                            Hari Terbaik <span class="mt-tag">(MT)</span><br>
+                            Raja atas Sgalanya <span class="mt-tag">(MT)</span><br>
+                            Bukti Kasihmu (NDC) <span class="mt-tag">(MT)</span><br>
+                            Satu Persembahan <span class="mt-tag">(MT)</span><br>
+                            Praise <span class="mt-tag">(MT)</span><br>
+                            Kunaikkan Syukurku <span class="mt-tag">(MT)</span><br>
+                            Endless Praise <span class="mt-tag">(MT)</span></div>
+                        <div>HIS LIFE Christmas <span class="mt-tag">(MT)</span><br>
+                            Allah Sanggup (GKDI) <span class="mt-tag">(MT)</span><br>
+                            Turn it Up <span class="mt-tag">(MT)</span><br>
+                            This is Living 2025 <span class="mt-tag">(MT)</span><br>
+                            Lebih dari Pemenang <span class="mt-tag">(MT)</span><br>
+                            Mari Menari 2.0 <span class="mt-tag">(MT)</span><br>
+                            Bukti Kasihmu <span class="mt-tag">(MT)</span><br>
+                            Allah sumber Kuatku <span class="mt-tag">(MT)</span><br>
+                            O Come All ye Faithful <span class="mt-tag">(MT)</span><br>
+                            O Holy Night <span class="mt-tag">(MT)</span><br>
+                            Hark Planetshakers <span class="mt-tag">(MT)</span><br>
+                            We Raise <span class="mt-tag">(MT)</span><br>
+                            This is the Day 2.0 <span class="mt-tag">(MT)</span><br>
+                            Holy Forever <span class="mt-tag">(MT)</span><br>
+                            Goodbye Yesterday <span class="mt-tag">(MT)</span><br>
+                            In Jesus Name (Darlene) <span class="mt-tag">(MT)</span><br>
+                            You Are Good (in LA) <span class="mt-tag">(MT)</span><br>
+                            Echo (ft. Tauren W) <span class="mt-tag">(MT)</span><br>
+                            This is our Time <span class="mt-tag">(MT)</span><br>
+                            Selidiki Aku <span class="mt-tag">(MT)</span><br>
+                            Bangkit dan Puji Dia <span class="mt-tag">(MT)</span><br>
+                            Sejarah Hidupku <span class="mt-tag">(MT)</span><br>
+                            Tempat Pertama <span class="mt-tag">(MT)</span><br>
+                            Kuteringat <span class="mt-tag">(MT)</span><br>
+                            Aku Diberkati Remix <span class="mt-tag">(MT)</span><br>
+                            Dari Pulau &amp; Gita Sorga <span class="mt-tag">(MT)</span><br>
+                            Oleh Darah Anak Domba <span class="mt-tag">(MT)</span></div>
+                        <div>Sambutlah Dia <span class="mt-tag">(MT)</span><br>
+                            Fajar Terangi Dunia <span class="mt-tag">(MT)</span><br>
+                            Puji dia Yesus <span class="mt-tag">(MT)</span><br>
+                            Yesus Kumenyembahmu <span class="mt-tag">(MT)</span><br>
+                            Allah Sanggup <span class="mt-tag">(MT)</span><br>
+                            Api Pantekosta Medley <span class="mt-tag">(MT)</span><br>
+                            Trima kasih Tuhan <span class="mt-tag">(MT)</span><br>
+                            Allah kita heran (GP) <span class="mt-tag">(MT)</span><br>
+                            NOEL <span class="mt-tag">(MT)</span><br>
+                            Silent Night <span class="mt-tag">(MT)</span><br>
+                            Its Christmas <span class="mt-tag">(MT)</span><br>
+                            Praise Opening <span class="mt-tag">(MT)</span><br>
+                            I Know You Can <span class="mt-tag">(MT)</span><br>
+                            Fill the Room <span class="mt-tag">(MT)</span><br>
+                            Real Love (Original) <span class="mt-tag">(MT)</span><br>
+                            I Speak Jesus <span class="mt-tag">(MT)</span><br>
+                            You Are Good (Original) <span class="mt-tag">(MT)</span><br>
+                            In Jesus Name (DOE) <span class="mt-tag">(MT)</span><br>
+                            Trust in God <span class="mt-tag">(MT)</span><br>
+                            Nyata Sempurna <span class="mt-tag">(MT)</span><br>
+                            Berserah Penuh <span class="mt-tag">(MT)</span><br>
+                            Never Lost <span class="mt-tag">(MT)</span><br>
+                            Serukan Namanya <span class="mt-tag">(MT)</span><br>
+                            Dia Raja (WN) <span class="mt-tag">(MT)</span><br>
+                            Nyalakan Apimu <span class="mt-tag">(MT)</span><br>
+                            Ajaib kau Tuhan <span class="mt-tag">(MT)</span></div>
+                    </div>
+                </div>
+
+                <div class="footer-col-2">
+                    <div style="margin-bottom:24px;">
+                        <h4 class="footer-col-title">Support</h4>
+                        <ul class="footer-link-list">
+                            <li><a href="contactus.html">Contact us</a></li>
+                            <li><a href="https://lynk.id/gudangsequencer/page/tunetrack" target="_blank"
+                                    rel="noopener noreferrer">Licensing</a></li>
+                            <li><a href="https://lynk.id/gudangsequencer/3xy1zv4e1rgr" target="_blank"
+                                    rel="noopener noreferrer">Free Multitracks</a></li>
+                            <li><a href="contactus.html">FAQs</a></li>
+                            <li><a href="https://lynk.id/gudangsequencer/4vrx9x4v1lv9" target="_blank"
+                                    rel="noopener noreferrer">Terms &amp; EULA</a></li>
+                        </ul>
+                    </div>
+                    <div style="margin-bottom:24px;">
+                        <h4 class="footer-col-title">About Tunetrack</h4>
+                        <ul class="footer-link-list">
+                            <li><a href="blog-community.html">Our story</a></li>
+                            <li><a href="https://www.instagram.com/tunetrackco/" target="_blank"
+                                    rel="noopener noreferrer">Artists</a></li>
+                            <li><a href="contactus.html">Team</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="footer-col-title">Follow us</h4>
+                        <ul class="footer-link-list">
+                            <li><a href="https://www.instagram.com/tunetrackco/" target="_blank"
+                                    rel="noopener noreferrer">Instagram</a></li>
+                            <li><a href="https://www.youtube.com/@tunetracksco" target="_blank"
+                                    rel="noopener noreferrer">YouTube</a></li>
+                            <li><a href="https://www.youtube.com/@tunetrackplays" target="_blank"
+                                    rel="noopener noreferrer">TikTok</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="footer-col-2">
+                    <div style="margin-bottom:24px;">
+                        <h4 class="footer-col-title">More Tunetrack</h4>
+                        <ul class="footer-link-list">
+                            <li><a href="catalog-tntsco.html">All Multitracks</a></li>
+                            <li><a href="https://lynk.id/gudangsequencer/3xy1zv4e1rgr" target="_blank"
+                                    rel="noopener noreferrer">Free Multitracks</a></li>
+                            <li><a href="https://www.youtube.com/@tunetrackplays" target="_blank"
+                                    rel="noopener noreferrer">Tunetrack Plays</a></li>
+                            <li><a href="blog-list.html">Tunetrack Papers</a></li>
+                            <li><a href="https://linktr.ee/tunetrackid" target="_blank"
+                                    rel="noopener noreferrer">Resources</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="footer-col-title">From the Studio</h4>
+                        <ul class="footer-link-list">
+                            <li><a href="blog-list.html">Latest Papers</a></li>
+                            <li><a href="https://www.youtube.com/@tunetracksco" target="_blank"
+                                    rel="noopener noreferrer">Latest Videos</a></li>
+                            <li><a href="https://linktr.ee/tunetrackid" target="_blank"
+                                    rel="noopener noreferrer">Worship Resources</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="footer-col-3">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+                        <div>
+                            <h4 class="footer-col-title">Channels</h4>
+                            <ul class="footer-link-list">
+                                <li><a href="index.html">Tunetrack</a></li>
+                                <li><a href="https://www.youtube.com/@tunetrackplays" target="_blank"
+                                        rel="noopener noreferrer">Tunetrack Plays</a></li>
+                                <li><a href="blog-list.html">Tunetrack Papers</a></li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 class="footer-col-title">Account</h4>
+                            <ul class="footer-link-list">
+                                <li><a href="https://lynk.id/gudangsequencer/page/tunetrack" target="_blank"
+                                        rel="noopener noreferrer">Login</a></li>
+                                <li><a href="https://lynk.id/gudangsequencer" target="_blank"
+                                        rel="noopener noreferrer">Create account</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom:24px;">
+                        <h4 class="footer-col-title">Built for Worship</h4>
+                        <ul class="footer-link-list">
+                            <li><a href="catalog-tntsco.html">Multitracks</a></li>
+                            <li><a href="catalog-tntsco.html">Sequencers</a></li>
+                            <li><a href="https://linktr.ee/tunetrackid" target="_blank"
+                                    rel="noopener noreferrer">Worship Tools</a></li>
+                            <li><a href="https://www.youtube.com/@tunetrackplays" target="_blank"
+                                    rel="noopener noreferrer">Tunetrack Plays</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="footer-col-title">Don't miss a beat</h4>
+
+                        <p style="font-size:12px;color:#52525b;line-height:1.5;margin-bottom:8px;">
+                            Subscribe for new multitracks, worship resources, releases and Tunetrack updates.
+                        </p>
+
+                        <div id="newsletter-interaction" style="
+                position:relative;
+                width:100%;
+                min-height:38px;
+                overflow:hidden;
+            ">
+                            <form id="standalone-newsletter-form" class="newsletter-pill-form" style="
+                    opacity:1;
+                    transform:translateY(0);
+                    transition:
+                        opacity .45s cubic-bezier(.22,1,.36,1),
+                        transform .45s cubic-bezier(.22,1,.36,1);
+                ">
+                                <input type="email" id="newsletter-email" placeholder="Email address"
+                                    autocomplete="email" required>
+                                <button type="submit" aria-label="Submit newsletter subscription">→</button>
+                            </form>
+
+                            <div id="newsletter-success" aria-live="polite" style="
+                    position:absolute;
+                    inset:0;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    gap:8px;
+                    opacity:0;
+                    transform:translateY(10px);
+                    pointer-events:none;
+                    font-size:12px;
+                    font-weight:500;
+                    color:#18181b;
+                    transition:
+                        opacity .55s cubic-bezier(.22,1,.36,1),
+                        transform .55s cubic-bezier(.22,1,.36,1);
+                ">
+                                <span style="
+                        display:inline-flex;
+                        align-items:center;
+                        justify-content:center;
+                        width:18px;
+                        height:18px;
+                        border-radius:50%;
+                        font-size:11px;
+                        line-height:1;
+                    ">✓</span>
+
+                                <span>You’re subscribed. Thanks!</span>
+                            </div>
+                        </div>
+
+                        <div id="newsletter-status-msg" class="newsletter-feedback"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <script>
+                (function () {
+                    const form = document.getElementById('standalone-newsletter-form');
+                    const emailInput = document.getElementById('newsletter-email');
+                    const success = document.getElementById('newsletter-success');
+                    const status = document.getElementById('newsletter-status-msg');
+
+                    if (!form || !emailInput || !success) return;
+
+                    form.addEventListener('submit', function (event) {
+                        event.preventDefault();
+
+                        const email = emailInput.value.trim();
+
+                        if (!email || !emailInput.checkValidity()) {
+                            emailInput.reportValidity();
+                            return;
+                        }
+
+                        /*
+                         * GANTI DENGAN EMAIL TUNETRACK TUJUAN.
+                         */
+                        const recipient = 'YOUR-EMAIL@example.com';
+
+                        const subject = 'New Tunetrack Newsletter Subscriber';
+
+                        const body =
+                            `Hi Tunetrack,
+
+A new subscriber has joined the Tunetrack newsletter.
+
+Subscriber email:
+${email}
+
+Please add this address to the Tunetrack newsletter mailing list.
+
+— Tunetrack
+`;
+
+                        const mailto =
+                            'mailto:' +
+                            recipient +
+                            '?subject=' +
+                            encodeURIComponent(subject) +
+                            '&body=' +
+                            encodeURIComponent(body);
+
+                        /* Prevent double submit */
+                        const button = form.querySelector('button');
+                        if (button) button.disabled = true;
+
+                        /*
+                         * Smooth transition:
+                         * form fades/slides away first,
+                         * then confirmation fades/slides in.
+                         */
+                        form.style.opacity = '0';
+                        form.style.transform = 'translateY(-8px)';
+                        form.style.pointerEvents = 'none';
+
+                        setTimeout(function () {
+                            success.style.opacity = '1';
+                            success.style.transform = 'translateY(0)';
+                            success.style.pointerEvents = 'auto';
+                        }, 180);
+
+                        /*
+                         * Open the email client after the visual
+                         * confirmation has started appearing.
+                         */
+                        setTimeout(function () {
+                            window.location.href = mailto;
+                        }, 650);
+
+                        if (status) {
+                            status.textContent = '';
+                        }
+                    });
+                })();
+            </script>
+
+            <div class="payment-bar">
+                <div class="payment-badges" aria-label="Accepted payment methods">
+
+                    <span class="pay-logo">
+                        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/QRIS_logo.svg" alt="QRIS">
+                    </span>
+
+                    <span class="pay-logo">
+                        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/GoPay_logo.svg" alt="GoPay">
+                    </span>
+
+                    <span class="pay-logo">
+                        <img src="assets/images/brands/Dana Logo - Colored - zonalogo.com.svg" alt="DANA">
+                    </span>
+
+                    <span class="pay-logo">
+                        <img src="assets/images/brands/OVO Logo - Colored - zonalogo.com.png" alt="OVO">
+                    </span>
+
+                    <span class="pay-logo">
+                        <img src="assets/images/brands/Shopee Logo - Colored - zonalogo.com.svg" alt="ShopeePay">
+                    </span>
+
+                    <span class="pay-logo">
+                        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Bank_Central_Asia.svg"
+                            alt="BCA">
+                    </span>
+
+                    <span class="pay-logo">
+                        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Visa_Inc._logo.svg"
+                            alt="VISA">
+                    </span>
+
+                    <span class="pay-logo">
+                        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Mastercard-logo.svg"
+                            alt="Mastercard">
+                    </span>
+
+                </div>
+
+                <div class="copyright-text">
+                    Designed by © Chael Davis · 2026 · All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="assets/js/dashboard.js">
+    </script>
+
+    <!-- Coba tambahkan ini di login-page.html kamu (pakai GSAP juga) -->
+    <script>
+        if (window.location.search.includes('fx=ripple')) {
+            // Contoh sederhana: Bikin body mulai dari opacity 0 lalu masuk
+            // Atau bikin div lingkaran raksasa yang menyusut ke luar (reveal effect)
+            gsap.from("body", {
+                opacity: 0,
+                scale: 1.05,
+                filter: "blur(10px)",
+                duration: 1.2,
+                ease: "power2.out"
+            });
+        }
+    </script>
+
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+
+    import {
+        getAuth,
+        setPersistence,
+        browserLocalPersistence,
+        browserSessionPersistence,
+        signInWithEmailAndPassword,
+        getIdTokenResult,
+        createUserWithEmailAndPassword,
+        updateProfile,
+        deleteUser,
+        signOut,
+        sendPasswordResetEmail
+    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+    import {
+        getFirestore,
+        doc,
+        setDoc,
+        serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAd7sJx_5-rYDUBAuzEp-QZHTAgqoYKB7I",
+        authDomain: "tunetrack-co.firebaseapp.com",
+        projectId: "tunetrack-co",
+        storageBucket: "tunetrack-co.firebasestorage.app",
+        messagingSenderId: "6013781332",
+        appId: "1:6013781332:web:86198dd552826c046eb4c1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    console.log("🔥 TuneTrack Firebase initialized");
+    console.log("🔥 Firebase Auth initialized");
+    console.log("🔥 TuneTrack Firestore initialized");
+
+    const loginView = document.getElementById("loginView");
+    const signupView = document.getElementById("signupView");
+    const forgotView = document.getElementById("forgotView");
+
+    const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
+    const forgotForm = document.getElementById("forgotForm");
+
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const rememberInput = document.getElementById("remember");
+
+    const signupUsername = document.getElementById("signupUsername");
+    const signupEmail = document.getElementById("signupEmail");
+    const signupPassword = document.getElementById("signupPassword");
+    const signupPasswordConfirm = document.getElementById("signupPasswordConfirm");
+
+    const loginMessage = document.getElementById("loginMessage");
+    const signupMessage = document.getElementById("signupMessage");
+    const forgotMessage = document.getElementById("forgotMessage");
+
+    const showSignupBtn = document.getElementById("showSignupBtn");
+    const backToLoginBtn = document.getElementById("backToLoginBtn");
+    const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
+    const backFromForgotBtn = document.getElementById("backFromForgotBtn");
+    const passkeyBtn = document.getElementById("passkeyBtn");
+
+    const forgotEmail = document.getElementById("forgotEmail");
+
+    const cookingOverlay = document.getElementById("accountCookingOverlay");
+    const cookingProgress = document.getElementById("accountCookingProgress");
+    const cookingPercent = document.getElementById("accountCookingPercent");
+    const cookingStatus = document.getElementById("accountCookingStatus");
+    const cookingTitle = cookingOverlay?.querySelector(".tt-cooking-title");
+    const cookingEmoji = cookingOverlay?.querySelector(".tt-cooking-emoji");
+
+    let cookingFrame = null;
+    let cookingTimer = null;
+
+    function showMessage(element, message = "", type = "") {
+        if (!element) return;
+        element.textContent = message;
+        element.classList.remove("is-error", "is-success");
+        if (type) element.classList.add(`is-${type}`);
+    }
+
+    function setButtonBusy(button, busy, busyText, originalText) {
+        if (!button) return;
+        button.disabled = busy;
+        button.textContent = busy ? busyText : originalText;
+        button.style.opacity = busy ? ".62" : "";
+        button.style.cursor = busy ? "wait" : "";
+    }
+
+    function switchView(target) {
+        [loginView, signupView, forgotView].filter(Boolean).forEach(view => {
+            view.hidden = view !== target;
+        });
+        requestAnimationFrame(() => target?.querySelector("input")?.focus());
+    }
+
+    function getAuthErrorMessage(error) {
+        switch (error?.code) {
+            case "auth/invalid-credential":
+            case "auth/wrong-password":
+            case "auth/user-not-found":
+                return "Wrong email or password.";
+            case "auth/invalid-email":
+                return "Please enter a valid email address.";
+            case "auth/email-already-in-use":
+                return "This account is already on our bank.";
+            case "auth/weak-password":
+                return "Password must be at least 6 characters.";
+            case "auth/user-disabled":
+                return "This account has been disabled.";
+            case "auth/too-many-requests":
+                return "Too many attempts. Please try again later.";
+            case "auth/network-request-failed":
+                return "Network error. Check your connection.";
+            case "auth/operation-not-allowed":
+                return "Email/password sign-in is not enabled in Firebase yet.";
+            default:
+                console.error("Firebase Auth error:", error);
+                return "Something went wrong. Please try again.";
+        }
+    }
+
+    function resetOverlay() {
+        if (!cookingOverlay) return;
+        cookingOverlay.classList.remove("is-preparing");
+        cookingOverlay.setAttribute("aria-hidden", "true");
+        cookingProgress.style.width = "0%";
+        cookingPercent.textContent = "0%";
+        cookingTitle.textContent = "Hold on a second.";
+        cookingStatus.textContent = "We're cooking your account…";
+        if (cookingEmoji) cookingEmoji.textContent = "👨‍🍳";
+        document.documentElement.style.overflow = "";
+        document.body.style.overflow = "";
+    }
+
+    function openOverlay(mode) {
+        if (!cookingOverlay) return;
+
+        cookingOverlay.classList.toggle("is-preparing", mode === "login");
+        cookingOverlay.setAttribute("aria-hidden", "false");
+
+        document.documentElement.style.overflow = "hidden";
+        document.body.style.overflow = "hidden";
+
+        cookingProgress.style.width = "0%";
+        cookingPercent.textContent = "0%";
+
+        if (mode === "login") {
+            cookingTitle.textContent = "Preparing your account.";
+            cookingStatus.textContent = "Hold on a second…";
+            if (cookingEmoji) cookingEmoji.textContent = "⏳";
+        } else {
+            cookingTitle.textContent = "Hold on a second.";
+            cookingStatus.textContent = "We're cooking your account…";
+            if (cookingEmoji) cookingEmoji.textContent = "👨‍🍳";
+        }
+    }
+
+    function closeOverlay() {
+        if (cookingFrame) cancelAnimationFrame(cookingFrame);
+        if (cookingTimer) clearTimeout(cookingTimer);
+        cookingFrame = null;
+        cookingTimer = null;
+        resetOverlay();
+    }
+
+    function runProgress(mode, duration) {
+        return new Promise(resolve => {
+            openOverlay(mode);
+
+            const startedAt = performance.now();
+
+            function frame(now) {
+                const progress = Math.min((now - startedAt) / duration, 1);
+                const percent = Math.round(progress * 100);
+
+                cookingProgress.style.width = `${percent}%`;
+                cookingPercent.textContent = `${percent}%`;
+
+                if (mode === "login") {
+                    if (progress < .30) cookingStatus.textContent = "Checking your account…";
+                    else if (progress < .62) cookingStatus.textContent = "Preparing your session…";
+                    else if (progress < .88) cookingStatus.textContent = "Securing your access…";
+                    else if (progress < 1) cookingStatus.textContent = "Almost ready…";
+                    else cookingStatus.textContent = "You're good to go.";
+                } else {
+                    if (progress < .20) cookingStatus.textContent = "We're cooking your account…";
+                    else if (progress < .42) cookingStatus.textContent = "Preheating the account system…";
+                    else if (progress < .64) cookingStatus.textContent = "Adding the finishing touches…";
+                    else if (progress < .82) cookingStatus.textContent = "Making everything nice and crispy…";
+                    else if (progress < .94) cookingStatus.textContent = "Almost there…";
+                    else if (progress < 1) cookingStatus.textContent = "One last check…";
+                    else cookingStatus.textContent = "Served fresh. Your account is ready.";
+                }
+
+                if (progress < 1) {
+                    cookingFrame = requestAnimationFrame(frame);
+                } else {
+                    cookingFrame = null;
+                    cookingTimer = setTimeout(resolve, 350);
+                }
+            }
+
+            cookingFrame = requestAnimationFrame(frame);
+        });
+    }
+
+    // ---------------------------------------------------------
+    // CREATE ACCOUNT
+    // ---------------------------------------------------------
+
+    if (signupForm) {
+        signupForm.addEventListener("submit", async event => {
+            event.preventDefault();
+
+            const username = signupUsername.value.trim();
+            const email = signupEmail.value.trim();
+            const password = signupPassword.value;
+            const confirmPassword = signupPasswordConfirm.value;
+
+            showMessage(signupMessage, "");
+
+            if (!username) {
+                showMessage(signupMessage, "Choose a username.", "error");
+                signupUsername.focus();
+                return;
+            }
+
+            if (!signupEmail.checkValidity()) {
+                showMessage(signupMessage, "Please enter a valid email address.", "error");
+                signupEmail.focus();
+                return;
+            }
+
+            if (password.length < 6) {
+                showMessage(signupMessage, "Password must be at least 6 characters.", "error");
+                signupPassword.focus();
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showMessage(signupMessage, "Passwords do not match.", "error");
+                signupPasswordConfirm.focus();
+                return;
+            }
+
+            const submitButton = signupForm.querySelector(".tt-submit-btn");
+            const originalText = submitButton?.textContent || "Create Account";
+            let createdUser = null;
+
+            setButtonBusy(submitButton, true, "Preparing account…", originalText);
+            showMessage(signupMessage, "");
+            openOverlay("signup");
+
+            try {
+                await setPersistence(
+                    auth,
+                    rememberInput?.checked
+                        ? browserLocalPersistence
+                        : browserSessionPersistence
+                );
+
+                // Start the Cooking animation BEFORE the online request so the
+                // user never gets a dead/blank loading state.
+                const credential = await createUserWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
+                );
+                createdUser = credential.user;
+
+                await updateProfile(createdUser, {
+                    displayName: username
+                });
+
+                // Create the user's private Firestore profile using the Firebase UID.
+                await setDoc(doc(db, "users", createdUser.uid), {
+                    uid: createdUser.uid,
+                    username,
+                    email: createdUser.email || email,
+                    createdAt: serverTimestamp(),
+                    updatedAt: serverTimestamp()
+                });
+
+                // Keep the Cooking animation visible for a short, intentional
+                // finish instead of forcing a 10-second artificial wait.
+                await new Promise(resolve => setTimeout(resolve, 1200));
+                await signOut(auth);
+                closeOverlay();
+
+                emailInput.value = email;
+                passwordInput.value = "";
+
+                showMessage(loginMessage, "Account ready. Sign in to continue.", "success");
+                switchView(loginView);
+                passwordInput.focus();
+
+            } catch (error) {
+                // Only roll back a user that THIS signup attempt actually created.
+                // Never delete an already-existing Firebase account.
+                if (createdUser) {
+                    try {
+                        if (auth.currentUser?.uid === createdUser.uid) {
+                            await deleteUser(createdUser);
+                        }
+                    } catch (rollbackError) {
+                        console.error("⚠️ Account rollback failed:", rollbackError);
+                    }
+                }
+
+                closeOverlay();
+                showMessage(signupMessage, getAuthErrorMessage(error), "error");
+                setButtonBusy(submitButton, false, "", originalText);
+            }
+        });
+    }
+
+    // ---------------------------------------------------------
+    // SIGN IN
+    // IMPORTANT: dashboard redirect exists ONLY inside the
+    // successful signInWithEmailAndPassword path.
+    // ---------------------------------------------------------
+
+    if (loginForm) {
+        loginForm.addEventListener("submit", async event => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            showMessage(loginMessage, "");
+
+            if (!email || !password) {
+                showMessage(loginMessage, "Enter your email and password.", "error");
+                return;
+            }
+
+            if (!emailInput.checkValidity()) {
+                showMessage(loginMessage, "Please enter a valid email address.", "error");
+                emailInput.focus();
+                return;
+            }
+
+            const submitButton = loginForm.querySelector(".tt-submit-btn");
+            const originalText = submitButton?.textContent || "Sign In";
+
+            setButtonBusy(submitButton, true, "Checking…", originalText);
+
+            // FORCE the Preparing animation on every real login attempt,
+            // before Firebase starts the network request.
+            openOverlay("login");
+
+            try {
+                await setPersistence(
+                    auth,
+                    rememberInput?.checked
+                        ? browserLocalPersistence
+                        : browserSessionPersistence
+                );
+
+                // This promise MUST resolve before any redirect is possible.
+                const credential = await signInWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
+                );
+
+                if (!credential?.user) {
+                    throw new Error("Authentication did not return a user.");
+                }
+
+                console.log("✅ TuneTrack user signed in:", credential.user.uid);
+
+                // Give the Preparing screen a short, consistent finish.
+                await new Promise(resolve => setTimeout(resolve, 1200));
+                closeOverlay();
+
+                showMessage(loginMessage, "Welcome back. Redirecting…", "success");
+
+                // Final redirect is ONLY reachable after successful auth.
+                // Route admins to the private admin workspace.
+                // Firebase custom claims are the source of truth; do not use
+                // the email address itself as the authorization check.
+                const tokenResult = await getIdTokenResult(credential.user, true);
+                const isAdmin = tokenResult?.claims?.admin === true;
+
+                window.location.assign(isAdmin ? "dashboard-admin.html" : "dashboard.html");
+
+            } catch (error) {
+                closeOverlay();
+
+                console.error("❌ TuneTrack sign-in failed:", error);
+
+                showMessage(
+                    loginMessage,
+                    getAuthErrorMessage(error),
+                    "error"
+                );
+
+                setButtonBusy(submitButton, false, "", originalText);
+            }
+        });
+    }
+
+    // ---------------------------------------------------------
+    // FORGOT PASSWORD
+    // ---------------------------------------------------------
+
+    if (forgotForm) {
+        forgotForm.addEventListener("submit", async event => {
+            event.preventDefault();
+
+            const email = forgotEmail?.value.trim();
+            showMessage(forgotMessage, "");
+
+            if (!email || !forgotEmail.checkValidity()) {
+                showMessage(forgotMessage, "Enter a valid account email.", "error");
+                return;
+            }
+
+            const submitButton = forgotForm.querySelector(".tt-submit-btn");
+            const originalText = submitButton?.textContent || "Reset Password";
+
+            setButtonBusy(submitButton, true, "Sending…", originalText);
+
+            try {
+                await sendPasswordResetEmail(auth, email);
+                showMessage(
+                    forgotMessage,
+                    "Password reset email sent. Check your inbox.",
+                    "success"
+                );
+            } catch (error) {
+                showMessage(forgotMessage, getAuthErrorMessage(error), "error");
+            } finally {
+                setButtonBusy(submitButton, false, "", originalText);
+            }
+        });
+    }
+
+    showSignupBtn?.addEventListener("click", () => {
+        showMessage(loginMessage, "");
+        switchView(signupView);
+    });
+
+    backToLoginBtn?.addEventListener("click", () => {
+        showMessage(signupMessage, "");
+        switchView(loginView);
+    });
+
+    forgotPasswordBtn?.addEventListener("click", () => {
+        if (forgotEmail && emailInput?.value.trim()) {
+            forgotEmail.value = emailInput.value.trim();
+        }
+        showMessage(loginMessage, "");
+        switchView(forgotView);
+    });
+
+    backFromForgotBtn?.addEventListener("click", () => {
+        showMessage(forgotMessage, "");
+        switchView(loginView);
+    });
+
+    passkeyBtn?.addEventListener("click", () => {
+        showMessage(
+            loginMessage,
+            "Passkey sign-in is coming next. Use email and password for now."
+        );
+    });
+</script>
+
+
+
+    <div class="tt-cooking-overlay" id="accountCookingOverlay" aria-hidden="true">
+        <div class="tt-cooking-panel" role="status" aria-live="polite">
+            <div class="tt-cooking-emoji" aria-hidden="true">👨‍🍳</div>
+            <div class="tt-cooking-kicker">TuneTrack Universal Account</div>
+            <h2 class="tt-cooking-title">Hold on a second.</h2>
+            <div class="tt-cooking-status" id="accountCookingStatus">
+                We're cooking your account…
+            </div>
+            <div class="tt-cooking-progress" aria-hidden="true">
+                <div class="tt-cooking-progress-fill" id="accountCookingProgress"></div>
+            </div>
+            <div class="tt-cooking-percent" id="accountCookingPercent">0%</div>
+        </div>
+    </div>
+
+
+<script id="tt-login-video-bg-script">
+(function () {
+    "use strict";
+
+    /*
+     * Full-screen MP4 background with a WebGL liquid displacement effect.
+     * The effect follows the pointer and smoothly relaxes when the pointer stops.
+     * If WebGL is unavailable, the same MP4 is shown as a normal cover video.
+     */
+
+    const VIDEO_SRC = "assets/videos/intro-bg.mp4";
+
+    function initLoginVideoBackground() {
+        if (document.getElementById("ttLoginVideoBg")) return;
+
+        const loginMain = document.querySelector(".tt-login-main");
+        if (!loginMain) return;
+
+        const wrap = document.createElement("div");
+        wrap.className = "tt-login-video-bg";
+        wrap.id = "ttLoginVideoBg";
+        wrap.setAttribute("aria-hidden", "true");
+
+        const canvas = document.createElement("canvas");
+        canvas.id = "ttLoginBgCanvas";
+
+        const video = document.createElement("video");
+        video.id = "ttLoginBgVideoFallback";
+        video.src = VIDEO_SRC;
+        video.muted = true;
+        video.defaultMuted = true;
+        video.loop = true;
+        video.autoplay = true;
+        video.playsInline = true;
+        video.setAttribute("muted", "");
+        video.setAttribute("autoplay", "");
+        video.setAttribute("playsinline", "");
+        video.preload = "auto";
+
+        wrap.appendChild(canvas);
+        wrap.appendChild(video);
+
+        loginMain.prepend(wrap);
+
+        /* Safari: make the real video available immediately. WebGL is an enhancement,
+           not a prerequisite for seeing the background. */
+        video.addEventListener("loadeddata", function () {
+            video.style.opacity = "1";
+            video.play().catch(function () {});
+        }, { once: false });
+        video.addEventListener("canplaythrough", function () {
+            video.play().catch(function () {});
+        }, { once: false });
+        video.load();
+
+        const gl = canvas.getContext("webgl", {
+            alpha: false,
+            antialias: false,
+            depth: false,
+            stencil: false,
+            premultipliedAlpha: false,
+            preserveDrawingBuffer: false
+        });
+
+        const showFallback = function () {
+            canvas.style.opacity = "0";
+            video.style.opacity = "1";
+            video.play().catch(function () {});
+        };
+
+        if (!gl) {
+            showFallback();
+            return;
+        }
+
+        const vertexSource = `
+            attribute vec2 aPosition;
+            varying vec2 vUv;
+
+            void main() {
+                vUv = aPosition * 0.5 + 0.5;
+                gl_Position = vec4(aPosition, 0.0, 1.0);
+            }
+        `;
+
+        const fragmentSource = `
+            precision highp float;
+
+            uniform sampler2D uVideo;
+            uniform vec2 uResolution;
+            uniform vec2 uVideoResolution;
+            uniform vec2 uMouse;
+            uniform float uTime;
+            uniform float uIntensity;
+
+            varying vec2 vUv;
+
+            vec2 coverUv(vec2 uv) {
+                float screenRatio = uResolution.x / max(uResolution.y, 1.0);
+                float videoRatio = uVideoResolution.x / max(uVideoResolution.y, 1.0);
+
+                vec2 scale = vec2(1.0);
+
+                if (screenRatio > videoRatio) {
+                    scale.y = videoRatio / screenRatio;
+                } else {
+                    scale.x = screenRatio / videoRatio;
+                }
+
+                return (uv - 0.5) * scale + 0.5;
+            }
+
+            void main() {
+                vec2 uv = coverUv(vUv);
+
+                vec2 delta = uv - uMouse;
+                float dist = length(delta);
+
+                /* Broad, soft liquid pull around the cursor. */
+                float falloff = exp(-dist * 7.0);
+
+                /* Concentric travelling ripples. */
+                float waveA = sin(dist * 34.0 - uTime * 4.6);
+                float waveB = sin(dist * 18.0 - uTime * 2.2);
+
+                float wave = (waveA * 0.72 + waveB * 0.28)
+                           * falloff
+                           * uIntensity;
+
+                vec2 direction = normalize(delta + vec2(0.00001));
+                vec2 tangent = vec2(-direction.y, direction.x);
+
+                /* Tangential shear gives the "wavy glass/liquid" feeling. */
+                uv += direction * wave * 0.030;
+                uv += tangent * wave * 0.018;
+
+                /* Gentle always-on micro motion; almost invisible when idle. */
+                uv += vec2(
+                    sin(uTime * 0.22 + uv.y * 8.0),
+                    cos(uTime * 0.19 + uv.x * 7.0)
+                ) * 0.0007;
+
+                vec4 color = texture2D(uVideo, uv);
+
+                /*
+                 * Slight contrast lift keeps the background cinematic under
+                 * the existing dark login card.
+                 */
+                color.rgb = (color.rgb - 0.5) * 1.06 + 0.5;
+
+                gl_FragColor = vec4(color.rgb, 1.0);
+            }
+        `;
+
+        function compile(type, source) {
+            const shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                gl.deleteShader(shader);
+                return null;
+            }
+
+            return shader;
+        }
+
+        const vertexShader = compile(gl.VERTEX_SHADER, vertexSource);
+        const fragmentShader = compile(gl.FRAGMENT_SHADER, fragmentSource);
+
+        if (!vertexShader || !fragmentShader) {
+            showFallback();
+            return;
+        }
+
+        const program = gl.createProgram();
+        gl.attachShader(program, vertexShader);
+        gl.attachShader(program, fragmentShader);
+        gl.linkProgram(program);
+
+        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+            showFallback();
+            return;
+        }
+
+        gl.useProgram(program);
+
+        const buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bufferData(
+            gl.ARRAY_BUFFER,
+            new Float32Array([
+                -1, -1,
+                 1, -1,
+                -1,  1,
+                -1,  1,
+                 1, -1,
+                 1,  1
+            ]),
+            gl.STATIC_DRAW
+        );
+
+        const positionLocation = gl.getAttribLocation(program, "aPosition");
+        gl.enableVertexAttribArray(positionLocation);
+        gl.vertexAttribPointer(
+            positionLocation,
+            2,
+            gl.FLOAT,
+            false,
+            0,
+            0
+        );
+
+        const uVideo = gl.getUniformLocation(program, "uVideo");
+        const uResolution = gl.getUniformLocation(program, "uResolution");
+        const uVideoResolution = gl.getUniformLocation(program, "uVideoResolution");
+        const uMouse = gl.getUniformLocation(program, "uMouse");
+        const uTime = gl.getUniformLocation(program, "uTime");
+        const uIntensity = gl.getUniformLocation(program, "uIntensity");
+
+        const texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+        const mouseTarget = { x: 0.5, y: 0.5 };
+        const mouseCurrent = { x: 0.5, y: 0.5 };
+        let mouseVelocity = 0;
+        let lastPointer = { x: 0.5, y: 0.5 };
+        let lastFrame = performance.now();
+        let videoReady = false;
+        let running = true;
+
+        function resize() {
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            const width = Math.max(1, Math.floor(window.innerWidth * dpr));
+            const height = Math.max(1, Math.floor(window.innerHeight * dpr));
+
+            if (canvas.width !== width || canvas.height !== height) {
+                canvas.width = width;
+                canvas.height = height;
+            }
+
+            gl.viewport(0, 0, canvas.width, canvas.height);
+            gl.uniform2f(uResolution, canvas.width, canvas.height);
+        }
+
+        function updatePointer(event) {
+            const rect = wrap.getBoundingClientRect();
+
+            const x = (event.clientX - rect.left) / Math.max(rect.width, 1);
+            const y = 1.0 - (event.clientY - rect.top) / Math.max(rect.height, 1);
+
+            mouseTarget.x = Math.max(0, Math.min(1, x));
+            mouseTarget.y = Math.max(0, Math.min(1, y));
+        }
+
+        function pointerLeave() {
+            mouseTarget.x = 0.5;
+            mouseTarget.y = 0.5;
+        }
+
+        function render(now) {
+            if (!running) return;
+
+            const elapsed = Math.min((now - lastFrame) / 1000, 0.05);
+            lastFrame = now;
+
+            mouseCurrent.x += (mouseTarget.x - mouseCurrent.x) * (1 - Math.pow(0.0005, elapsed));
+            mouseCurrent.y += (mouseTarget.y - mouseCurrent.y) * (1 - Math.pow(0.0005, elapsed));
+
+            const dx = mouseTarget.x - lastPointer.x;
+            const dy = mouseTarget.y - lastPointer.y;
+            const movement = Math.min(1, Math.sqrt(dx * dx + dy * dy) * 18);
+
+            mouseVelocity += (movement - mouseVelocity) * 0.10;
+            mouseVelocity *= 0.985;
+
+            lastPointer.x += (mouseTarget.x - lastPointer.x) * 0.16;
+            lastPointer.y += (mouseTarget.y - lastPointer.y) * 0.16;
+
+            if (videoReady && video.readyState >= 2) {
+                gl.bindTexture(gl.TEXTURE_2D, texture);
+
+                try {
+                    gl.texImage2D(
+                        gl.TEXTURE_2D,
+                        0,
+                        gl.RGBA,
+                        gl.RGBA,
+                        gl.UNSIGNED_BYTE,
+                        video
+                    );
+                } catch (error) {
+                    showFallback();
+                    running = false;
+                    return;
+                }
+
+                gl.uniform1i(uVideo, 0);
+                gl.uniform2f(uMouse, mouseCurrent.x, mouseCurrent.y);
+                gl.uniform1f(
+                    uIntensity,
+                    Math.min(1.0, 0.18 + mouseVelocity * 1.25)
+                );
+                gl.uniform1f(uTime, now * 0.001);
+
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+                canvas.style.opacity = "1";
+                video.style.opacity = "0";
+            }
+
+            requestAnimationFrame(render);
+        }
+
+        video.addEventListener("loadedmetadata", function () {
+            videoReady = true;
+
+            gl.uniform2f(
+                uVideoResolution,
+                video.videoWidth || 1920,
+                video.videoHeight || 1080
+            );
+
+            resize();
+            video.play().catch(function () {});
+        });
+
+        video.addEventListener("canplay", function () {
+            videoReady = true;
+            video.play().catch(function () {});
+        });
+
+        video.addEventListener("error", showFallback);
+
+        window.addEventListener("resize", resize, { passive: true });
+        window.addEventListener("pointermove", updatePointer, { passive: true });
+        window.addEventListener("pointerleave", pointerLeave, { passive: true });
+
+        document.addEventListener("visibilitychange", function () {
+            if (document.hidden) {
+                video.pause();
+            } else {
+                video.play().catch(function () {});
+            }
+        });
+
+        canvas.addEventListener("webglcontextlost", function (event) {
+            event.preventDefault();
+            showFallback();
+            running = false;
+        });
+
+        resize();
+        requestAnimationFrame(render);
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initLoginVideoBackground, { once: true });
+    } else {
+        initLoginVideoBackground();
+    }
+})();
+</script>
+
+</body>
+
+</html>

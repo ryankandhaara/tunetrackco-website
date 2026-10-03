@@ -1,0 +1,74 @@
+        /* FINAL FREEBIES UI/FLOW FIX */
+        #freebies-grid {
+            position: relative !important;
+            display: block !important;
+            width: 100% !important;
+            min-height: 0 !important;
+            overflow: visible !important;
+        }
+
+        .tt-freebies-categories {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 20px !important;
+            width: 100% !important;
+            position: relative;
+        }
+
+        .tt-freebies-categories[hidden] {
+            display: none !important;
+        }
+
+        .tt-freebies-detail {
+            display: none !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            opacity: 0;
+            transform: none !important;
+            filter: none !important;
+            clip-path: none !important;
+        }
+
+        /* During the transition the detail is ALWAYS pinned to the top of #freebies-grid.
+           It can therefore never render below the category cards for even one frame. */
+        .tt-freebies-detail.is-open {
+            display: block !important;
+        }
+
+        .tt-freebies-detail.is-overlay {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 20 !important;
+        }
+
+        /* After the transition it returns to normal flow at the exact same top coordinate. */
+        .tt-freebies-detail.is-ready {
+            position: relative !important;
+            top: auto !important;
+            left: auto !important;
+            right: auto !important;
+            z-index: auto !important;
+        }
+
+        /* Only ONE separator: the editorial hero separator above the asset/detail.
+           The detail header itself must not create another line or a giant spacer. */
+        .tt-freebies-detail-head {
+            padding: 0 !important;
+            margin: 0 0 18px !important;
+            border-bottom: 0 !important;
+        }
+
+        .tt-freebies-detail-grid {
+            position: relative;
+            margin: 0 !important;
+            padding-top: 0 !important;
+        }
+
+        @media (max-width:767px) {
+            .tt-freebies-categories {
+                gap: 18px !important;
+            }
+        }

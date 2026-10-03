@@ -1,0 +1,431 @@
+    /* FREEBIES OVERRIDE */
+
+    #freebies-grid {
+        gap: 12px !important;
+    }
+
+    #freebies-grid>article:nth-child(1) {
+        background: #6C63FF !important;
+    }
+
+    #freebies-grid>article:nth-child(2) {
+        background: #4F46E5 !important;
+    }
+
+    #freebies-grid>article:nth-child(3) {
+        background: #3730A3 !important;
+    }
+
+    .tt-freebies-categories {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 20px !important;
+    }
+
+    .tt-freebies-categories .tt-freebie-category-card {
+        margin: 0 !important;
+    }
+
+    .tt-freebies-detail.is-ready {
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    /* =========================================================
+
+
+FREEBIES — FINAL STATIC LAYOUT FIX
+NO TELEPORT / NO WHITE FLASH / NO CARD SCROLL
+========================================================= */
+
+    html,
+    body {
+        scroll-behavior: auto !important;
+        overflow-anchor: none !important;
+    }
+
+    body {
+        overflow-x: hidden !important;
+    }
+
+    /* MAIN FREEBIES AREA */
+    #freebies-grid {
+        position: relative !important;
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        overflow-anchor: none !important;
+        overscroll-behavior: none !important;
+    }
+
+    /* CARD LIST */
+    .tt-freebies-categories {
+        position: relative !important;
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 20px !important;
+        overflow: visible !important;
+        overflow-anchor: none !important;
+    }
+
+    /* CATEGORY CARD */
+    .tt-freebie-category-card {
+        position: relative !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+        overscroll-behavior: none !important;
+    }
+
+    /* DETAIL */
+    .tt-freebies-detail {
+        box-sizing: border-box !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        overflow-anchor: none !important;
+        overscroll-behavior: none !important;
+    }
+
+    /* DETAIL DURING TRANSITION */
+    .tt-freebies-detail.is-overlay {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: auto !important;
+        bottom: auto !important;
+
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        z-index: 100 !important;
+
+        overflow: visible !important;
+        background: transparent !important;
+    }
+
+    /* DETAIL SETELAH OPEN */
+    .tt-freebies-detail.is-ready {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        overflow: visible !important;
+        background: transparent !important;
+    }
+
+    /* DETAIL CONTENT */
+    .tt-freebies-detail-grid {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+        overscroll-behavior: none !important;
+    }
+
+    /* HIDDEN CATEGORY LIST */
+    .tt-freebies-categories[hidden] {
+        display: none !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* SEMUA STATE TETAP BOX-SIZING SAMA */
+    #freebies-grid *,
+    .tt-freebies-categories *,
+    .tt-freebies-detail * {
+        box-sizing: border-box;
+    }
+
+    /* HILANGKAN FLASH PUTIH */
+    .tt-freebies-detail.is-opening,
+    .tt-freebies-detail.is-open,
+    .tt-freebies-detail.is-overlay,
+    .tt-freebies-detail.is-ready {
+        background-color: transparent !important;
+    }
+
+    /* TIDAK ADA CONTAINER YANG BOLEH SCROLL SENDIRI */
+    #freebies-grid,
+    .tt-freebies-categories,
+    .tt-freebie-category-card,
+    .tt-freebies-detail,
+    .tt-freebies-detail-grid {
+        scrollbar-width: none !important;
+    }
+
+    #freebies-grid::-webkit-scrollbar,
+    .tt-freebies-categories::-webkit-scrollbar,
+    .tt-freebie-category-card::-webkit-scrollbar,
+    .tt-freebies-detail::-webkit-scrollbar,
+    .tt-freebies-detail-grid::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    /* FREE BADGE ANCHOR */
+    #freebies-grid .catalog-data-card {
+        position: relative !important;
+        isolation: isolate !important;
+    }
+
+    #freebies-grid .catalog-data-card .catalog-card-footer {
+        display: none !important;
+    }
+
+    /* TAG BIRU (FREE BADGE) — z-index diset ke 1 agar berada di bawah layer blur (z-index 10) */
+    #freebies-grid .catalog-data-card .tt-free-tag {
+        display: flex !important;
+        position: absolute !important;
+        top: 12px !important;
+        right: 12px !important;
+        z-index: 1 !important;
+        width: 64px !important;
+        height: 64px !important;
+        min-width: 64px !important;
+        min-height: 64px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 50% !important;
+        background: #315BFF !important;
+        color: #fff !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        font-family: var(--font-mono) !important;
+        font-size: 10px !important;
+        font-weight: 700 !important;
+        line-height: 1 !important;
+        letter-spacing: .08em !important;
+        pointer-events: none !important;
+    }
+
+    /* OVERLAY PROMPT / TOMBOL UNLOCK (TETAP DI ATAS BLUR, z-index: 20) */
+    #freebies-grid .catalog-data-card .tt-claim-card-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 28px;
+        background: rgba(0, 0, 0, 0.30);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity .28s ease, visibility .28s ease, background-color .28s ease;
+    }
+
+    /* LAYER BLUR (OVERLAY HOVER) — z-index: 10 menutupi gambar & tag biru */
+    #freebies-grid .catalog-data-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        pointer-events: none;
+        background: rgba(0, 0, 0, 0);
+        backdrop-filter: blur(0);
+        -webkit-backdrop-filter: blur(0);
+        border-radius: 16px !important;
+        overflow: hidden !important;
+        transition: background .28s ease, backdrop-filter .28s ease, -webkit-backdrop-filter .28s ease;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        #freebies-grid .catalog-data-card:hover::before,
+        #freebies-grid .catalog-data-card:focus-visible::before,
+        #freebies-grid .catalog-data-card.tt-claim-card-active::before {
+            background: rgba(0, 0, 0, 0.60);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(40px);
+        }
+    }
+
+    @media (hover: none), (pointer: coarse) {
+        #freebies-grid .catalog-data-card.tt-claim-card-active::before {
+            background: rgba(0, 0, 0, 0.60);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+        }
+    }
+
+    #freebies-grid .catalog-data-card .tt-claim-card-prompt {
+        width: min(100%, 330px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        text-align: center;
+        transform: translateY(10px);
+        transition: transform .32s cubic-bezier(.16,1,.3,1);
+    }
+
+    #freebies-grid .catalog-data-card .tt-claim-card-kicker {
+        font-family: var(--font-mono);
+        font-size: 9px;
+        line-height: 1.2;
+        letter-spacing: .14em;
+        color: rgba(255,255,255,.68);
+        text-transform: uppercase;
+    }
+
+    #freebies-grid .catalog-data-card .tt-claim-card-title {
+        max-width: 290px;
+        font-family: var(--font-ui);
+        font-size: clamp(15px, 1.35vw, 19px);
+        line-height: 1.15;
+        letter-spacing: -.02em;
+        color: #fff;
+        text-transform: uppercase;
+    }
+
+    #freebies-grid .catalog-data-card .tt-claim-card-action {
+        appearance: none;
+        border: 1px solid rgba(255,255,255,.9);
+        background: #fff;
+        color: #090909;
+        min-height: 40px;
+        padding: 10px 20px;
+        border-radius: 999px;
+        font-family: var(--font-mono);
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: .08em;
+        cursor: pointer;
+        transition: transform .2s ease, background-color .2s ease, color .2s ease;
+    }
+
+    #freebies-grid .catalog-data-card .tt-claim-card-action:hover {
+        transform: translateY(-1px);
+        background: transparent;
+        color: #fff;
+    }
+
+    /* Desktop: hover reveals the unlock UI. */
+    @media (hover: hover) and (pointer: fine) {
+        #freebies-grid .catalog-data-card:hover .tt-claim-card-overlay,
+        #freebies-grid .catalog-data-card:focus-visible .tt-claim-card-overlay,
+        #freebies-grid .catalog-data-card.tt-claim-card-active .tt-claim-card-overlay {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        #freebies-grid .catalog-data-card:hover .tt-claim-card-prompt,
+        #freebies-grid .catalog-data-card:focus-visible .tt-claim-card-prompt,
+        #freebies-grid .catalog-data-card.tt-claim-card-active .tt-claim-card-prompt {
+            transform: translateY(0);
+        }
+    }
+
+    /* Touch/mobile: tap the card to reveal the same UI. */
+    @media (hover: none), (pointer: coarse) {
+        #freebies-grid .catalog-data-card.tt-claim-card-active .tt-claim-card-overlay {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        #freebies-grid .catalog-data-card.tt-claim-card-active .tt-claim-card-prompt {
+            transform: translateY(0);
+        }
+    }
+
+    #freebies-grid .catalog-data-card:focus-visible {
+        outline: 1px solid rgba(255,255,255,.8);
+        outline-offset: 4px;
+    }
+
+    /* ALTERNATIVE/PRICE TAG SELECTORS — disesuaikan z-index ke 1 */
+    #freebies-grid .catalog-data-card .tt-free-price-tag {
+        display: flex !important;
+        position: absolute !important;
+        top: 12px !important;
+        right: 12px !important;
+        z-index: 1 !important;
+        width: 58px !important;
+        height: 58px !important;
+        min-width: 58px !important;
+        min-height: 58px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 50% !important;
+        background: #315BFF !important;
+        color: #fff !important;
+        font-family: var(--font-mono) !important;
+        font-size: 10px !important;
+        font-weight: 700 !important;
+        line-height: 1 !important;
+        letter-spacing: .08em !important;
+        text-align: center !important;
+        pointer-events: none !important;
+        box-sizing: border-box !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+    }
+
+    #freebies-grid .catalog-data-card::after {
+        content: "FREE" !important;
+        display: flex !important;
+        position: absolute !important;
+        top: 12px !important;
+        right: 12px !important;
+        z-index: 1 !important;
+        width: 58px !important;
+        height: 58px !important;
+        min-width: 58px !important;
+        min-height: 58px !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 50% !important;
+        background: #315BFF !important;
+        color: #fff !important;
+        font-family: var(--font-mono) !important;
+        font-size: 10px !important;
+        font-weight: 700 !important;
+        line-height: 1 !important;
+        letter-spacing: .08em !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+        pointer-events: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }

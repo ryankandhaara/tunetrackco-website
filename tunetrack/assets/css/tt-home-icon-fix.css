@@ -1,0 +1,20 @@
+        .ui-header-right .tt-home-btn {
+            width: 40px;
+            min-width: 40px;
+            height: 40px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateX(-10%);
+        }
+
+        .ui-header-right .tt-home-btn svg {
+            width: 17px;
+            height: 17px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.7;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }

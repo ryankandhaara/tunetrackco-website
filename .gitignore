@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# Archives / backups
+*.zip
+
+# Node
+node_modules/
+
+# Firebase Admin credentials
+*-firebase-adminsdk-*.json
+firebase-adminsdk-*.json
+serviceAccount*.json

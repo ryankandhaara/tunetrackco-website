@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TuneTrack™ — Custom Audio & Sequencer Production</title>
+  
+  <!-- Standalone TuneTrack Design System Stylesheet -->
+  <link rel="stylesheet" href="assets/css/order-tunetrack.css">
+
+  <!-- 
+    ==========================================================================
+    OPTIONAL FIREBASE SDKs (UNCOMMENT WHEN CONNECTING TO LIVE BACKEND)
+    ==========================================================================
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  -->
+</head>
+<body>
+  <div class="bg-grid"></div>
+
+  <!-- SITE HEADER / APP NAVIGATION -->
+  <header class="site-header">
+    <div class="header-container">
+      <div class="brand-wrap">
+        <a href="dashboard.html" class="brand-logo" title="Back to Dashboard">
+          <div class="brand-mark"><div class="brand-dot"></div></div>
+          <span>TUNETRACK</span>
+        </a>
+        <span class="brand-badge">STUDIO // CUSTOM ORDER</span>
+      </div>
+
+      <!-- STEP BREADCRUMBS -->
+      <nav class="nav-breadcrumbs" id="headerBreadcrumbs">
+        <span class="breadcrumb-step active" id="crumb-service">01 SERVICE</span>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-step" id="crumb-form">02 PROJECT FORM</span>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-step" id="crumb-review">03 REVIEW</span>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-step" id="crumb-status">04 PRODUCTION</span>
+      </nav>
+
+      <!-- HEADER ACTIONS -->
+      <div class="header-actions">
+        <button class="nav-price-pill" id="headerPricePill" onclick="togglePriceBreakdownModal()" title="View dynamic pricing ledger">
+          <span class="price-label">TOTAL</span>
+          <div class="odometer-box" id="navOdometer">
+            <span class="odometer-prefix">Rp</span>
+            <div class="odometer-reels" id="navOdometerReels"></div>
+          </div>
+        </button>
+
+        <button class="btn-secondary" onclick="openOrderLookupModal()" title="Lookup an existing order">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <span>Find Key</span>
+        </button>
+
+        <a href="dashboard.html" class="btn-secondary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+          <span>Dashboard</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN EXPERIENCE CONTAINER -->
+  <main class="main-wrap">
+
+    <!-- ========================================================
+         VIEW 1: CUSTOM ORDER LANDING & CHOOSE SERVICE
+    ======================================================== -->
+    <section class="view-section active" id="view-service">
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-dot"></span>
+        <span>ON-DEMAND STUDIO PRODUCTION // TIER 1 ENGINEERS</span>
+      </div>
+      <h1 class="hero-title">CUSTOM ORDER.<br><span style="color: #94a3b8; font-weight: 400;">Create exactly what you need.</span></h1>
+      <p class="hero-subhead">
+        Commission custom audio production tailored for your live stage, worship team, or studio setup. 
+        Select your required format below to begin the guided creative process.
+      </p>
+
+      <!-- 3 SERVICE CARDS -->
+      <div class="services-grid">
+        <!-- 1. CUSTOM MULTITRACK -->
+        <div class="service-card" id="card-multitrack" onclick="selectService('multitrack')">
+          <span class="service-card-tag">STANDALONE STEMS</span>
+          <div class="service-card-header">
+            <div class="service-number">OPTION // 01</div>
+            <h2 class="service-name">CUSTOM MULTITRACK</h2>
+            <p class="service-desc">Complete multi-stem breakdown with isolated WAV tracks for all instruments and guides.</p>
+          </div>
+
+          <div class="service-pricing-badge">
+            <span class="service-price-amount">Rp125.000</span>
+            <span class="service-pricing-note">Per track base</span>
+          </div>
+
+          <ul class="service-features-list">
+            <li class="service-feature-item">
+              <svg class="service-feature-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Drums, Bass, Keys, Guitars & Vocal guides</span>
+            </li>
+            <li class="service-feature-item">
+              <svg class="service-feature-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>24-bit / 48kHz lossless studio WAV stems</span>
+            </li>
+            <li class="service-feature-item">
+              <svg class="service-feature-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Ableton & DAW ready markers & click map</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 2. CUSTOM SEQUENCER -->
+        <div class="service-card" id="card-sequencer" onclick="selectService('sequencer')">
+          <span class="service-card-tag">LIVE PERFORMANCE</span>
+          <div class="service-card-header">
+            <div class="service-number">OPTION // 02</div>
+            <h2 class="service-name">CUSTOM SEQUENCER</h2>
+            <p class="service-desc">Precision live backing sequences with L/R click split, cue prompts, and hardware MIDI.</p>
+          </div>
+
+          <div class="service-pricing-badge">
+            <span class="service-price-amount">Rp75.000</span>
+            <span class="service-pricing-note">Per track base</span>
+          </div>
+
+          <ul class="service-features-list">
+            <li class="service-feature-item">
+              <svg class="service-feature-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Left: Metronome Click & Voice Cue Prompts</span>
+            </li>
+            <li class="service-feature-item">
+              <svg class="service-feature-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Right: Stereo Synth, Pad & Backing Audio</span>
+            </li>
+            <li class="service-feature-item">
+              <svg class="service-feature-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Roland, Korg, Yamaha & iPad / Phone ready</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 3. CUSTOM SETLIST -->
+        <div class="service-card" id="card-setlist" onclick="selectService('setlist')">
+          <span class="service-card-tag">CONCERT BUNDLE</span>
+          <div class="service-card-header">
+            <div class="service-number">OPTION // 03</div>
+            <h2 class="service-name">CUSTOM SETLIST</h2>
+            <p class="service-desc">Continuous 3-song concert block with seamless atmospheric transitions and key modulation.</p>
+          </div>
+
+          <div class="service-pricing-badge">
+            <div>
+              <span class="service-price-amount">Rp300.000</span>
+              <div class="discount-pill">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <span>Rp80.000 Package Discount Applied</span>
+              </div>
+            </div>
+            <span class="service-pricing-note">Includes 3 songs</span>
+          </div>
+
+          <ul class="service-features-list">
+            <li class="service-feature-item">
+              <svg class="service-feature-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>3 Complete Songs included in base bundle</span>
+            </li>
+            <li class="service-feature-item">
+              <svg class="service-feature-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Seamless harmonic transitions between tracks</span>
+            </li>
+            <li class="service-feature-item">
+              <svg class="service-feature-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Continuous live show cues & stage run sheet</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Continue to Form Button -->
+      <div style="display: flex; justify-content: flex-end;">
+        <button class="btn-primary" id="btnContinueToForm" onclick="proceedToForm()" style="opacity: 0.5; pointer-events: none;">
+          <span>Configure Project Details</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW 2: GUIDED ORDER CREATIVE FORM
+    ======================================================== -->
+    <section class="view-section" id="view-form">
+      <div style="margin-bottom: 28px;">
+        <button class="btn-secondary" onclick="goToStep('service')" style="margin-bottom: 16px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+          <span>Change Service</span>
+        </button>
+        <h1 class="hero-title" style="font-size: 2.4rem;">Project Blueprint.</h1>
+        <p class="hero-subhead" id="formSubtitle">Provide references, timing, and audio assets for precision engineering.</p>
+      </div>
+
+      <div class="form-layout">
+        <!-- LEFT COLUMN: MAIN FORM -->
+        <div class="form-main-col">
+
+          <!-- SINGLE SONG FORM (For Multitrack & Sequencer) -->
+          <div id="singleSongFormContainer">
+            <div class="form-card">
+              <div class="form-section-header">
+                <div>
+                  <div class="section-eyebrow">SONG SPECIFICATION</div>
+                  <div class="section-title">Track Identity & References</div>
+                </div>
+                <span class="brand-badge">SONG 01</span>
+              </div>
+
+              <!-- Song Title & Artist -->
+              <div class="grid-2">
+                <div class="field-group">
+                  <label class="field-label">Song Title <span class="field-hint">Required</span></label>
+                  <input type="text" class="input-text" id="songTitle" placeholder="e.g. Midnight City" value="Midnight City" oninput="handleFormChange()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Artist / Band <span class="field-hint">Required</span></label>
+                  <input type="text" class="input-text" id="songArtist" placeholder="e.g. M83" value="M83" oninput="handleFormChange()">
+                </div>
+              </div>
+
+              <!-- Reference Links -->
+              <div class="grid-2">
+                <div class="field-group">
+                  <label class="field-label">YouTube Reference Link</label>
+                  <input type="url" class="input-text" id="songYoutube" placeholder="https://youtube.com/watch?v=..." value="https://youtu.be/dX3k_QDnzHE" oninput="handleFormChange()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Audio / Streaming Link <span class="field-hint">Spotify / Drive</span></label>
+                  <input type="url" class="input-text" id="songLink" placeholder="https://open.spotify.com/track/..." oninput="handleFormChange()">
+                </div>
+              </div>
+
+              <!-- Audio Attachment Dropzone -->
+              <div class="field-group">
+                <label class="field-label">Audio Reference File <span class="field-hint">MP3, WAV, AIFF, ZIP up to 250MB</span></label>
+                <div class="dropzone-box has-file" id="dropzoneSingle" onclick="simulateFileUpload('single')">
+                  <div class="file-chip" id="fileChipSingle">
+                    <div class="file-info">
+                      <div class="file-icon-badge">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                      </div>
+                      <div>
+                        <div class="file-name" id="fileNameSingle">midnight_city_master_ref.wav</div>
+                        <div class="file-meta">24.8 MB • Audio/WAV reference attached</div>
+                      </div>
+                    </div>
+                    <button class="btn-secondary" style="padding: 4px 8px; font-size: 0.72rem;" onclick="event.stopPropagation(); removeAttachment('single')">Replace</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Duration Control -->
+              <div class="field-group" style="margin-bottom: 0;">
+                <label class="field-label">
+                  <span>Song Duration</span>
+                  <span class="field-hint">Threshold: 8:00 (under 8 min = Rp0 extra)</span>
+                </label>
+
+                <div class="duration-control-wrap">
+                  <div class="duration-inputs">
+                    <div class="duration-unit-box">
+                      <input type="number" min="0" max="60" class="duration-unit-input" id="singleDurMin" value="8" oninput="onDurationInput('single')">
+                      <span class="duration-unit-label">Min</span>
+                    </div>
+                    <span class="duration-colon">:</span>
+                    <div class="duration-unit-box">
+                      <input type="number" min="0" max="59" class="duration-unit-input" id="singleDurSec" value="30" oninput="onDurationInput('single')">
+                      <span class="duration-unit-label">Sec</span>
+                    </div>
+
+                    <!-- Quick Presets -->
+                    <div class="duration-presets">
+                      <button class="duration-chip" onclick="setPresetDuration('single', 3, 45)">03:45</button>
+                      <button class="duration-chip" onclick="setPresetDuration('single', 5, 30)">05:30</button>
+                      <button class="duration-chip" onclick="setPresetDuration('single', 7, 50)">07:50</button>
+                      <button class="duration-chip active" onclick="setPresetDuration('single', 8, 30)">08:30 (+35k)</button>
+                      <button class="duration-chip" onclick="setPresetDuration('single', 9, 15)">09:15 (+45k)</button>
+                      <button class="duration-chip" onclick="setPresetDuration('single', 11, 0)">11:00 (+65k)</button>
+                    </div>
+                  </div>
+
+                  <!-- Real-time Extra Fee Formula Breakdown Box -->
+                  <div class="duration-fee-banner extra" id="singleDurationBanner">
+                    <span id="singleDurationText">Duration: 8:30 (8 min threshold). Extra time: Rp35.000</span>
+                    <span id="singleDurationAmount">+ Rp35.000</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- SETLIST MULTI-SONG FORM (Displayed when Custom Setlist is selected) -->
+          <div id="setlistFormContainer" style="display: none;">
+            <div class="form-card">
+              <div class="form-section-header">
+                <div>
+                  <div class="section-eyebrow">SETLIST SPECIFICATION</div>
+                  <div class="section-title">Curated Concert Tracks</div>
+                </div>
+                <span class="brand-badge" id="setlistTrackCountBadge">3 SONGS INCLUDED</span>
+              </div>
+              <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 20px;">
+                Your Custom Setlist includes 3 full tracks. Extra time charges are calculated per individual song according to each track's duration.
+              </p>
+
+              <!-- Dynamic Multi-Song Tracklist -->
+              <div class="setlist-tracks-container" id="setlistTracklist">
+                <!-- Dynamically rendered via JS -->
+              </div>
+
+              <!-- Add Another Song button -->
+              <button class="btn-secondary" style="margin-top: 18px; width: 100%; justify-content: center; padding: 12px;" onclick="addSetlistSong()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span>Add Extra Song to Setlist (+Rp100.000)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- PRIORITY DELIVERY OPTIONAL SERVICE -->
+          <div class="priority-card" id="priorityCard" onclick="togglePriority()">
+            <div class="priority-info">
+              <div class="priority-icon-wrap">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <div>
+                <div class="priority-title">Priority Delivery & Quick 1-Day Work</div>
+                <div class="priority-subtitle">Dedicated 24-hour express turn-around with direct senior producer queue.</div>
+              </div>
+            </div>
+
+            <div class="priority-switch-wrap">
+              <span class="priority-fee-tag">+ Rp50.000</span>
+              <div class="switch-ui" id="prioritySwitch"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN: STICKY LIVE SUMMARY -->
+        <div class="pricing-sidebar">
+          <div class="pricing-card">
+            <div class="pricing-card-header">
+              <span class="section-eyebrow">ORDER VALUATION</span>
+              <span class="brand-badge" id="sidebarServiceBadge">MULTITRACK</span>
+            </div>
+
+            <!-- DYNAMIC SLOT MACHINE TOTAL -->
+            <div class="total-price-hero">
+              <span class="total-price-label">ESTIMATED TOTAL</span>
+              <div class="odometer-box" id="sidebarOdometer" style="font-size: 2.2rem;">
+                <span class="odometer-prefix">Rp</span>
+                <div class="odometer-reels" id="sidebarOdometerReels"></div>
+              </div>
+            </div>
+
+            <!-- ITEMIZED LEDGER -->
+            <div class="pricing-ledger">
+              <div class="ledger-row">
+                <span id="ledgerBaseTitle">Custom Multitrack Base</span>
+                <span id="ledgerBaseAmount">Rp125.000</span>
+              </div>
+              
+              <div class="ledger-row" id="ledgerDiscountRow" style="display: none;">
+                <span>Setlist Bundle Discount</span>
+                <span class="ledger-row discount">- Rp80.000</span>
+              </div>
+
+              <div class="ledger-row">
+                <span>Duration Surcharge</span>
+                <span id="ledgerExtraAmount">+ Rp0</span>
+              </div>
+
+              <div class="ledger-row" id="ledgerPriorityRow" style="display: none;">
+                <span>Priority 1-Day Delivery</span>
+                <span id="ledgerPriorityAmount">+ Rp50.000</span>
+              </div>
+
+              <div class="ledger-divider"></div>
+
+              <div class="ledger-row highlight">
+                <span>Final Calculation</span>
+                <span id="ledgerFinalText">Rp125.000</span>
+              </div>
+            </div>
+
+            <!-- CTA TO REVIEW -->
+            <button class="btn-action-full" onclick="proceedToReview()">
+              <span>Review Order Specifications</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+            <p style="font-size: 0.7rem; color: var(--text-muted); text-align: center; margin-top: 12px; font-family: var(--font-mono);">
+              Pricing will be permanently frozen upon confirmation.
+            </p>
+          </div>
+
+          <!-- PRODUCTION GUARANTEE CARD -->
+          <div style="background: #0d0d12; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 18px; font-size: 0.78rem; color: var(--text-secondary);">
+            <div style="font-weight: 700; color: #fff; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>TuneTrack Studio Guarantee</span>
+            </div>
+            <span>Every custom project includes full stem isolation, DAW markers, and 1 free revision round within 7 days of delivery.</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW 3: CONFIRM ORDER (REVIEW SCREEN)
+    ======================================================== -->
+    <section class="view-section" id="view-review">
+      <div class="review-container">
+        <div style="margin-bottom: 24px;">
+          <button class="btn-secondary" onclick="goToStep('form')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+            <span>Back to Edit Blueprint</span>
+          </button>
+        </div>
+
+        <div class="review-invoice-card">
+          <span class="review-watermark">SPECIFICATION // DRAFT PREVIEW</span>
+          
+          <div class="section-eyebrow">ORDER CONFIRMATION</div>
+          <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 8px;">Order Review & Blueprint Freeze</h2>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); max-width: 580px;">
+            Please carefully verify your tracks, timing, and references. Upon clicking confirm, this order will be generated with a unique Public Order Key and prices will be locked.
+          </p>
+
+          <!-- META GRID -->
+          <div class="review-meta-grid">
+            <div class="review-meta-item">
+              <span class="review-meta-label">SERVICE TIER</span>
+              <span class="review-meta-value" id="revService">Custom Multitrack</span>
+            </div>
+            <div class="review-meta-item">
+              <span class="review-meta-label">DELIVERY SPEED</span>
+              <span class="review-meta-value" id="revDelivery">Standard (3-4 Days)</span>
+            </div>
+            <div class="review-meta-item">
+              <span class="review-meta-label">TOTAL TRACKS</span>
+              <span class="review-meta-value" id="revTrackCount">1 Song</span>
+            </div>
+            <div class="review-meta-item">
+              <span class="review-meta-label">AUDIO SPEC</span>
+              <span class="review-meta-value">24-Bit / 48kHz WAV Stems</span>
+            </div>
+          </div>
+
+          <!-- TRACK DETAILS TABLE -->
+          <h3 style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 14px; font-family: var(--font-mono);">
+            Tracks & References Manifest
+          </h3>
+
+          <table class="review-tracks-table" id="revTracksTable">
+            <thead>
+              <tr>
+                <th>TRACK</th>
+                <th>ARTIST</th>
+                <th>DURATION</th>
+                <th>EXTRA TIME</th>
+                <th>REFERENCE / FILE</th>
+              </tr>
+            </thead>
+            <tbody id="revTracksBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+
+          <!-- PRICING CALCULATION REVIEW -->
+          <div class="review-pricing-box">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px;">
+              <div>
+                <span class="section-eyebrow">FINAL FROZEN TOTAL</span>
+                <div class="odometer-box" id="reviewOdometer" style="font-size: 2.4rem;">
+                  <span class="odometer-prefix">Rp</span>
+                  <div class="odometer-reels" id="reviewOdometerReels"></div>
+                </div>
+              </div>
+              <span class="brand-badge" style="background: rgba(59, 130, 246, 0.15); color: #93c5fd; border-color: rgba(59, 130, 246, 0.3);">
+                FIXED PRICE GUARANTEE
+              </span>
+            </div>
+
+            <div style="font-size: 0.82rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 8px;" id="revPriceBreakdownList">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- CONFIRM ACTIONS -->
+          <div class="review-actions-bar">
+            <button class="btn-secondary" onclick="goToStep('form')">
+              <span>Modify Details</span>
+            </button>
+
+            <button class="btn-primary" style="padding: 14px 28px; font-size: 0.95rem;" onclick="confirmAndPlaceOrder()">
+              <span>CONFIRM & PLACE ORDER</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW 4: PAYMENT (LYNK BRIDGE & DRAWBACK / RETURN)
+    ======================================================== -->
+    <section class="view-section" id="view-payment">
+      <div class="payment-modal-box">
+        <div class="payment-header">
+          <div class="hero-eyebrow" style="margin-bottom: 12px;">
+            <span>SECURE PAYMENT GATEWAY</span>
+          </div>
+          <h2 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 6px;">TuneTrack × Lynk Payment</h2>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">
+            Order created & frozen with key: <strong style="color: #fff; font-family: var(--font-mono);" id="payOrderKey">TT-8F72KQ91</strong>
+          </p>
+        </div>
+
+        <!-- QRIS PAYMENT CARD -->
+        <div class="qris-card">
+          <div class="qris-badge-top">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>QRIS INSTANT PAY</span>
+          </div>
+
+          <svg class="qris-code-svg" viewBox="0 0 100 100" fill="#000">
+            <rect x="10" y="10" width="25" height="25" fill="#000"/>
+            <rect x="14" y="14" width="17" height="17" fill="#fff"/>
+            <rect x="18" y="18" width="9" height="9" fill="#000"/>
+
+            <rect x="65" y="10" width="25" height="25" fill="#000"/>
+            <rect x="69" y="14" width="17" height="17" fill="#fff"/>
+            <rect x="73" y="18" width="9" height="9" fill="#000"/>
+
+            <rect x="10" y="65" width="25" height="25" fill="#000"/>
+            <rect x="14" y="69" width="17" height="17" fill="#fff"/>
+            <rect x="18" y="73" width="9" height="9" fill="#000"/>
+
+            <rect x="42" y="12" width="6" height="6"/><rect x="52" y="12" width="6" height="6"/>
+            <rect x="42" y="24" width="6" height="10"/><rect x="52" y="22" width="6" height="6"/>
+            <rect x="12" y="44" width="8" height="8"/><rect x="24" y="44" width="6" height="6"/>
+            <rect x="40" y="40" width="20" height="20"/><rect x="45" y="45" width="10" height="10" fill="#fff"/>
+            <rect x="66" y="44" width="8" height="6"/><rect x="78" y="44" width="10" height="6"/>
+            <rect x="42" y="66" width="6" height="8"/><rect x="52" y="70" width="8" height="8"/>
+            <rect x="68" y="66" width="12" height="6"/><rect x="74" y="76" width="12" height="12"/>
+          </svg>
+
+          <div style="margin-top: 10px; font-weight: 800; font-size: 1.15rem; font-family: var(--font-mono);" id="qrisPayAmount">
+            Rp170.000
+          </div>
+          <div class="qris-order-tag" id="qrisOrderTag">KEY: TT-8F72KQ91</div>
+        </div>
+
+        <!-- FIXED LYNK URL / PAYMENT BRIDGE INFO -->
+        <div class="lynk-url-pill">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            <span style="color: var(--text-secondary);">Direct Payment Bridge:</span>
+            <span style="color: #93c5fd;" id="lynkDirectUrl">https://lynk.id/tunetrack/pay</span>
+          </div>
+          <button class="btn-secondary" style="padding: 4px 8px; font-size: 0.7rem;" onclick="copyLynkUrl()">Copy</button>
+        </div>
+
+        <!-- PAYMENT SIMULATION ACTIONS -->
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px;">
+          <button class="btn-primary" style="width: 100%; justify-content: center; padding: 14px;" onclick="simulatePaymentSuccess()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Simulate Payment Complete (Lynk Webhook)</span>
+          </button>
+          
+          <button class="btn-secondary" style="width: 100%; justify-content: center; padding: 12px;" onclick="openLynkExternal()">
+            <span>Open Lynk.id Portal Window</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </button>
+        </div>
+
+        <!-- DRAWBACK / RETURN BRIDGE -->
+        <div class="drawback-bar">
+          <button class="btn-secondary" onclick="drawbackOrder()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+            <span>← Drawback / Return to Order Form</span>
+          </button>
+
+          <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">
+            Unpaid • Editable
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW 5: ACTIVE ORDER LIFECYCLE (PROCESSING STATE)
+    ======================================================== -->
+    <section class="view-section" id="view-active">
+      <div class="order-status-card">
+        <div class="status-hero-banner">
+          <div>
+            <div class="live-pulse-badge">
+              <span class="pulse-dot"></span>
+              <span>ACTIVE SESSION // STATUS: PROCESSING</span>
+            </div>
+            <h2 style="font-size: 2.2rem; font-weight: 700; margin-top: 8px; margin-bottom: 4px;" id="activeOrderTitle">
+              Custom Multitrack Production
+            </h2>
+            <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 10px;">
+              <span>PUBLIC ORDER KEY:</span>
+              <span style="color: #93c5fd; font-weight: 700;" id="activeOrderKeyDisplay">TT-8F72KQ91</span>
+              <button class="btn-secondary" style="padding: 2px 6px; font-size: 0.68rem;" onclick="copyOrderKey()">Copy</button>
+            </div>
+          </div>
+
+          <div style="text-align: right;">
+            <div style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase;">
+              ESTIMATED COMPLETION
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 700; color: #fff;" id="activeEtaTimer">
+              23h 48m remaining
+            </div>
+            <span class="brand-badge" id="activePriorityBadge" style="background: rgba(59, 130, 246, 0.15); color: #93c5fd;">
+              PRIORITY 1-DAY QUEUE
+            </span>
+          </div>
+        </div>
+
+        <!-- PRODUCTION PIPELINE STEPPER -->
+        <div class="pipeline-stepper">
+          <div class="step-item done">
+            <span class="step-badge">STEP 01 // COMPLETE</span>
+            <div class="step-name">Payment & Lock</div>
+            <p style="font-size: 0.72rem; color: var(--text-muted);">Lynk payment verified and pricing frozen.</p>
+          </div>
+
+          <div class="step-item done">
+            <span class="step-badge">STEP 02 // COMPLETE</span>
+            <div class="step-name">Asset Ingestion</div>
+            <p style="font-size: 0.72rem; color: var(--text-muted);">Audio references & tempo map checked.</p>
+          </div>
+
+          <div class="step-item active">
+            <span class="step-badge">STEP 03 // IN PROGRESS</span>
+            <div class="step-name">Arrangement & Stems</div>
+            <p style="font-size: 0.72rem; color: var(--text-muted);">Multi-instrument tracking & cue coding.</p>
+          </div>
+
+          <div class="step-item">
+            <span class="step-badge">STEP 04 // UPCOMING</span>
+            <div class="step-name">QC & Master Bounce</div>
+            <p style="font-size: 0.72rem; color: var(--text-muted);">24-bit 48kHz delivery packaging.</p>
+          </div>
+        </div>
+
+        <!-- DETAILS COLLAPSIBLE / SUMMARY -->
+        <div class="grid-2">
+          <div style="background: #09090e; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 20px;">
+            <div class="section-eyebrow">ORDER MANIFEST</div>
+            <div id="activeOrderSummaryBody" style="font-size: 0.82rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <!-- ENGINEER CHAT / LIVE DIRECT COMM -->
+          <div style="background: #09090e; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 20px; display: flex; flex-direction: column;">
+            <div class="section-eyebrow">DIRECT STUDIO NOTE</div>
+            <div style="font-size: 0.85rem; font-weight: 600; color: #fff; margin-top: 4px; margin-bottom: 8px;">
+              Assigned Engineer: Aris Kurnia (Lead Multi-track Producer)
+            </div>
+            <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 16px;">
+              "Audio reference received in high quality. Setting up drum tempo map at 105 BPM and analog synth stems."
+            </p>
+            <div style="margin-top: auto; display: flex; gap: 10px;">
+              <input type="text" class="input-text" id="engineerNoteInput" placeholder="Send quick note to engineer..." style="font-size: 0.8rem; padding: 8px 12px;">
+              <button class="btn-secondary" onclick="sendEngineerNote()">Send</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DEMO TOOL: SIMULATE COMPLETION -->
+        <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">
+            [PRODUCER WORKFLOW SIMULATION TOOL]
+          </span>
+          <button class="btn-primary" onclick="simulateOrderFinished()">
+            <span>Simulate Studio Completion → Master Ready</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW 6: FINISHED ORDER & INTERACTIVE STEM PLAYER
+    ======================================================== -->
+    <section class="view-section" id="view-finished">
+      <!-- CONGRATULATIONS BANNER -->
+      <div class="finished-banner">
+        <div>
+          <span class="brand-badge" style="background: var(--success-tint); color: var(--success-green); border-color: rgba(16, 185, 129, 0.3);">
+            PRODUCTION COMPLETE // DELIVERED
+          </span>
+          <h2 style="font-size: 2.2rem; font-weight: 700; margin-top: 8px; margin-bottom: 4px;">
+            Your Master Session is Ready.
+          </h2>
+          <p style="font-size: 0.88rem; color: var(--text-secondary);">
+            Mastered Stems and DAW Project Files are packaged and verified. Audition isolated stems below.
+          </p>
+        </div>
+
+        <div style="display: flex; gap: 12px;">
+          <button class="btn-primary" onclick="downloadAllStems()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Download All Stems (.ZIP)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- INTERACTIVE STEM PLAYER / MULTI-CHANNEL CONSOLE -->
+      <div class="stem-player-container">
+        <div class="player-header">
+          <div>
+            <div class="section-eyebrow">AUDITION STUDIO CONSOLE</div>
+            <h3 style="font-size: 1.25rem; font-weight: 700;">Multi-Stem Master Audition</h3>
+          </div>
+          <span class="brand-badge">24-BIT / 48KHZ STEREO BOUNCE</span>
+        </div>
+
+        <!-- MASTER TRANSPORT BAR -->
+        <div class="master-controls">
+          <button class="play-btn-circle" id="masterPlayBtn" onclick="toggleStemAudio()">
+            <svg id="masterPlayIcon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </button>
+          
+          <div style="flex: 1;">
+            <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 6px;">
+              <span id="playerTrackTitle">Midnight City — Isolated Master Stems</span>
+              <span id="playerTime">00:00 / 08:30</span>
+            </div>
+            <input type="range" id="playerScrubber" min="0" max="100" value="0" style="width: 100%; accent-color: var(--blue-accent); cursor: pointer;" oninput="onScrubAudio(this.value)">
+          </div>
+
+          <button class="btn-secondary" onclick="resetAudioPlayback()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+          </button>
+        </div>
+
+        <!-- 5 STEM CHANNELS (DRUMS, BASS, KEYS, GUITARS, CLICK/GUIDE) -->
+        <div class="stems-mixing-console">
+          <!-- 1. DRUMS -->
+          <div class="stem-channel" id="stem-ch-drums">
+            <div class="stem-meta">
+              <span class="stem-tag">01</span>
+              <div>
+                <div style="font-weight: 700; font-size: 0.88rem;">🥁 Drums & Perc</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono);">Kick, Snare, Tops</div>
+              </div>
+            </div>
+            <div class="stem-meter-bar"><div class="stem-meter-fill" id="meter-drums" style="width: 65%;"></div></div>
+            <div class="stem-btn-group">
+              <button class="mute-solo-btn" onclick="toggleMute('drums')">MUTE</button>
+              <button class="mute-solo-btn" onclick="toggleSolo('drums')">SOLO</button>
+            </div>
+          </div>
+
+          <!-- 2. BASS -->
+          <div class="stem-channel" id="stem-ch-bass">
+            <div class="stem-meta">
+              <span class="stem-tag">02</span>
+              <div>
+                <div style="font-weight: 700; font-size: 0.88rem;">🎸 Analog Bass</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono);">Sub 808 + Synth Bass</div>
+              </div>
+            </div>
+            <div class="stem-meter-bar"><div class="stem-meter-fill" id="meter-bass" style="width: 72%;"></div></div>
+            <div class="stem-btn-group">
+              <button class="mute-solo-btn" onclick="toggleMute('bass')">MUTE</button>
+              <button class="mute-solo-btn" onclick="toggleSolo('bass')">SOLO</button>
+            </div>
+          </div>
+
+          <!-- 3. KEYS / SYNTHS -->
+          <div class="stem-channel" id="stem-ch-keys">
+            <div class="stem-meta">
+              <span class="stem-tag">03</span>
+              <div>
+                <div style="font-weight: 700; font-size: 0.88rem;">🎹 Synth & Pads</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono);">Polyphonic Arp & Chords</div>
+              </div>
+            </div>
+            <div class="stem-meter-bar"><div class="stem-meter-fill" id="meter-keys" style="width: 80%;"></div></div>
+            <div class="stem-btn-group">
+              <button class="mute-solo-btn" onclick="toggleMute('keys')">MUTE</button>
+              <button class="mute-solo-btn" onclick="toggleSolo('keys')">SOLO</button>
+            </div>
+          </div>
+
+          <!-- 4. LEAD / GUITARS -->
+          <div class="stem-channel" id="stem-ch-leads">
+            <div class="stem-meta">
+              <span class="stem-tag">04</span>
+              <div>
+                <div style="font-weight: 700; font-size: 0.88rem;">🎷 Leads & Riffs</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono);">Sax Lead & Guitars</div>
+              </div>
+            </div>
+            <div class="stem-meter-bar"><div class="stem-meter-fill" id="meter-leads" style="width: 58%;"></div></div>
+            <div class="stem-btn-group">
+              <button class="mute-solo-btn" onclick="toggleMute('leads')">MUTE</button>
+              <button class="mute-solo-btn" onclick="toggleSolo('leads')">SOLO</button>
+            </div>
+          </div>
+
+          <!-- 5. CLICK & GUIDE CUES -->
+          <div class="stem-channel" id="stem-ch-cue">
+            <div class="stem-meta">
+              <span class="stem-tag">05</span>
+              <div>
+                <div style="font-weight: 700; font-size: 0.88rem;">🎙️ Click & Voice Cues</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono);">Stage Guide (L-channel)</div>
+              </div>
+            </div>
+            <div class="stem-meter-bar"><div class="stem-meter-fill" id="meter-cue" style="width: 45%;"></div></div>
+            <div class="stem-btn-group">
+              <button class="mute-solo-btn" onclick="toggleMute('cue')">MUTE</button>
+              <button class="mute-solo-btn" onclick="toggleSolo('cue')">SOLO</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOWNLOAD REPOSITORY & INVOICE -->
+      <div class="grid-2">
+        <div class="form-card">
+          <div class="section-eyebrow">FILES & ASSETS</div>
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 14px;">Master Production Deliverables</h3>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div class="file-chip" style="background: #09090e; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <div>
+                <div style="font-weight: 600; font-size: 0.85rem;">TT_MidnightCity_24bit_Stems.zip</div>
+                <div style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">142 MB • Lossless Multi-Track Stems</div>
+              </div>
+              <button class="btn-secondary" onclick="fakeDownload('TT_MidnightCity_24bit_Stems.zip')">Download</button>
+            </div>
+
+            <div class="file-chip" style="background: #09090e; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <div>
+                <div style="font-weight: 600; font-size: 0.85rem;">TT_Sequencer_LR_Split.wav</div>
+                <div style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">68 MB • Click & Guide (Left) / Stems (Right)</div>
+              </div>
+              <button class="btn-secondary" onclick="fakeDownload('TT_Sequencer_LR_Split.wav')">Download</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="section-eyebrow">POST-DELIVERY SUPPORT</div>
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 8px;">100% Satisfaction Guarantee</h3>
+          <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 20px;">
+            Need stem adjustments, alternative key transposition, or a different cue guide? One full revision is free within 7 days.
+          </p>
+          <div style="display: flex; gap: 12px;">
+            <button class="btn-secondary" onclick="requestRevisionModal()">Request Revision</button>
+            <button class="btn-secondary" onclick="downloadInvoicePDF()">Download Receipt</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 40px; text-align: center;">
+        <button class="btn-primary" onclick="startNewCustomOrder()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>Create Another Custom Order</span>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- STICKY BOTTOM ACTION BAR -->
+  <div class="sticky-bottom-bar" id="stickyBottomBar">
+    <div class="bottom-bar-left">
+      <div class="bottom-bar-service">
+        <span class="bottom-service-name" id="bottomServiceName">Select a service</span>
+        <span class="bottom-service-spec" id="bottomServiceSpec">TuneTrack On-Demand Studio</span>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <!-- SLOT MACHINE PRICE ODOMETER -->
+      <div style="text-align: right;">
+        <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase;">
+          TOTAL
+        </div>
+        <div class="odometer-box" id="bottomOdometer" style="font-size: 1.45rem;">
+          <span class="odometer-prefix">Rp</span>
+          <div class="odometer-reels" id="bottomOdometerReels"></div>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="bottomBarActionBtn" onclick="onBottomBarAction()">
+        <span>Continue</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- MODALS: PRICE BREAKDOWN & ORDER KEY LOOKUP -->
+  <div class="modal-overlay" id="breakdownModal" onclick="if(event.target===this) togglePriceBreakdownModal()">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div class="section-title">Transparent Price Formula</div>
+        <button class="btn-secondary" style="padding: 4px 8px;" onclick="togglePriceBreakdownModal()">✕</button>
+      </div>
+      <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px;">
+        TuneTrack follows an open, predictable pricing formula for all production commissions:
+      </div>
+      <div style="background: #09090d; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px; font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.8; margin-bottom: 20px;">
+        <div>• <strong>Custom Multitrack:</strong> Rp125.000 base</div>
+        <div>• <strong>Custom Sequencer:</strong> Rp75.000 base</div>
+        <div>• <strong>Custom Setlist:</strong> Rp300.000 base (includes 3 songs + Rp80.000 discount)</div>
+        <div style="margin-top: 8px; color: #93c5fd;">
+          • <strong>Extra Duration Rule:</strong><br>
+          &nbsp;&nbsp;Under 8:00 = Rp0<br>
+          &nbsp;&nbsp;At 8:00 = +Rp35.000<br>
+          &nbsp;&nbsp;9:00 = +Rp45.000 (+Rp10k per extra min)
+        </div>
+        <div style="margin-top: 8px;">• <strong>Priority 1-Day Delivery:</strong> +Rp50.000</div>
+      </div>
+      <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="togglePriceBreakdownModal()">Got it</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="lookupModal" onclick="if(event.target===this) closeOrderLookupModal()">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div class="section-title">Lookup Public Order Key</div>
+        <button class="btn-secondary" style="padding: 4px 8px;" onclick="closeOrderLookupModal()">✕</button>
+      </div>
+      <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 16px;">
+        Enter any TuneTrack order key (e.g. <code>TT-8F72KQ91</code>) to track your active production or retrieve finished masters.
+      </p>
+      <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <input type="text" class="input-text" id="lookupKeyInput" placeholder="TT-XXXXXXXX" style="font-family: var(--font-mono); text-transform: uppercase;">
+        <button class="btn-primary" onclick="performOrderLookup()">Lookup</button>
+      </div>
+
+      <div style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 8px;">
+        DEMO PRE-LOADED SAMPLES:
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <button class="btn-secondary" style="justify-content: space-between;" onclick="loadSampleOrder('TT-8F72KQ91')">
+          <span>TT-8F72KQ91 (Custom Sequencer • Processing)</span>
+          <span style="color: var(--blue-accent);">Load →</span>
+        </button>
+        <button class="btn-secondary" style="justify-content: space-between;" onclick="loadSampleOrder('TT-P72LM4XA')">
+          <span>TT-P72LM4XA (Custom Multitrack • Finished)</span>
+          <span style="color: var(--success-green);">Audition →</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Standalone Application Logic & Firebase Adapter -->
+  <script src="assets/js/order-tunetrack.js"></script>
+</body>
+</html>

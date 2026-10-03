@@ -1,0 +1,10 @@
+        /* FINAL AVATAR SPACING FIX — only this section is affected. */
+        .avatar-selector {
+            margin-bottom: 0 !important;
+        }
+
+        .avatar-change-actions {
+            margin-top: 20px !important;
+            margin-bottom: -132px !important;
+            padding-bottom: 0 !important;
+        }

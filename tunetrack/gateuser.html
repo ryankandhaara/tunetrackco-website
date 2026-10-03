@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#050505">
+<title>Gate — TuneTrack ecosystem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<style>
+:root {
+  --bg: #050505;
+  --fg: #f4f4f1;
+  --muted: #737373;
+  --line: rgba(255, 255, 255, 0.1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  width: 100%; height: 100%;
+  background: var(--bg); color: var(--fg);
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: #fff; color: #000; }
+button { appearance: none; background: none; border: none; font: inherit; outline: none; }
+
+#webgl-container {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: auto;
+}
+
+.bg-vid { display: none; }
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(5,5,5,0.2) 0%, rgba(5,5,5,0.85) 100%), 
+              linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.9) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.gate-ui {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  padding: 2rem;
+}
+
+.eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.eyebrow::before, .eyebrow::after {
+  content: "";
+  height: 1px; width: 24px;
+  background: var(--line);
+}
+
+.title-wrap {
+  text-align: center;
+  overflow: hidden;
+}
+
+.title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(3.5rem, 8vw, 9rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: #fff;
+  margin: 0;
+  position: relative;
+}
+
+.subtitle {
+  font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+  color: rgba(255,255,255,0.6);
+  margin-top: 1.5rem;
+  max-width: 400px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.cta-wrapper {
+  margin-top: 3.5rem;
+  pointer-events: auto;
+  position: relative;
+}
+
+.cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem 2.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 100px;
+  color: #fff;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: border-color 0.4s ease, background 0.4s ease, transform 0.2s ease;
+}
+
+.cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  transform: translateY(100%);
+  transition: transform 0.5s var(--ease-out-expo);
+  z-index: 0;
+}
+
+.cta:hover { border-color: #fff; transform: scale(1.02); }
+.cta:hover::before { transform: translateY(0); }
+.cta:hover .cta-text { color: #000; }
+
+.cta-text {
+  position: relative;
+  z-index: 1;
+  transition: color 0.4s ease;
+}
+
+.cursor-dot, .cursor-follower {
+  position: fixed;
+  top: 0; left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+}
+
+.cursor-dot { width: 6px; height: 6px; background: #fff; }
+.cursor-follower {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(255,255,255,0.5);
+  transition: width 0.3s var(--ease-out-expo), height 0.3s var(--ease-out-expo), background 0.3s ease;
+}
+
+.cursor-follower.hovering {
+  width: 64px; height: 64px;
+  background: rgba(255,255,255,0.1);
+  border-color: transparent;
+}
+
+body.hide-cursor, body.hide-cursor * { cursor: none !important; }
+
+/* MODIFIED: Transisi sekarang transparan dan efek glass */
+.page-transition {
+  position: fixed;
+  inset: 0;
+  background: transparent; 
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  opacity: 0; /* Ubah dari transform jadi opacity untuk fade-in halus */
+  will-change: opacity;
+}
+
+.transition-text {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  color: #fff;
+  text-transform: uppercase;
+  overflow: hidden;
+}
+
+.transition-progress {
+  width: 200px; height: 1px;
+  background: rgba(255,255,255,0.2);
+  margin-top: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.transition-bar {
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%; width: 0%;
+  background: #fff;
+}
+
+/* MODIFIED: Shockwave diganti jadi glass ring raksasa */
+.final-shockwave {
+  position: fixed;
+  top: 50%; left: 50%;
+  width: 100px; height: 100px; /* Base lebih besar */
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  z-index: 10005;
+  pointer-events: none;
+  /* Efek visual air/kaca */
+  box-shadow: 0 0 100px 40px rgba(255, 255, 255, 0.1), inset 0 0 80px 20px rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px) brightness(1.2);
+  -webkit-backdrop-filter: blur(10px) brightness(1.2);
+  will-change: transform;
+}
+
+/* MODIFIED: Lapisan transisi halus ke halaman berikutnya */
+.fade-to-black {
+  position: fixed; inset: 0; background: #050505; z-index: 10010; opacity: 0; pointer-events: none;
+}
+
+.header-ui, .footer-ui {
+  position: absolute;
+  left: 2rem; right: 2rem;
+  display: flex;
+  justify-content: space-between;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  z-index: 2;
+  pointer-events: none;
+}
+.header-ui { top: 2rem; }
+.footer-ui { bottom: 2rem; }
+
+@media (max-width: 768px) {
+  .header-ui, .footer-ui { display: none; }
+  .title { font-size: clamp(3rem, 12vw, 4.5rem); }
+  .cursor-dot, .cursor-follower { display: none; }
+  body.hide-cursor, body.hide-cursor * { cursor: auto !important; }
+}
+</style>
+</head>
+<body>
+
+<div id="webgl-container"></div>
+<video id="bg-vid" class="bg-vid" src="assets/videos/gate-user.mp4" autoplay loop muted playsinline crossorigin="anonymous"></video>
+<div class="overlay"></div>
+
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-follower" id="cursorFollower"></div>
+
+<div class="page-transition" id="transitionCurtain">
+  <div class="transition-text"><span id="transTextSpan">AUTHENTICATING...</span></div>
+  <div class="transition-progress"><div class="transition-bar" id="transBar"></div></div>
+</div>
+
+<div class="final-shockwave" id="finalShockwave"></div>
+<div class="fade-to-black" id="fadeToBlack"></div>
+
+<header class="header-ui">
+  <span>TuneTrack / V.4</span>
+  <span>System : Online</span>
+</header>
+
+<main class="gate-ui">
+  <div class="eyebrow">Account Access</div>
+  <div class="title-wrap"><h1 class="title" id="mainTitle">Unlock your File.</h1></div>
+  <p class="subtitle" id="subTitle">Enter the ecosystem. Manage your products, secure your files, and claim your ownership in one unified space.</p>
+  <div class="cta-wrapper">
+    <button class="cta" id="enterBtn"><span class="cta-text" id="ctaText">INITIALIZE SYSTEM</span></button>
+  </div>
+</main>
+
+<footer class="footer-ui">
+  <span>Encrypted Protocol</span>
+  <span>© 2026 TuneTrack</span>
+</footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  if (!isTouchDevice) {
+    document.body.classList.add('hide-cursor');
+    const dot = document.getElementById('cursorDot');
+    const follower = document.getElementById('cursorFollower');
+    let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+    const xDot = gsap.quickTo(dot, "x", {duration: 0.1, ease: "power3"});
+    const yDot = gsap.quickTo(dot, "y", {duration: 0.1, ease: "power3"});
+    const xFollower = gsap.quickTo(follower, "x", {duration: 0.6, ease: "power3"});
+    const yFollower = gsap.quickTo(follower, "y", {duration: 0.6, ease: "power3"});
+
+    window.addEventListener("mousemove", (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      xDot(mouseX); yDot(mouseY); xFollower(mouseX); yFollower(mouseY);
+    });
+
+    const btn = document.getElementById('enterBtn');
+    btn.addEventListener("mouseenter", () => follower.classList.add('hovering'));
+    btn.addEventListener("mouseleave", () => follower.classList.remove('hovering'));
+  }
+
+  gsap.from("#mainTitle", { y: 100, opacity: 0, duration: 1.5, ease: "expo.out", delay: 0.2 });
+  gsap.from("#subTitle", { y: 20, opacity: 0, duration: 1.5, ease: "expo.out", delay: 0.4 });
+  gsap.from(".cta", { y: 20, opacity: 0, duration: 1.5, ease: "expo.out", delay: 0.6 });
+  gsap.from(".header-ui, .footer-ui", { opacity: 0, duration: 2, ease: "power2.out", delay: 1 });
+
+  const ctaBtn = document.getElementById('enterBtn');
+  const ctaText = document.getElementById('ctaText');
+  const originalText = "INITIALIZE SYSTEM";
+  let typeInterval, isTyping = false;
+
+  ctaBtn.addEventListener("mouseenter", () => {
+    if(isTyping) return;
+    isTyping = true; ctaText.innerText = ""; let i = 0;
+    typeInterval = setInterval(() => {
+      ctaText.innerText += originalText.charAt(i); i++;
+      if (i >= originalText.length) { clearInterval(typeInterval); isTyping = false; }
+    }, 30);
+  });
+  ctaBtn.addEventListener("mouseleave", () => {
+    clearInterval(typeInterval); ctaText.innerText = originalText; isTyping = false;
+  });
+
+  const container = document.getElementById('webgl-container');
+  const video = document.getElementById('bg-vid');
+  const scene = new THREE.Scene();
+  const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  const texture = new THREE.VideoTexture(video);
+  texture.minFilter = THREE.LinearFilter; texture.magFilter = THREE.LinearFilter; texture.format = THREE.RGBFormat;
+
+  const uniforms = {
+    uTexture: { value: texture },
+    uTime: { value: 0.0 },
+    uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+    uClickPos: { value: new THREE.Vector2(0.5, 0.5) },
+    uRippleProgress: { value: 0.0 }
+  };
+
+  const vertexShader = `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position, 1.0); }`;
+  const fragmentShader = `
+    uniform sampler2D uTexture; uniform float uTime; uniform vec2 uResolution;
+    uniform vec2 uClickPos; uniform float uRippleProgress; varying vec2 vUv;
+    void main() {
+      vec2 uv = vUv;
+      vec2 aspect = vec2(uResolution.x / uResolution.y, 1.0);
+      vec2 p = (uv - uClickPos) * aspect;
+      float dist = length(p);
+      float waveRadius = uRippleProgress * 1.5; 
+      float waveThickness = 0.15;
+      float ring = smoothstep(waveRadius - waveThickness, waveRadius, dist) * smoothstep(waveRadius + waveThickness, waveRadius, dist);
+      float amplitude = 0.08 * (1.0 - smoothstep(0.0, 0.8, uRippleProgress));
+      float distortion = sin(dist * 25.0 - uRippleProgress * 15.0) * ring * amplitude;
+      vec2 distortedUv = uv + normalize(p + 0.0001) * distortion;
+      distortedUv = clamp(distortedUv, 0.0, 1.0);
+      gl_FragColor = texture2D(uTexture, distortedUv);
+    }
+  `;
+
+  const material = new THREE.ShaderMaterial({ uniforms: uniforms, vertexShader: vertexShader, fragmentShader: fragmentShader, transparent: true });
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
+  scene.add(mesh);
+  const clock = new THREE.Clock();
+
+  function animate() {
+    requestAnimationFrame(animate);
+    uniforms.uTime.value = clock.getElapsedTime();
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
+  });
+
+  function triggerRipple(x, y) {
+    const normX = x / window.innerWidth; const normY = 1.0 - (y / window.innerHeight); 
+    uniforms.uClickPos.value.set(normX, normY);
+    uniforms.uRippleProgress.value = 0.0;
+    gsap.killTweensOf(uniforms.uRippleProgress);
+    gsap.to(uniforms.uRippleProgress, { value: 1.0, duration: 2.5, ease: "power2.out" });
+  }
+
+  window.addEventListener('pointerdown', (e) => {
+    if(video.paused) { video.play().catch(err => console.log(err)); }
+    triggerRipple(e.clientX, e.clientY);
+  });
+
+  // MODIFIED: Animasi transisi akhir
+  const curtain = document.getElementById('transitionCurtain');
+  const transTextSpan = document.getElementById('transTextSpan');
+  const transBar = document.getElementById('transBar');
+  const finalShockwave = document.getElementById('finalShockwave');
+
+  ctaBtn.addEventListener("click", (e) => {
+    e.stopPropagation(); 
+    
+    // Set posisi shockwave akhir persis di koordinat klik tombol
+    const rect = ctaBtn.getBoundingClientRect();
+    const clickX = rect.left + rect.width / 2;
+    const clickY = rect.top + rect.height / 2;
+    finalShockwave.style.left = clickX + "px";
+    finalShockwave.style.top = clickY + "px";
+
+    triggerRipple(e.clientX, e.clientY);
+    ctaBtn.style.pointerEvents = "none";
+    
+    const tl = gsap.timeline();
+    
+    // 1. UI memudar pelan, video & ripple WebGL tetap terlihat
+    tl.to(".gate-ui, .header-ui, .footer-ui", { opacity: 0, duration: 0.6, ease: "power2.out" })
+    
+    // 2. Munculkan teks loading dengan layar yang nge-blur
+    .to(curtain, { opacity: 1, duration: 1, ease: "power2.out" }, "-=0.2")
+    .to(transBar, { width: "100%", duration: 2, ease: "power2.inOut" }, "-=0.2")
+    .call(() => transTextSpan.innerText = "UNLOCKING...", null, "-=1.5")
+    .call(() => transTextSpan.innerText = "ACCESS GRANTED", null, "-=0.5")
+    
+    // 3. Efek cincin kaca membesar menutupi seluruh layar (Ripple wipe)
+    .to(finalShockwave, {
+      scale: 50, // Cukup besar untuk melahap resolusi 4K
+      duration: 1.5,
+      ease: "power3.in"
+    }, "+=0.2")
+    
+    // 4. Fade to solid color di sepersekian detik terakhir untuk sembunyikan refresh
+    .to("#fadeToBlack", { opacity: 1, duration: 0.3 }, "-=0.3")
+    
+    // 5. Redirect dengan parameter fx=ripple
+    .call(() => {
+       window.location.href = 'login-page.html?fx=ripple';
+    });
+  });
+
+});
+</script>
+</body>
+</html>
