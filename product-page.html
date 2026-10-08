@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="color-scheme" content="dark">
+  <title>TuneTrack</title>
+
+  <meta name="tunetrack-page-title" content="TuneTrack — Multitrack, Sequencer, Preset">
+  <!-- Space Mono Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/product-page.css">
+
+  <!-- Chrome: force one native document scroller. Safari is untouched. -->
+  <style id="chrome-native-scroll-fix">
+    @supports selector(:has(*)) {
+      html.chrome-native-scroll,
+      html.chrome-native-scroll body,
+      html.chrome-native-scroll .page-wrapper {
+        overscroll-behavior: none !important;
+      }
+
+      html.chrome-native-scroll {
+        overflow-x: clip !important;
+        overflow-y: auto !important;
+        height: auto !important;
+        min-height: 100% !important;
+        max-height: none !important;
+        position: static !important;
+        scroll-behavior: auto !important;
+        touch-action: auto !important;
+      }
+
+      html.chrome-native-scroll body {
+        /* clip prevents body from becoming a second scroll container */
+        overflow: visible !important;
+        overflow-x: clip !important;
+        overflow-y: visible !important;
+        width: auto !important;
+        height: auto !important;
+        min-height: 100% !important;
+        max-height: none !important;
+        position: static !important;
+        touch-action: auto !important;
+      }
+
+      /* This wrapper is the common source of the "scrollbar only" behavior. */
+      html.chrome-native-scroll .page-wrapper {
+        overflow: visible !important;
+        overflow-x: visible !important;
+        overflow-y: visible !important;
+        width: auto !important;
+        height: auto !important;
+        min-height: 100% !important;
+        max-height: none !important;
+        position: static !important;
+        transform: none !important;
+        touch-action: auto !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="is-loading">
+
+  <!-- STICKY TOP TICKER / FLOATING DOCKED BAR -->
+  <div class="sticky-dock-bar" id="stickyDockBar" aria-hidden="true">
+    <div class="dock-container">
+      <div class="dock-meta">
+        <span class="dock-title" id="dockProductTitle">Loading product...</span>
+        <span class="dock-cart-counter">Cart(<span class="cart-val-sync">0</span>)</span>
+      </div>
+      <div class="dock-actions">
+        <div class="dock-qty">
+          <button type="button" class="btn-qty-minus" aria-label="Decrease quantity">−</button>
+          <span class="qty-display">1</span>
+          <button type="button" class="btn-qty-plus" aria-label="Increase quantity">+</button>
+        </div>
+        <div class="dock-formats">
+          <button type="button" class="dock-format-btn is-active" data-format="multitrack">Multitrack</button>
+          <button type="button" class="dock-format-btn" data-format="stems" disabled
+            style="opacity: 0.45; cursor: not-allowed; pointer-events: none;">
+            Stems
+          </button>
+
+          <button type="button" class="dock-format-btn" data-format="sequencer" disabled
+            style="opacity: 0.45; cursor: not-allowed; pointer-events: none;">
+            Sequencer
+          </button>
+        </div>
+      </div>
+      <button type="button" class="dock-add-btn" id="dockAddToCart">
+        <span>Add To Bag (—)</span>
+      </button>
+    </div>
+  </div>
+  </div>
+
+  <div class="page-wrapper" id="pageWrapper">
+
+
+    <!-- TUNETRACK CATALOG HEADER — ADDED ABOVE ORIGINAL PRODUCT HEADER -->
+    <div id="catalogTopIntegration">
+      <header class="swiss-header" id="tnco-header">
+        <div class="swiss-header-left">
+          <a aria-label="Tunetrack Home" class="swiss-header-logo" href="index.html">
+            <span class="swiss-logo-text">tunetrack©</span>
+          </a>
+        </div>
+        <nav aria-label="Main navigation" class="swiss-header-nav">
+          <a href="index.html">Home</a>
+          <a class="is-active" href="catalog-page.html">Discover on Store</a>
+                <a href="blog-list.html">Papers</a>
+                <a href="contactus.html">Contact</a>
+                <a href="community-gate.html">Community</a>
+                <a href="https://linktr.ee/tunetrackid" target="_blank">Connect with Us</a>
+        </nav>
+        <div class="swiss-header-right">
+
+          <button aria-label="Open account login" class="swiss-icon-btn" id="swissAccountBtn" type="button"
+            onclick="window.location.href='login-page.html'">
+            <svg aria-hidden="true" class="swiss-account-icon" fill="none" height="20" id="swissAccountIcon"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"
+              viewbox="0 0 24 24" width="20">
+              <circle cx="12" cy="8" r="3.5"></circle>
+              <path d="M5 21c.7-4 3-6 7-6s6.3 2 7 6"></path>
+            </svg>
+            <span class="swiss-account-label" hidden="" id="swissAccountLabel"></span>
+          </button>
+          <button aria-expanded="false" aria-label="Open navigation menu" class="swiss-icon-btn swiss-menu-toggle"
+            id="tncoHeaderMenuButton" type="button">
+            <svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-width="1.6"
+              viewbox="0 0 24 24" width="22">
+              <line x1="3" x2="21" y1="6" y2="6"></line>
+              <line x1="3" x2="21" y1="12" y2="12"></line>
+              <line x1="3" x2="21" y1="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </header>
+      <div aria-hidden="true" class="tnco-mobile-menu-overlay" id="tncoMobileMenu">
+        <button aria-label="Close menu" class="tnco-mobile-menu-close" id="tncoMobileMenuClose" type="button">×</button>
+        <nav aria-label="Mobile navigation" class="tnco-mobile-menu-nav">
+          <a href="index.html">HOME</a>
+          <a href="catalog-page.html">DISCOVER ON STORE</a>
+          <a href="blog-list.html">PAPERS</a>
+          <a href="contactus.html">CONTACT</a>
+          <a href="community-gate.html">COMMUNITY</a>
+          <a href="https://linktr.ee/tunetrackid" rel="noopener noreferrer" target="_blank">CONNECT WITH US</a>
+        </nav>
+        <div class="tnco-mobile-menu-actions">
+          <a href="https://linktr.ee/tunetrackid" rel="noopener noreferrer" target="_blank">CONNECT</a>
+          <a href="https://t.me/tunetrackstd?boost" rel="noopener noreferrer" target="_blank">JOIN US</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOP HEADER NAVIGATION -->
+    <header class="site-header" id="siteHeader">
+      <div class="header-grid">
+        <div class="header-cell cell-breadcrumbs">
+          <a href="#" class="breadcrumb-link">Index</a>
+          <span class="breadcrumb-dots">...</span>
+          <span class="breadcrumb-path" id="headerBreadcrumbPath">[/products/tunetrack-products-are-good</span>
+        </div>
+        <div class="header-cell cell-brand">
+          <a href="#" class="brand-link" id="brandTitle">Various Artist</a>
+        </div>
+        <div class="header-cell cell-cart">
+          <button type="button" class="cart-trigger" id="cartTrigger">
+            Cart(<span id="headerCartCount">0</span>)
+          </button>
+        </div>
+        <div class="header-cell cell-radio">
+          <div class="radio-status-wrap">
+            <span class="status-indicator-dot" aria-hidden="true"></span>
+            <span class="status-indicator-text">Product Page</span>
+          </div>
+          <div class="radio-schedule-wrap">
+            <span class="radio-station-name" id="randomRadioTitle">Live Store -</span>
+            <span class="radio-broadcast-time" id="randomRadioMeta">Multitrack, 48kHz WAV</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN PRODUCT SECTION -->
+    <main id="mainContent" class="main-content">
+      <section class="product-layout" id="productLayout">
+
+        <!-- LEFT COLUMN: 3 STACKED IMAGES -->
+        <div class="product-column column-media">
+
+          <!-- IMAGE 1: SLEEVE ARTWORK -->
+          <div class="stacked-image-wrapper">
+            <div class="artwork-canvas-wrapper">
+              <div class="record-sleeve-mockup">
+
+                <!-- PRODUCT IMAGE — BEHIND STICKER -->
+                <img id="productSleeveArtwork" class="product-sleeve-artwork" src="" alt="" aria-hidden="true">
+
+                <!-- STICKER — FRONT LAYER -->
+                <div class="hype-scale-wrap" style="display: contents;">
+                  <div class="hype-sticker">
+                    <div class="hype-content">
+
+                      <p class="hype-blurb">
+                        essential stage-ready worship tools by tunetrackco with multitrack
+                        sequencers, performance stems &amp; production resources built for modern live worship
+                      </p>
+
+                      <h2 class="hype-title">GIVE IT TO 'EM!</h2>
+
+                      <div class="barcode-graphic" aria-hidden="true">
+                        <div class="barcode-lines"></div>
+                        <span class="barcode-number">4 062548 127928</span>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- IMAGE 2: VINYL RECORD DETAIL / PRODUCT PLAYER -->
+          <div class="stacked-image-wrapper">
+            <div class="artwork-canvas-wrapper guide-slide-canvas">
+              <div class="vinyl-record-mockup" id="productVinylPlayer" role="button" tabindex="0"
+                aria-label="Play product audio" aria-pressed="false">
+                <div class="vinyl-artwork-layer" aria-hidden="true">
+                  <img id="vinylArtworkImage" src="" alt="" draggable="false">
+                </div>
+                <div class="vinyl-grooves"></div>
+
+                <div class="vinyl-center-label is-white">
+                  <div class="label-spindle-hole"></div>
+                  <div class="label-text-block">
+                    <div class="label-heading" id="vinylLabelHeading">SIDE B</div>
+                    <div class="label-title" id="vinylLabelTitle">LOADING...</div>
+                    <div class="label-track" id="vinylLabelSubtext">LIVE PLAYBACK</div>
+                  </div>
+                </div>
+
+                <div class="vinyl-play-indicator" id="vinylPlayIndicator" aria-hidden="true">
+                  <span class="vinyl-play-icon">▶</span>
+                  <span class="vinyl-play-text">PLAY</span>
+                </div>
+
+                <!-- Hidden YouTube player: audio source for Image 2 vinyl only. -->
+                <div class="vinyl-youtube-audio" id="productVideoFrame" aria-hidden="true"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- IMAGE 3: STATIC LYNK.ID PLACEHOLDER -->
+          <div class="stacked-image-wrapper">
+            <div class="artwork-canvas-wrapper guide-slide-canvas product-image-3-placeholder">
+              <img class="product-image-3-placeholder-img" src="assets/images/lynk-id-placeholder.png"
+                alt="Lynk.id product placeholder" draggable="false">
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: TITLE (TOP) -> DETAILS (BOTTOM) -->
+        <div class="product-column column-details">
+
+          <!-- TOP: HERO TYPOGRAPHY TITLE -->
+          <header class="product-title-header">
+            <h1 class="product-main-title" id="productTitle">
+              <span class="title-line">Loading product...</span>
+            </h1>
+          </header>
+
+          <!-- FLEX SPACER TO PUSH DETAILS TO THE BOTTOM -->
+          <div class="details-spacer"></div>
+
+          <!-- BOTTOM: DETAILS / CHECKOUT ALIGNED WITH IMAGE 3 -->
+          <div class="details-bottom-block">
+            <section class="product-meta-box" id="productMetaBox">
+              <div class="meta-box-inner">
+
+                <div class="tracklist-header-line" id="tracklistHeader">
+                  Loading product...
+                </div>
+
+                <div class="tracklist-cat-line">
+                  Tracklist
+                </div>
+
+                <div class="tracklist-rows"></div>
+
+                <div class="expandable-credits-block" id="expandableCredits">
+                  <div class="credits-subheading">
+                    For your Information:
+                  </div>
+
+                  <div class="credit-rows"></div>
+                </div>
+
+                <div class="meta-box-actions">
+                  <button type="button" class="btn-text-toggle" id="btnDetailsToggle" aria-expanded="false">
+                    <span class="toggle-text">Read More</span>
+                  </button>
+
+                  <button type="button" class="btn-text-share" id="btnShareThis">
+                    <span>Share this</span>
+                  </button>
+                </div>
+
+              </div>
+            </section>
+          </div>
+
+          <div class="product-options-row">
+            <span class="options-label">Option</span>
+            <div class="options-group" role="radiogroup">
+              <button type="button" class="format-pill-btn is-active" data-format="vinyl" data-price="$18">
+                <span>Multitrack</span>
+              </button>
+              <button type="button" class="format-pill-btn" data-format="aiff" data-price="$12" disabled
+                style="opacity: 0.45; cursor: not-allowed; pointer-events: none;">
+                <span>Single Track — Soon</span>
+              </button>
+
+              <button type="button" class="format-pill-btn" data-format="mp3" data-price="$9" disabled
+                style="opacity: 0.45; cursor: not-allowed; pointer-events: none;">
+                <span>Project File — Soon</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="product-purchase-row">
+            <div class="qty-stepper-cell">
+              <span class="qty-number" id="mainQty">1</span>
+              <div class="qty-buttons">
+                <button type="button" class="qty-btn" id="mainQtyMinus">−</button>
+                <button type="button" class="qty-btn" id="mainQtyPlus">+</button>
+              </div>
+            </div>
+            <button type="button" class="btn-add-to-bag" id="mainAddToBag">
+              <span class="add-text">Add To Bag (<span id="btnPriceDisplay">—</span>)</span>
+            </button>
+          </div>
+
+          <div class="product-specs-table">
+            <div class="spec-cell">
+              <span class="spec-label">Artist</span>
+              <span class="spec-val" id="productArtistSpec">—</span>
+            </div>
+            <div class="spec-cell">
+              <span class="spec-label">Cat. Number</span>
+              <span class="spec-val" id="catalogNumberValue">—</span>
+            </div>
+            <div class="spec-cell">
+              <span class="spec-label">Format</span>
+              <span class="spec-val">WAV 48kHz, ALP</span>
+            </div>
+            <div class="spec-cell">
+              <span class="spec-label">Price</span>
+              <span class="spec-val" id="productPriceSpec">—</span>
+            </div>
+          </div>
+        </div>
+
+  </div>
+  </section>
+
+  <!-- RELATED ITEMS SECTION -->
+  <section class="related-items-section" id="relatedSection">
+    <div class="related-grid">
+      <div class="related-cell cell-heading">
+        <h2 class="related-section-title">Related Items</h2>
+        <a href="catalog-page.html" class="related-shop-all-link">Shop All</a>
+      </div>
+
+      <article class="related-cell cell-card">
+        <a href="#" class="card-link-wrapper">
+          <div class="card-image-box">
+            <div class="record-sleeve-mockup thumb-mockup">
+              <div class="sleeve-art-center thumb-art">
+                <div class="vinyl-center-label thumb-label is-blue">
+                  <div class="label-spindle-hole"></div>
+                  <div class="thumb-label-name">John Silas</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-info-box">
+            <p class="card-product-title">John Silas, Water Sign (ft. Patrice Scott Remix) 12"</p>
+            <span class="card-product-price">$18</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="related-cell cell-card">
+        <a href="#" class="card-link-wrapper">
+          <div class="card-image-box">
+            <div class="record-sleeve-mockup thumb-mockup is-photo-cover">
+              <div class="photo-cover-layer">
+                <span class="cover-tag">UNIVERSAL LOVE</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-info-box">
+            <p class="card-product-title">Universal Love: 10 Years of Love Injection 3xLP</p>
+            <span class="card-product-price">$40</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="related-cell cell-card">
+        <a href="#" class="card-link-wrapper">
+          <div class="card-image-box">
+            <div class="record-sleeve-mockup thumb-mockup">
+              <div class="sleeve-art-center thumb-art">
+                <div class="vinyl-center-label thumb-label is-white">
+                  <div class="label-spindle-hole"></div>
+                  <div class="thumb-label-name">Gene Tellem</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-info-box">
+            <p class="card-product-title">Gene Tellem, Phantom Vibrations 12"</p>
+            <span class="card-product-price">$18</span>
+          </div>
+        </a>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ARCHIVE RADIO BIG SECTION -->
+  <section class="radio-banner-section">
+    <div class="radio-banner-container">
+      <div class="radio-line-accent"></div>
+      <p class="radio-banner-label">TUNE YOUR TRACKS</p>
+
+      <h2 class="radio-banner-status" id="tunetrackRadioStatus">
+        <span class="typewriter-text"></span><span class="typewriter-cursor"></span>
+      </h2>
+
+      <p class="radio-banner-desc">
+        Broadcasting from TuneTrack. Multitracks, sequencers, presets, and sounds for live playback and production.
+      </p>
+
+      <span style="display:block; height:60px;"></span>
+
+      <style>
+        #tunetrackRadioStatus {
+          display: flex;
+          align-items: baseline;
+          width: 100%;
+          max-width: 100%;
+          white-space: nowrap;
+          overflow: visible;
+          flex-wrap: nowrap;
+        }
+
+        #tunetrackRadioStatus .typewriter-text {
+          display: inline-block;
+          white-space: nowrap;
+        }
+
+        #tunetrackRadioStatus .typewriter-cursor {
+          display: inline-block;
+          width: 2px;
+          height: 0.85em;
+          margin-left: 7px;
+          background: currentColor;
+          vertical-align: middle;
+          animation: tunetrackCursorBlink 0.7s steps(1) infinite;
+          flex: 0 0 auto;
+        }
+
+        @keyframes tunetrackCursorBlink {
+
+          0%,
+          49% {
+            opacity: 1;
+          }
+
+          50%,
+          100% {
+            opacity: 0;
+          }
+        }
+      </style>
+
+      <script>
+        (() => {
+          const textEl = document.querySelector(
+            "#tunetrackRadioStatus .typewriter-text"
+          );
+
+          if (!textEl) return;
+
+          const statuses = [
+            "OFF AIR",
+            "LOADING SESSION",
+            "SOUNDCHECK",
+            "LIVE PLAYBACK"
+          ];
+
+          let statusIndex = 0;
+
+          const typeWriter = (text) => {
+            let charIndex = 0;
+
+            textEl.textContent = "";
+
+            const typing = setInterval(() => {
+              textEl.textContent = text.slice(0, charIndex + 1);
+              charIndex++;
+
+              if (charIndex >= text.length) {
+                clearInterval(typing);
+
+                setTimeout(() => {
+                  deleteWriter(text);
+                }, 2200);
+              }
+            }, 75);
+          };
+
+          const deleteWriter = (text) => {
+            let charIndex = text.length;
+
+            const deleting = setInterval(() => {
+              textEl.textContent = text.slice(0, charIndex - 1);
+              charIndex--;
+
+              if (charIndex <= 0) {
+                clearInterval(deleting);
+
+                statusIndex = (statusIndex + 1) % statuses.length;
+
+                setTimeout(() => {
+                  typeWriter(statuses[statusIndex]);
+                }, 400);
+              }
+            }, 40);
+          };
+
+          typeWriter(statuses[statusIndex]);
+        })();
+      </script>
+  </section>
+  </main>
+
+  <!-- TUNETRACK CATALOG FOOTER — EXACT SOURCE -->
+  <footer class="swiss-footer tunetrack-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col-5">
+          <h4 class="footer-col-title">All Multitracks</h4>
+          <div class="font-columns-grid">
+            <div>Yesus Raja (JPCC) <span class="mt-tag">(MT)</span><br>
+              NOEL med. Gloria <span class="mt-tag">(MT)</span><br>
+              Yang Terutama <span class="mt-tag">(MT)</span><br>
+              Penulis Hidupku <span class="mt-tag">(MT)</span><br>
+              Nothing Is Impossible <span class="mt-tag">(MT)</span><br>
+              Sperti Bapa Sayang <span class="mt-tag">(MT)</span><br>
+              Kecaplah dan Lihatlah <span class="mt-tag">(MT)</span><br>
+              Tiap Langkahku <span class="mt-tag">(MT)</span><br>
+              Friend of God (Arr) <span class="mt-tag">(MT)</span><br>
+              Joy to the World 2017 <span class="mt-tag">(MT)</span><br>
+              Angels We Have Heard <span class="mt-tag">(MT)</span><br>
+              New Things Coming <span class="mt-tag">(MT)</span><br>
+              In Jesus Name Asia <span class="mt-tag">(MT)</span><br>
+              Real Love HXL 25 <span class="mt-tag">(MT)</span><br>
+              Now Aint that Something <span class="mt-tag">(MT)</span><br>
+              O Come med. Carol <span class="mt-tag">(MT)</span><br>
+              This is the Day <span class="mt-tag">(MT)</span><br>
+              Impossible Possible <span class="mt-tag">(MT)</span><br>
+              KAMSAHAMNIDA <span class="mt-tag">(MT)</span><br>
+              Terangmu <span class="mt-tag">(MT)</span><br>
+              Hari Terbaik <span class="mt-tag">(MT)</span><br>
+              Raja atas Sgalanya <span class="mt-tag">(MT)</span><br>
+              Bukti Kasihmu (NDC) <span class="mt-tag">(MT)</span><br>
+              Satu Persembahan <span class="mt-tag">(MT)</span><br>
+              Praise <span class="mt-tag">(MT)</span><br>
+              Kunaikkan Syukurku <span class="mt-tag">(MT)</span><br>
+              Endless Praise <span class="mt-tag">(MT)</span></div>
+            <div>HIS LIFE Christmas <span class="mt-tag">(MT)</span><br>
+              Allah Sanggup (GKDI) <span class="mt-tag">(MT)</span><br>
+              Turn it Up <span class="mt-tag">(MT)</span><br>
+              This is Living 2025 <span class="mt-tag">(MT)</span><br>
+              Lebih dari Pemenang <span class="mt-tag">(MT)</span><br>
+              Mari Menari 2.0 <span class="mt-tag">(MT)</span><br>
+              Bukti Kasihmu <span class="mt-tag">(MT)</span><br>
+              Allah sumber Kuatku <span class="mt-tag">(MT)</span><br>
+              O Come All ye Faithful <span class="mt-tag">(MT)</span><br>
+              O Holy Night <span class="mt-tag">(MT)</span><br>
+              Hark Planetshakers <span class="mt-tag">(MT)</span><br>
+              We Raise <span class="mt-tag">(MT)</span><br>
+              This is the Day 2.0 <span class="mt-tag">(MT)</span><br>
+              Holy Forever <span class="mt-tag">(MT)</span><br>
+              Goodbye Yesterday <span class="mt-tag">(MT)</span><br>
+              In Jesus Name (Darlene) <span class="mt-tag">(MT)</span><br>
+              You Are Good (in LA) <span class="mt-tag">(MT)</span><br>
+              Echo (ft. Tauren W) <span class="mt-tag">(MT)</span><br>
+              This is our Time <span class="mt-tag">(MT)</span><br>
+              Selidiki Aku <span class="mt-tag">(MT)</span><br>
+              Bangkit dan Puji Dia <span class="mt-tag">(MT)</span><br>
+              Sejarah Hidupku <span class="mt-tag">(MT)</span><br>
+              Tempat Pertama <span class="mt-tag">(MT)</span><br>
+              Kuteringat <span class="mt-tag">(MT)</span><br>
+              Aku Diberkati Remix <span class="mt-tag">(MT)</span><br>
+              Dari Pulau &amp; Gita Sorga <span class="mt-tag">(MT)</span><br>
+              Oleh Darah Anak Domba <span class="mt-tag">(MT)</span></div>
+            <div>Sambutlah Dia <span class="mt-tag">(MT)</span><br>
+              Fajar Terangi Dunia <span class="mt-tag">(MT)</span><br>
+              Puji dia Yesus <span class="mt-tag">(MT)</span><br>
+              Yesus Kumenyembahmu <span class="mt-tag">(MT)</span><br>
+              Allah Sanggup <span class="mt-tag">(MT)</span><br>
+              Api Pantekosta Medley <span class="mt-tag">(MT)</span><br>
+              Trima kasih Tuhan <span class="mt-tag">(MT)</span><br>
+              Allah kita heran (GP) <span class="mt-tag">(MT)</span><br>
+              NOEL <span class="mt-tag">(MT)</span><br>
+              Silent Night <span class="mt-tag">(MT)</span><br>
+              Its Christmas <span class="mt-tag">(MT)</span><br>
+              Praise Opening <span class="mt-tag">(MT)</span><br>
+              I Know You Can <span class="mt-tag">(MT)</span><br>
+              Fill the Room <span class="mt-tag">(MT)</span><br>
+              Real Love (Original) <span class="mt-tag">(MT)</span><br>
+              I Speak Jesus <span class="mt-tag">(MT)</span><br>
+              You Are Good (Original) <span class="mt-tag">(MT)</span><br>
+              In Jesus Name (DOE) <span class="mt-tag">(MT)</span><br>
+              Trust in God <span class="mt-tag">(MT)</span><br>
+              Nyata Sempurna <span class="mt-tag">(MT)</span><br>
+              Berserah Penuh <span class="mt-tag">(MT)</span><br>
+              Never Lost <span class="mt-tag">(MT)</span><br>
+              Serukan Namanya <span class="mt-tag">(MT)</span><br>
+              Dia Raja (WN) <span class="mt-tag">(MT)</span><br>
+              Nyalakan Apimu <span class="mt-tag">(MT)</span><br>
+              Ajaib kau Tuhan <span class="mt-tag">(MT)</span></div>
+          </div>
+        </div>
+
+        <div class="footer-col-2">
+          <div style="margin-bottom:24px;">
+            <h4 class="footer-col-title">Support</h4>
+            <ul class="footer-link-list">
+              <li><a href="contactus.html">Contact us</a></li>
+              <li><a href="https://lynk.id/gudangsequencer/page/tunetrack" target="_blank"
+                  rel="noopener noreferrer">Licensing</a></li>
+              <li><a href="https://lynk.id/gudangsequencer/3xy1zv4e1rgr" target="_blank" rel="noopener noreferrer">Free
+                  Multitracks</a></li>
+              <li><a href="contactus.html">FAQs</a></li>
+              <li><a href="https://lynk.id/gudangsequencer/4vrx9x4v1lv9" target="_blank" rel="noopener noreferrer">Terms
+                  &amp; EULA</a></li>
+            </ul>
+          </div>
+          <div style="margin-bottom:24px;">
+            <h4 class="footer-col-title">About Tunetrack</h4>
+            <ul class="footer-link-list">
+              <li><a href="blog-community.html">Our story</a></li>
+              <li><a href="https://www.instagram.com/tunetrackco/" target="_blank" rel="noopener noreferrer">Artists</a>
+              </li>
+              <li><a href="contactus.html">Team</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="footer-col-title">Follow us</h4>
+            <ul class="footer-link-list">
+              <li><a href="https://www.instagram.com/tunetrackco/" target="_blank"
+                  rel="noopener noreferrer">Instagram</a></li>
+              <li><a href="https://www.youtube.com/@tunetracksco" target="_blank" rel="noopener noreferrer">YouTube</a>
+              </li>
+              <li><a href="https://www.youtube.com/@tunetrackplays" target="_blank" rel="noopener noreferrer">TikTok</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-col-2">
+          <div style="margin-bottom:24px;">
+            <h4 class="footer-col-title">More Tunetrack</h4>
+            <ul class="footer-link-list">
+              <li><a href="catalog-tntsco.html">All Multitracks</a></li>
+              <li><a href="https://lynk.id/gudangsequencer/3xy1zv4e1rgr" target="_blank" rel="noopener noreferrer">Free
+                  Multitracks</a></li>
+              <li><a href="https://www.youtube.com/@tunetrackplays" target="_blank" rel="noopener noreferrer">Tunetrack
+                  Plays</a></li>
+              <li><a href="blog-list.html">Tunetrack Papers</a></li>
+              <li><a href="https://linktr.ee/tunetrackid" target="_blank" rel="noopener noreferrer">Resources</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="footer-col-title">From the Studio</h4>
+            <ul class="footer-link-list">
+              <li><a href="blog-list.html">Latest Papers</a></li>
+              <li><a href="https://www.youtube.com/@tunetracksco" target="_blank" rel="noopener noreferrer">Latest
+                  Videos</a></li>
+              <li><a href="https://linktr.ee/tunetrackid" target="_blank" rel="noopener noreferrer">Worship
+                  Resources</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-col-3">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+            <div>
+              <h4 class="footer-col-title">Channels</h4>
+              <ul class="footer-link-list">
+                <li><a href="index.html">Tunetrack</a></li>
+                <li><a href="https://www.youtube.com/@tunetrackplays" target="_blank"
+                    rel="noopener noreferrer">Tunetrack Plays</a></li>
+                <li><a href="blog-list.html">Tunetrack Papers</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 class="footer-col-title">Account</h4>
+              <ul class="footer-link-list">
+                <li><a href="https://lynk.id/gudangsequencer/page/tunetrack" target="_blank"
+                    rel="noopener noreferrer">Login</a></li>
+                <li><a href="https://lynk.id/gudangsequencer" target="_blank" rel="noopener noreferrer">Create
+                    account</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div style="margin-bottom:24px;">
+            <h4 class="footer-col-title">Built for Worship</h4>
+            <ul class="footer-link-list">
+              <li><a href="catalog-tntsco.html">Multitracks</a></li>
+              <li><a href="catalog-tntsco.html">Sequencers</a></li>
+              <li><a href="https://linktr.ee/tunetrackid" target="_blank" rel="noopener noreferrer">Worship Tools</a>
+              </li>
+              <li><a href="https://www.youtube.com/@tunetrackplays" target="_blank" rel="noopener noreferrer">Tunetrack
+                  Plays</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="footer-col-title">Don't miss a beat</h4>
+
+            <p style="font-size:12px;color:#52525b;line-height:1.5;margin-bottom:8px;">
+              Subscribe for new multitracks, worship resources, releases and Tunetrack updates.
+            </p>
+
+            <div id="newsletter-interaction" style="
+                position:relative;
+                width:100%;
+                min-height:38px;
+                overflow:hidden;
+            ">
+              <form id="standalone-newsletter-form" class="newsletter-pill-form" style="
+                    opacity:1;
+                    transform:translateY(0);
+                    transition:
+                        opacity .45s cubic-bezier(.22,1,.36,1),
+                        transform .45s cubic-bezier(.22,1,.36,1);
+                ">
+                <input type="email" id="newsletter-email" placeholder="Email address" autocomplete="email" required>
+                <button type="submit" aria-label="Submit newsletter subscription">→</button>
+              </form>
+
+              <div id="newsletter-success" aria-live="polite" style="
+                    position:absolute;
+                    inset:0;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    gap:8px;
+                    opacity:0;
+                    transform:translateY(10px);
+                    pointer-events:none;
+                    font-size:12px;
+                    font-weight:500;
+                    color:#18181b;
+                    transition:
+                        opacity .55s cubic-bezier(.22,1,.36,1),
+                        transform .55s cubic-bezier(.22,1,.36,1);
+                ">
+                <span style="
+                        display:inline-flex;
+                        align-items:center;
+                        justify-content:center;
+                        width:18px;
+                        height:18px;
+                        border-radius:50%;
+                        font-size:11px;
+                        line-height:1;
+                    ">✓</span>
+
+                <span>You’re subscribed. Thanks!</span>
+              </div>
+            </div>
+
+            <div id="newsletter-status-msg" class="newsletter-feedback"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <script>
+        (function () {
+          const form = document.getElementById('standalone-newsletter-form');
+          const emailInput = document.getElementById('newsletter-email');
+          const success = document.getElementById('newsletter-success');
+          const status = document.getElementById('newsletter-status-msg');
+
+          if (!form || !emailInput || !success) return;
+
+          form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const email = emailInput.value.trim();
+
+            if (!email || !emailInput.checkValidity()) {
+              emailInput.reportValidity();
+              return;
+            }
+
+            /*
+             * GANTI DENGAN EMAIL TUNETRACK TUJUAN.
+             */
+            const recipient = 'YOUR-EMAIL@example.com';
+
+            const subject = 'New Tunetrack Newsletter Subscriber';
+
+            const body =
+              `Hi Tunetrack,
+
+A new subscriber has joined the Tunetrack newsletter.
+
+Subscriber email:
+${email}
+
+Please add this address to the Tunetrack newsletter mailing list.
+
+— Tunetrack
+`;
+
+            const mailto =
+              'mailto:' +
+              recipient +
+              '?subject=' +
+              encodeURIComponent(subject) +
+              '&body=' +
+              encodeURIComponent(body);
+
+            /* Prevent double submit */
+            const button = form.querySelector('button');
+            if (button) button.disabled = true;
+
+            /*
+             * Smooth transition:
+             * form fades/slides away first,
+             * then confirmation fades/slides in.
+             */
+            form.style.opacity = '0';
+            form.style.transform = 'translateY(-8px)';
+            form.style.pointerEvents = 'none';
+
+            setTimeout(function () {
+              success.style.opacity = '1';
+              success.style.transform = 'translateY(0)';
+              success.style.pointerEvents = 'auto';
+            }, 180);
+
+            /*
+             * Open the email client after the visual
+             * confirmation has started appearing.
+             */
+            setTimeout(function () {
+              window.location.href = mailto;
+            }, 650);
+
+            if (status) {
+              status.textContent = '';
+            }
+          });
+        })();
+      </script>
+
+      <div class="payment-bar">
+        <div class="payment-badges" aria-label="Accepted payment methods">
+
+          <span class="pay-logo pay-logo-qris">
+            <img src="assets/images/brands/QRIS Logo - White - zonalogo.com.png" alt="QRIS"
+              style="width:108px!important;height:auto!important;max-width:none!important;object-fit:contain;">
+          </span>
+
+          <span class="pay-logo pay-logo-gopay">
+            <img src="assets/images/brands/GoPay Logo - White - zonalogo.com.png" alt="GoPay"
+              style="width:85px!important;height:auto!important;max-width:none!important;object-fit:contain;">
+          </span>
+
+          <span class="pay-logo">
+            <img src="assets/images/brands/Dana Logo - Colored - zonalogo.com.svg" alt="DANA">
+          </span>
+
+          <span class="pay-logo">
+            <img src="assets/images/brands/OVO Logo - Colored - zonalogo.com.png" alt="OVO">
+          </span>
+
+          <span class="pay-logo">
+            <img src="assets/images/brands/Shopee Logo - Colored - zonalogo.com.svg" alt="ShopeePay">
+          </span>
+
+          <span class="pay-logo">
+            <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Bank_Central_Asia.svg" alt="BCA">
+          </span>
+
+          <span class="pay-logo">
+            <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Visa_Inc._logo.svg" alt="VISA">
+          </span>
+
+          <span class="pay-logo">
+            <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Mastercard-logo.svg" alt="Mastercard">
+          </span>
+
+        </div>
+
+        <div class="copyright-text">
+          Designed by © Chael Davis · 2026 · All rights reserved.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <aside class="cart-side-drawer" id="cartDrawer" aria-hidden="true" style="font-size: 50px !important;">
+    <style>
+      #cartDrawer,
+      #cartDrawer *,
+      #cartDrawer *::before,
+      #cartDrawer *::after {
+        font-size: 17px !important;
+      }
+    </style>
+
+    <div class="drawer-header">
+      <span class="drawer-heading">Bag (<span class="cart-val-sync">0</span>)</span>
+      <button type="button" class="drawer-close-btn" id="btnCloseDrawer" aria-label="Close cart">×</button>
+    </div>
+
+    <div class="drawer-items-list" id="drawerItemsList">
+      <div class="drawer-empty-state">
+        <p>Your bag is currently empty.</p>
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <div class="drawer-subtotal-row">
+        <span>TuneTrack Subtotal</span>
+        <span id="drawerSubtotalPrice">—</span>
+      </div>
+
+      <button type="button" class="btn-drawer-checkout" id="btnDrawerCheckout">
+        Proceed To Checkout →
+      </button>
+
+      <div class="tunetrack-payment-checkout" id="tunetrackPaymentCheckout" hidden>
+        <div class="tunetrack-payment-heading">Pay in Currency</div>
+
+        <a class="tunetrack-payment-option" id="tunetrackIndonesiaPayment" href="#" target="_blank"
+          rel="noopener noreferrer">
+          <span class="tunetrack-payment-option-title">Indonesia / Asia</span>
+          <span class="tunetrack-payment-option-meta">Bank, QRIS, E-Wallet</span>
+          <span class="tunetrack-payment-option-arrow">→</span>
+        </a>
+
+        <a class="tunetrack-payment-option" id="tunetrackGlobalPayment" href="#" target="_blank"
+          rel="noopener noreferrer">
+          <span class="tunetrack-payment-option-title">Global Payment</span>
+          <span class="tunetrack-payment-option-meta">Stripe, PayPal, etc.</span>
+          <span class="tunetrack-payment-option-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.18/lenis.min.js"></script>
+
+  <script>
+    // Chrome: keep the REAL Lenis instance alive for layout/animation logic,
+    // but let native Chrome trackpad scrolling own the actual page movement.
+    (() => {
+      const isChrome =
+        /Chrome\//.test(navigator.userAgent) &&
+        !/Edg\//.test(navigator.userAgent) &&
+        !/OPR\//.test(navigator.userAgent);
+
+      if (!isChrome || typeof window.Lenis !== "function") return;
+
+      document.documentElement.classList.add("chrome-native-scroll");
+
+      const RealLenis = window.Lenis;
+
+      window.Lenis = class ChromeDualScrollLenis extends RealLenis {
+        constructor(options = {}) {
+          // IMPORTANT: this is still the real Lenis class/instance.
+          // Only its wheel smoothing is disabled so Chrome's trackpad can
+          // perform native document scrolling. Lenis continues to receive
+          // native scroll state and remains available to product-page.js.
+          super({
+            ...options,
+            smoothWheel: false,
+          });
+        }
+      };
+    })();
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- TuneTrack local catalog data source -->
+  <script src="assets/js/data-catalog-local.js"></script>
+  
+<script id="chrome-forced-native-trackpad-scroll">
+(() => {
+  const ua = navigator.userAgent || "";
+  const isChrome =
+    /Chrome\//.test(ua) &&
+    !/Edg\//.test(ua) &&
+    !/OPR\//.test(ua);
+
+  if (!isChrome) return;
+
+  /*
+   * HARD FALLBACK:
+   * Do not cancel wheel events and do not touch Lenis.
+   * Chrome gets a passive wheel listener that directly advances the
+   * document scroll position. This works even if another listener
+   * interferes with the browser's normal wheel default action.
+   */
+  window.addEventListener("wheel", (event) => {
+    if (!event.deltaY) return;
+
+    const scroller = document.scrollingElement || document.documentElement;
+    const max = Math.max(0, scroller.scrollHeight - window.innerHeight);
+    const next = Math.max(0, Math.min(max, scroller.scrollTop + event.deltaY));
+
+    if (next !== scroller.scrollTop) {
+      scroller.scrollTop = next;
+    }
+  }, { passive: true, capture: true });
+})();
+</script>
+
+<script src="assets/js/product-page.js"></script>
+  <script src="https://www.youtube.com/iframe_api"></script>
+</body>
+
+</html>
