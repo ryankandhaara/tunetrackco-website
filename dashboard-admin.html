@@ -1,52 +1,562 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TuneTrack — Admin Workspace</title>
+  <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+  <link rel="shortcut icon" href="assets/images/favicon.ico">
   <link rel="stylesheet" href="assets/css/dashboard.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
   <style>
-    :root{--admin-line:rgba(255,255,255,.10);--admin-muted:rgba(255,255,255,.45);--admin-panel:#0b0b0b;--admin-panel-2:#101010}
-    *{box-sizing:border-box}
-    html,body{margin:0;background:#070707;color:#fff;font-family:Inter,Arial,sans-serif}
-    body{min-height:100vh}
-    button,input,select,textarea{font:inherit}
-    button{color:inherit}
-    .admin-shell{min-height:100vh;padding:0 5.5vw 70px}
-    .admin-topbar{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--admin-line);position:sticky;top:0;z-index:20;background:rgba(7,7,7,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
-    .admin-brand{font-size:23px;font-weight:800;letter-spacing:-.07em}.admin-brand span{font-weight:500}
-    .admin-top-actions{display:flex;align-items:center;gap:8px}
-    .admin-pill{border:1px solid var(--admin-line);background:#0c0c0c;border-radius:999px;padding:9px 13px;font:700 10px/1 'Space Mono',monospace;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:.22s ease}
-    .admin-pill:hover{border-color:rgba(255,255,255,.28);background:#141414}
-    .admin-pill.primary{background:#fff;color:#000;border-color:#fff}.admin-pill.primary:hover{background:#ddd}
-    .admin-hero{padding:70px 0 38px;border-bottom:1px solid var(--admin-line)}
-    .admin-kicker{font:700 10px/1.4 'Space Mono',monospace;color:#666;letter-spacing:.14em;text-transform:uppercase;margin-bottom:16px}
-    .admin-title{font-size:clamp(48px,7vw,94px);line-height:.88;letter-spacing:-.07em;margin:0;max-width:900px}
-    .admin-subtitle{max-width:720px;color:#777;font:400 11px/1.8 'Space Mono',monospace;text-transform:uppercase;letter-spacing:.04em;margin-top:24px}
-    .admin-status{display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:8px 11px;border:1px solid rgba(0,255,190,.18);background:rgba(0,255,190,.04);border-radius:999px;font:700 9px/1 'Space Mono',monospace;color:#6fffd0;letter-spacing:.08em;text-transform:uppercase}
-    .admin-status-dot{width:6px;height:6px;border-radius:50%;background:#63ffd0;box-shadow:0 0 12px rgba(99,255,208,.7)}
-    .admin-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:28px}
-    .admin-stat{border:1px solid var(--admin-line);background:linear-gradient(145deg,#0c0c0c,#090909);border-radius:18px;padding:20px;min-height:130px}
-    .admin-stat-label{font:700 9px/1.4 'Space Mono',monospace;color:#555;letter-spacing:.12em;text-transform:uppercase}.admin-stat-value{font-size:40px;line-height:1;margin-top:28px;letter-spacing:-.05em}.admin-stat-note{font:400 9px/1.4 'Space Mono',monospace;color:#555;margin-top:8px}
-    .admin-toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:34px 0 14px;flex-wrap:wrap}.admin-toolbar-left,.admin-toolbar-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-    .admin-input,.admin-select,.admin-textarea{width:100%;border:1px solid var(--admin-line);background:#0a0a0a;color:#fff;border-radius:12px;padding:11px 12px;outline:none;transition:border-color .2s ease}.admin-input:focus,.admin-select:focus,.admin-textarea:focus{border-color:rgba(255,255,255,.34)}
-    .admin-search{width:min(390px,70vw)}
-    .admin-table-wrap{border:1px solid var(--admin-line);border-radius:18px;overflow:hidden;background:#090909}
-    .admin-table{width:100%;border-collapse:collapse}.admin-table th{padding:13px 14px;text-align:left;background:#0e0e0e;border-bottom:1px solid var(--admin-line);font:700 9px/1.3 'Space Mono',monospace;color:#555;letter-spacing:.09em;text-transform:uppercase}.admin-table td{padding:13px 14px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:middle}.admin-table tr:last-child td{border-bottom:0}.admin-table tbody tr{transition:background .2s ease}.admin-table tbody tr:hover{background:rgba(255,255,255,.025)}
-    .product-cell{display:flex;align-items:center;gap:12px;min-width:260px}.product-thumb{width:54px;height:38px;border-radius:8px;object-fit:cover;background:#151515;border:1px solid rgba(255,255,255,.08)}.product-title{font-size:13px;font-weight:600}.product-artist{font:400 9px/1.4 'Space Mono',monospace;color:#555;text-transform:uppercase;margin-top:3px}.mono{font:400 9px/1.5 'Space Mono',monospace;color:#777}.price-chip,.category-chip{display:inline-flex;align-items:center;border:1px solid rgba(255,255,255,.10);border-radius:999px;padding:5px 8px;font:700 8px/1 'Space Mono',monospace;text-transform:uppercase;white-space:nowrap}.price-chip.free{border-color:rgba(99,255,208,.18);color:#6fffd0}.row-actions{display:flex;justify-content:flex-end;gap:6px}.icon-btn{width:32px;height:32px;border:1px solid var(--admin-line);border-radius:9px;background:#0d0d0d;cursor:pointer}.icon-btn:hover{border-color:rgba(255,255,255,.3)}
-    .admin-modal{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:22px;z-index:100}.admin-modal.open{display:flex}.admin-modal-card{width:min(920px,100%);max-height:90vh;overflow:auto;border:1px solid rgba(255,255,255,.14);border-radius:22px;background:#0a0a0a;box-shadow:0 30px 100px rgba(0,0,0,.5)}.admin-modal-head{display:flex;align-items:flex-start;justify-content:space-between;padding:24px;border-bottom:1px solid var(--admin-line)}.admin-modal-title{font-size:28px;letter-spacing:-.04em;margin:0}.admin-modal-kicker{font:700 9px/1.4 'Space Mono',monospace;color:#555;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}.admin-form{padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:14px}.admin-field{display:flex;flex-direction:column;gap:7px}.admin-field.full{grid-column:1/-1}.admin-label{font:700 9px/1.4 'Space Mono',monospace;color:#666;letter-spacing:.09em;text-transform:uppercase}.admin-textarea{min-height:86px;resize:vertical}.admin-form-actions{grid-column:1/-1;display:flex;justify-content:flex-end;gap:8px;padding-top:8px}.admin-helper{font:400 9px/1.6 'Space Mono',monospace;color:#555}.admin-empty{padding:60px 20px;text-align:center;color:#555;font:400 10px/1.7 'Space Mono',monospace}
-    .admin-toast{position:fixed;right:20px;bottom:20px;z-index:200;padding:11px 14px;border:1px solid rgba(255,255,255,.14);background:#0b0b0b;border-radius:12px;box-shadow:0 18px 55px rgba(0,0,0,.4);font:700 9px/1.4 'Space Mono',monospace;opacity:0;transform:translateY(8px);pointer-events:none;transition:.25s ease}.admin-toast.show{opacity:1;transform:translateY(0)}
-    .admin-auth-gate{position:fixed;inset:0;background:#070707;z-index:500;display:flex;align-items:center;justify-content:center}.admin-auth-gate.hidden{display:none}.admin-auth-copy{text-align:center}.admin-auth-copy strong{display:block;font-size:20px;letter-spacing:-.03em}.admin-auth-copy span{display:block;margin-top:8px;color:#555;font:400 9px/1.5 'Space Mono',monospace}
-    @media(max-width:900px){.admin-grid{grid-template-columns:repeat(2,1fr)}.admin-table-wrap{overflow:auto}.admin-table{min-width:850px}}
-    @media(max-width:640px){.admin-shell{padding:0 18px 50px}.admin-topbar{height:64px}.admin-hero{padding:48px 0 30px}.admin-title{font-size:48px}.admin-grid{grid-template-columns:1fr 1fr}.admin-form{grid-template-columns:1fr}.admin-field.full{grid-column:auto}.admin-form-actions{grid-column:auto}.admin-search{width:100%}}
+    :root {
+      --admin-line: rgba(255, 255, 255, .10);
+      --admin-muted: rgba(255, 255, 255, .45);
+      --admin-panel: #0b0b0b;
+      --admin-panel-2: #101010
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      margin: 0;
+      background: #070707;
+      color: #fff;
+      font-family: Inter, Arial, sans-serif
+    }
+
+    body {
+      min-height: 100vh
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit
+    }
+
+    button {
+      color: inherit
+    }
+
+    .admin-shell {
+      min-height: 100vh;
+      padding: 0 5.5vw 70px
+    }
+
+    .admin-topbar {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--admin-line);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(7, 7, 7, .88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px)
+    }
+
+    .admin-brand {
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: -.07em
+    }
+
+    .admin-brand span {
+      font-weight: 500
+    }
+
+    .admin-top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .admin-pill {
+      border: 1px solid var(--admin-line);
+      background: #0c0c0c;
+      border-radius: 999px;
+      padding: 9px 13px;
+      font: 700 10px/1 'Space Mono', monospace;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: .22s ease
+    }
+
+    .admin-pill:hover {
+      border-color: rgba(255, 255, 255, .28);
+      background: #141414
+    }
+
+    .admin-pill.primary {
+      background: #fff;
+      color: #000;
+      border-color: #fff
+    }
+
+    .admin-pill.primary:hover {
+      background: #ddd
+    }
+
+    .admin-hero {
+      padding: 70px 0 38px;
+      border-bottom: 1px solid var(--admin-line)
+    }
+
+    .admin-kicker {
+      font: 700 10px/1.4 'Space Mono', monospace;
+      color: #666;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      margin-bottom: 16px
+    }
+
+    .admin-title {
+      font-size: clamp(48px, 7vw, 94px);
+      line-height: .88;
+      letter-spacing: -.07em;
+      margin: 0;
+      max-width: 900px
+    }
+
+    .admin-subtitle {
+      max-width: 720px;
+      color: #777;
+      font: 400 11px/1.8 'Space Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin-top: 24px
+    }
+
+    .admin-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      padding: 8px 11px;
+      border: 1px solid rgba(0, 255, 190, .18);
+      background: rgba(0, 255, 190, .04);
+      border-radius: 999px;
+      font: 700 9px/1 'Space Mono', monospace;
+      color: #6fffd0;
+      letter-spacing: .08em;
+      text-transform: uppercase
+    }
+
+    .admin-status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #63ffd0;
+      box-shadow: 0 0 12px rgba(99, 255, 208, .7)
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 28px
+    }
+
+    .admin-stat {
+      border: 1px solid var(--admin-line);
+      background: linear-gradient(145deg, #0c0c0c, #090909);
+      border-radius: 18px;
+      padding: 20px;
+      min-height: 130px
+    }
+
+    .admin-stat-label {
+      font: 700 9px/1.4 'Space Mono', monospace;
+      color: #555;
+      letter-spacing: .12em;
+      text-transform: uppercase
+    }
+
+    .admin-stat-value {
+      font-size: 40px;
+      line-height: 1;
+      margin-top: 28px;
+      letter-spacing: -.05em
+    }
+
+    .admin-stat-note {
+      font: 400 9px/1.4 'Space Mono', monospace;
+      color: #555;
+      margin-top: 8px
+    }
+
+    .admin-toolbar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 34px 0 14px;
+      flex-wrap: wrap
+    }
+
+    .admin-toolbar-left,
+    .admin-toolbar-right {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap
+    }
+
+    .admin-input,
+    .admin-select,
+    .admin-textarea {
+      width: 100%;
+      border: 1px solid var(--admin-line);
+      background: #0a0a0a;
+      color: #fff;
+      border-radius: 12px;
+      padding: 11px 12px;
+      outline: none;
+      transition: border-color .2s ease
+    }
+
+    .admin-input:focus,
+    .admin-select:focus,
+    .admin-textarea:focus {
+      border-color: rgba(255, 255, 255, .34)
+    }
+
+    .admin-search {
+      width: min(390px, 70vw)
+    }
+
+    .admin-table-wrap {
+      border: 1px solid var(--admin-line);
+      border-radius: 18px;
+      overflow: hidden;
+      background: #090909
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse
+    }
+
+    .admin-table th {
+      padding: 13px 14px;
+      text-align: left;
+      background: #0e0e0e;
+      border-bottom: 1px solid var(--admin-line);
+      font: 700 9px/1.3 'Space Mono', monospace;
+      color: #555;
+      letter-spacing: .09em;
+      text-transform: uppercase
+    }
+
+    .admin-table td {
+      padding: 13px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, .06);
+      vertical-align: middle
+    }
+
+    .admin-table tr:last-child td {
+      border-bottom: 0
+    }
+
+    .admin-table tbody tr {
+      transition: background .2s ease
+    }
+
+    .admin-table tbody tr:hover {
+      background: rgba(255, 255, 255, .025)
+    }
+
+    .product-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 260px
+    }
+
+    .product-thumb {
+      width: 54px;
+      height: 38px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #151515;
+      border: 1px solid rgba(255, 255, 255, .08)
+    }
+
+    .product-title {
+      font-size: 13px;
+      font-weight: 600
+    }
+
+    .product-artist {
+      font: 400 9px/1.4 'Space Mono', monospace;
+      color: #555;
+      text-transform: uppercase;
+      margin-top: 3px
+    }
+
+    .mono {
+      font: 400 9px/1.5 'Space Mono', monospace;
+      color: #777
+    }
+
+    .price-chip,
+    .category-chip {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(255, 255, 255, .10);
+      border-radius: 999px;
+      padding: 5px 8px;
+      font: 700 8px/1 'Space Mono', monospace;
+      text-transform: uppercase;
+      white-space: nowrap
+    }
+
+    .price-chip.free {
+      border-color: rgba(99, 255, 208, .18);
+      color: #6fffd0
+    }
+
+    .row-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px
+    }
+
+    .icon-btn {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--admin-line);
+      border-radius: 9px;
+      background: #0d0d0d;
+      cursor: pointer
+    }
+
+    .icon-btn:hover {
+      border-color: rgba(255, 255, 255, .3)
+    }
+
+    .admin-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      z-index: 100
+    }
+
+    .admin-modal.open {
+      display: flex
+    }
+
+    .admin-modal-card {
+      width: min(920px, 100%);
+      max-height: 90vh;
+      overflow: auto;
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 22px;
+      background: #0a0a0a;
+      box-shadow: 0 30px 100px rgba(0, 0, 0, .5)
+    }
+
+    .admin-modal-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 24px;
+      border-bottom: 1px solid var(--admin-line)
+    }
+
+    .admin-modal-title {
+      font-size: 28px;
+      letter-spacing: -.04em;
+      margin: 0
+    }
+
+    .admin-modal-kicker {
+      font: 700 9px/1.4 'Space Mono', monospace;
+      color: #555;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 8px
+    }
+
+    .admin-form {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px
+    }
+
+    .admin-field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px
+    }
+
+    .admin-field.full {
+      grid-column: 1/-1
+    }
+
+    .admin-label {
+      font: 700 9px/1.4 'Space Mono', monospace;
+      color: #666;
+      letter-spacing: .09em;
+      text-transform: uppercase
+    }
+
+    .admin-textarea {
+      min-height: 86px;
+      resize: vertical
+    }
+
+    .admin-form-actions {
+      grid-column: 1/-1;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding-top: 8px
+    }
+
+    .admin-helper {
+      font: 400 9px/1.6 'Space Mono', monospace;
+      color: #555
+    }
+
+    .admin-empty {
+      padding: 60px 20px;
+      text-align: center;
+      color: #555;
+      font: 400 10px/1.7 'Space Mono', monospace
+    }
+
+    .admin-toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 200;
+      padding: 11px 14px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      background: #0b0b0b;
+      border-radius: 12px;
+      box-shadow: 0 18px 55px rgba(0, 0, 0, .4);
+      font: 700 9px/1.4 'Space Mono', monospace;
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: .25s ease
+    }
+
+    .admin-toast.show {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    .admin-auth-gate {
+      position: fixed;
+      inset: 0;
+      background: #070707;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .admin-auth-gate.hidden {
+      display: none
+    }
+
+    .admin-auth-copy {
+      text-align: center
+    }
+
+    .admin-auth-copy strong {
+      display: block;
+      font-size: 20px;
+      letter-spacing: -.03em
+    }
+
+    .admin-auth-copy span {
+      display: block;
+      margin-top: 8px;
+      color: #555;
+      font: 400 9px/1.5 'Space Mono', monospace
+    }
+
+    @media(max-width:900px) {
+      .admin-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .admin-table-wrap {
+        overflow: auto
+      }
+
+      .admin-table {
+        min-width: 850px
+      }
+    }
+
+    @media(max-width:640px) {
+      .admin-shell {
+        padding: 0 18px 50px
+      }
+
+      .admin-topbar {
+        height: 64px
+      }
+
+      .admin-hero {
+        padding: 48px 0 30px
+      }
+
+      .admin-title {
+        font-size: 48px
+      }
+
+      .admin-grid {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .admin-form {
+        grid-template-columns: 1fr
+      }
+
+      .admin-field.full {
+        grid-column: auto
+      }
+
+      .admin-form-actions {
+        grid-column: auto
+      }
+
+      .admin-search {
+        width: 100%
+      }
+    }
   </style>
 </head>
+
 <body>
   <div class="admin-auth-gate" id="adminAuthGate">
-    <div class="admin-auth-copy"><strong>Verifying admin access.</strong><span>Firebase custom claim check in progress…</span></div>
+    <div class="admin-auth-copy"><strong>Verifying admin access.</strong><span>Firebase custom claim check in
+        progress…</span></div>
   </div>
 
   <main class="admin-shell" id="adminApp" hidden>
@@ -62,22 +572,46 @@
     <section class="admin-hero">
       <div class="admin-kicker">TuneTrack / Private Control Surface</div>
       <h1 class="admin-title">ADMIN<br>WORKSPACE.</h1>
-      <p class="admin-subtitle">Manage the local product catalogue, pricing, links, thumbnails and metadata from the same web workspace. Paid checkout links remain external to Lynk.id.</p>
-      <div class="admin-status"><span class="admin-status-dot"></span><span id="adminIdentity">ADMIN VERIFIED</span></div>
+      <p class="admin-subtitle">Manage the local product catalogue, pricing, links, thumbnails and metadata from the
+        same web workspace. Paid checkout links remain external to Lynk.id.</p>
+      <div class="admin-status"><span class="admin-status-dot"></span><span id="adminIdentity">ADMIN VERIFIED</span>
+      </div>
     </section>
 
     <section class="admin-grid">
-      <div class="admin-stat"><div class="admin-stat-label">Total products</div><div class="admin-stat-value" id="statTotal">0</div><div class="admin-stat-note">Local catalogue entries</div></div>
-      <div class="admin-stat"><div class="admin-stat-label">Free / freebies</div><div class="admin-stat-value" id="statFree">0</div><div class="admin-stat-note">Claimable local items</div></div>
-      <div class="admin-stat"><div class="admin-stat-label">Paid</div><div class="admin-stat-value" id="statPaid">0</div><div class="admin-stat-note">External Lynk.id checkout</div></div>
-      <div class="admin-stat"><div class="admin-stat-label">Categories</div><div class="admin-stat-value" id="statCategories">0</div><div class="admin-stat-note">Distinct catalogue tags</div></div>
+      <div class="admin-stat">
+        <div class="admin-stat-label">Total products</div>
+        <div class="admin-stat-value" id="statTotal">0</div>
+        <div class="admin-stat-note">Local catalogue entries</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-label">Free / freebies</div>
+        <div class="admin-stat-value" id="statFree">0</div>
+        <div class="admin-stat-note">Claimable local items</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-label">Paid</div>
+        <div class="admin-stat-value" id="statPaid">0</div>
+        <div class="admin-stat-note">External Lynk.id checkout</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-label">Categories</div>
+        <div class="admin-stat-value" id="statCategories">0</div>
+        <div class="admin-stat-note">Distinct catalogue tags</div>
+      </div>
     </section>
 
     <section>
       <div class="admin-toolbar">
         <div class="admin-toolbar-left">
-          <input class="admin-input admin-search" id="searchInput" placeholder="Search title, artist, price…" autocomplete="off">
-          <select class="admin-select" id="typeFilter" style="width:150px"><option value="all">All products</option><option value="free">Free</option><option value="paid">Paid</option><option value="exclusive">Exclusive</option></select>
+          <input class="admin-input admin-search" id="searchInput" placeholder="Search title, artist, price…"
+            autocomplete="off">
+          <select class="admin-select" id="typeFilter" style="width:150px">
+            <option value="all">All products</option>
+            <option value="free">Free</option>
+            <option value="paid">Paid</option>
+            <option value="exclusive">Exclusive</option>
+          </select>
         </div>
         <div class="admin-toolbar-right">
           <button class="admin-pill" id="importBtn">Import catalog</button>
@@ -86,26 +620,59 @@
           <input type="file" id="importInput" accept=".js,.json,.txt" hidden>
         </div>
       </div>
-      <div class="admin-helper" style="margin:0 0 12px">Changes are edited in this admin workspace. <strong style="color:#aaa">Save catalog file</strong> downloads the updated <code>data-catalog-local.js</code>; replace the site's existing file with it.</div>
-      <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Product</th><th>Price</th><th>Category</th><th>Links</th><th></th></tr></thead><tbody id="catalogBody"></tbody></table><div class="admin-empty" id="emptyState" hidden>No products match the current filter.</div></div>
+      <div class="admin-helper" style="margin:0 0 12px">Changes are edited in this admin workspace. <strong
+          style="color:#aaa">Save catalog file</strong> downloads the updated <code>data-catalog-local.js</code>;
+        replace the site's existing file with it.</div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Category</th>
+              <th>Links</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="catalogBody"></tbody>
+        </table>
+        <div class="admin-empty" id="emptyState" hidden>No products match the current filter.</div>
+      </div>
     </section>
   </main>
 
   <div class="admin-modal" id="productModal" aria-hidden="true">
     <div class="admin-modal-card">
-      <div class="admin-modal-head"><div><div class="admin-modal-kicker" id="modalKicker">CATALOG / NEW ENTRY</div><h2 class="admin-modal-title" id="modalTitle">Add product.</h2></div><button class="icon-btn" id="closeModalBtn" aria-label="Close">×</button></div>
+      <div class="admin-modal-head">
+        <div>
+          <div class="admin-modal-kicker" id="modalKicker">CATALOG / NEW ENTRY</div>
+          <h2 class="admin-modal-title" id="modalTitle">Add product.</h2>
+        </div><button class="icon-btn" id="closeModalBtn" aria-label="Close">×</button>
+      </div>
       <form class="admin-form" id="productForm">
-        <div class="admin-field"><label class="admin-label">Title</label><input class="admin-input" id="fTitle" required></div>
-        <div class="admin-field"><label class="admin-label">Artist</label><input class="admin-input" id="fArtist" required></div>
-        <div class="admin-field"><label class="admin-label">Price</label><input class="admin-input" id="fPrice" placeholder="Free / IDR 120.000 / Exclusive Item" required></div>
-        <div class="admin-field"><label class="admin-label">Category</label><input class="admin-input" id="fCategory" placeholder="praise, freebies"></div>
-        <div class="admin-field full"><label class="admin-label">Thumbnail / image path</label><input class="admin-input" id="fImage" placeholder="assets/thumbnail/example.jpg"></div>
-        <div class="admin-field"><label class="admin-label">Product link</label><input class="admin-input" id="fLink" placeholder="Lynk.id / local page"></div>
-        <div class="admin-field"><label class="admin-label">Free download Drive link</label><input class="admin-input" id="fDrive" placeholder="https://drive.google.com/..." ></div>
-        <div class="admin-field"><label class="admin-label">YouTube</label><input class="admin-input" id="fYoutube" placeholder="https://www.youtube.com/watch?v=..."></div>
-        <div class="admin-field"><label class="admin-label">My Products thumbnail</label><input class="admin-input" id="fMyThumb" placeholder="Optional; usually same as image"></div>
-        <div class="admin-field full"><label class="admin-label">Image credit</label><input class="admin-input" id="fCredit" placeholder="Optional"></div>
-        <div class="admin-form-actions"><button type="button" class="admin-pill" id="cancelModalBtn">Cancel</button><button type="submit" class="admin-pill primary" id="saveProductBtn">Save product</button></div>
+        <div class="admin-field"><label class="admin-label">Title</label><input class="admin-input" id="fTitle"
+            required></div>
+        <div class="admin-field"><label class="admin-label">Artist</label><input class="admin-input" id="fArtist"
+            required></div>
+        <div class="admin-field"><label class="admin-label">Price</label><input class="admin-input" id="fPrice"
+            placeholder="Free / IDR 120.000 / Exclusive Item" required></div>
+        <div class="admin-field"><label class="admin-label">Category</label><input class="admin-input" id="fCategory"
+            placeholder="praise, freebies"></div>
+        <div class="admin-field full"><label class="admin-label">Thumbnail / image path</label><input
+            class="admin-input" id="fImage" placeholder="assets/thumbnail/example.jpg"></div>
+        <div class="admin-field"><label class="admin-label">Product link</label><input class="admin-input" id="fLink"
+            placeholder="Lynk.id / local page"></div>
+        <div class="admin-field"><label class="admin-label">Free download Drive link</label><input class="admin-input"
+            id="fDrive" placeholder="https://drive.google.com/..."></div>
+        <div class="admin-field"><label class="admin-label">YouTube</label><input class="admin-input" id="fYoutube"
+            placeholder="https://www.youtube.com/watch?v=..."></div>
+        <div class="admin-field"><label class="admin-label">My Products thumbnail</label><input class="admin-input"
+            id="fMyThumb" placeholder="Optional; usually same as image"></div>
+        <div class="admin-field full"><label class="admin-label">Image credit</label><input class="admin-input"
+            id="fCredit" placeholder="Optional"></div>
+        <div class="admin-form-actions"><button type="button" class="admin-pill"
+            id="cancelModalBtn">Cancel</button><button type="submit" class="admin-pill primary" id="saveProductBtn">Save
+            product</button></div>
       </form>
     </div>
   </div>
@@ -116,7 +683,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
     import { getAuth, getIdTokenResult, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
-    const firebaseConfig = { apiKey:"AIzaSyAd7sJx_5-rYDUBAuzEp-QZHTAgqoYKB7I", authDomain:"tunetrack-co.firebaseapp.com", projectId:"tunetrack-co", storageBucket:"tunetrack-co.firebasestorage.app", messagingSenderId:"6013781332", appId:"1:6013781332:web:86198dd552826c046eb4c1" };
+    const firebaseConfig = { apiKey: "AIzaSyAd7sJx_5-rYDUBAuzEp-QZHTAgqoYKB7I", authDomain: "tunetrack-co.firebaseapp.com", projectId: "tunetrack-co", storageBucket: "tunetrack-co.firebasestorage.app", messagingSenderId: "6013781332", appId: "1:6013781332:web:86198dd552826c046eb4c1" };
     const auth = getAuth(initializeApp(firebaseConfig));
     const gate = document.getElementById("adminAuthGate");
     const app = document.getElementById("adminApp");
@@ -129,64 +696,65 @@
     const $ = id => document.getElementById(id);
     const isFree = p => String(p?.price || "").trim().toLowerCase() === "free" || (Array.isArray(p?.category) && p.category.some(c => String(c).toLowerCase() === "freebies"));
     const isExclusive = p => p?.exclusive === true || String(p?.price || "").trim().toLowerCase() === "exclusive item";
-    const showToast = msg => { toast.textContent=msg; toast.classList.add("show"); clearTimeout(toastTimer); toastTimer=setTimeout(()=>toast.classList.remove("show"),2400); };
-    const esc = value => String(value ?? "").replace(/[&<>'"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[c]));
+    const showToast = msg => { toast.textContent = msg; toast.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove("show"), 2400); };
+    const esc = value => String(value ?? "").replace(/[&<>'"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", "\"": "&quot;" }[c]));
 
-    function updateStats(){
-      $("statTotal").textContent=products.length;
-      $("statFree").textContent=products.filter(isFree).length;
-      $("statPaid").textContent=products.filter(p=>!isFree(p)&&!isExclusive(p)).length;
-      const cats=new Set(products.flatMap(p=>Array.isArray(p.category)?p.category:[]).map(c=>String(c).trim().toLowerCase()).filter(Boolean));
-      $("statCategories").textContent=cats.size;
+    function updateStats() {
+      $("statTotal").textContent = products.length;
+      $("statFree").textContent = products.filter(isFree).length;
+      $("statPaid").textContent = products.filter(p => !isFree(p) && !isExclusive(p)).length;
+      const cats = new Set(products.flatMap(p => Array.isArray(p.category) ? p.category : []).map(c => String(c).trim().toLowerCase()).filter(Boolean));
+      $("statCategories").textContent = cats.size;
     }
 
-    function render(){
-      const q=$("searchInput").value.trim().toLowerCase(); const filter=$("typeFilter").value;
-      const rows=products.map((p,index)=>({p,index})).filter(({p})=>{
-        const hay=[p.title,p.artist,p.price,p.link,p.youtube,...(Array.isArray(p.category)?p.category:[])].join(" ").toLowerCase();
-        if(q&&!hay.includes(q)) return false;
-        if(filter==="free"&&!isFree(p)) return false;
-        if(filter==="paid"&&(isFree(p)||isExclusive(p))) return false;
-        if(filter==="exclusive"&&!isExclusive(p)) return false;
+    function render() {
+      const q = $("searchInput").value.trim().toLowerCase(); const filter = $("typeFilter").value;
+      const rows = products.map((p, index) => ({ p, index })).filter(({ p }) => {
+        const hay = [p.title, p.artist, p.price, p.link, p.youtube, ...(Array.isArray(p.category) ? p.category : [])].join(" ").toLowerCase();
+        if (q && !hay.includes(q)) return false;
+        if (filter === "free" && !isFree(p)) return false;
+        if (filter === "paid" && (isFree(p) || isExclusive(p))) return false;
+        if (filter === "exclusive" && !isExclusive(p)) return false;
         return true;
       });
-      $("catalogBody").innerHTML=rows.map(({p,index})=>{
-        const cats=Array.isArray(p.category)?p.category:[]; const image=p.image||p["myprod-thumb"]||""; const link=p.link||"";
-        return `<tr><td><div class="product-cell"><img class="product-thumb" src="${esc(image)}" onerror="this.style.opacity='.25'" alt=""><div><div class="product-title">${esc(p.title||"Untitled")}</div><div class="product-artist">${esc(p.artist||"Unknown artist")}</div></div></div></td><td><span class="price-chip ${isFree(p)?"free":""}">${esc(p.price||"—")}</span></td><td><div style="display:flex;gap:5px;flex-wrap:wrap">${cats.slice(0,3).map(c=>`<span class="category-chip">${esc(c)}</span>`).join("")}</div></td><td><span class="mono">${link?"LINK SET":"NO LINK"}</span></td><td><div class="row-actions"><button class="icon-btn" data-edit="${index}" title="Edit">✎</button><button class="icon-btn" data-copy="${index}" title="Duplicate">＋</button><button class="icon-btn" data-delete="${index}" title="Delete">×</button></div></td></tr>`;
+      $("catalogBody").innerHTML = rows.map(({ p, index }) => {
+        const cats = Array.isArray(p.category) ? p.category : []; const image = p.image || p["myprod-thumb"] || ""; const link = p.link || "";
+        return `<tr><td><div class="product-cell"><img class="product-thumb" src="${esc(image)}" onerror="this.style.opacity='.25'" alt=""><div><div class="product-title">${esc(p.title || "Untitled")}</div><div class="product-artist">${esc(p.artist || "Unknown artist")}</div></div></div></td><td><span class="price-chip ${isFree(p) ? "free" : ""}">${esc(p.price || "—")}</span></td><td><div style="display:flex;gap:5px;flex-wrap:wrap">${cats.slice(0, 3).map(c => `<span class="category-chip">${esc(c)}</span>`).join("")}</div></td><td><span class="mono">${link ? "LINK SET" : "NO LINK"}</span></td><td><div class="row-actions"><button class="icon-btn" data-edit="${index}" title="Edit">✎</button><button class="icon-btn" data-copy="${index}" title="Duplicate">＋</button><button class="icon-btn" data-delete="${index}" title="Delete">×</button></div></td></tr>`;
       }).join("");
-      $("emptyState").hidden=rows.length>0; updateStats();
+      $("emptyState").hidden = rows.length > 0; updateStats();
     }
 
-    function openEditor(index=-1){
-      editIndex=index; const p=index>=0?products[index]:{};
-      $("modalKicker").textContent=index>=0?"CATALOG / EDIT ENTRY":"CATALOG / NEW ENTRY"; $("modalTitle").textContent=index>=0?"Edit product.":"Add product.";
-      $("fTitle").value=p.title||""; $("fArtist").value=p.artist||""; $("fPrice").value=p.price||""; $("fCategory").value=Array.isArray(p.category)?p.category.join(", "):""; $("fImage").value=p.image||""; $("fLink").value=p.link||""; $("fDrive").value=p["drive-link"]||""; $("fYoutube").value=p.youtube||""; $("fMyThumb").value=p["myprod-thumb"]||""; $("fCredit").value=p.imageCredit||"";
-      $("productModal").classList.add("open"); $("productModal").setAttribute("aria-hidden","false"); $("fTitle").focus();
+    function openEditor(index = -1) {
+      editIndex = index; const p = index >= 0 ? products[index] : {};
+      $("modalKicker").textContent = index >= 0 ? "CATALOG / EDIT ENTRY" : "CATALOG / NEW ENTRY"; $("modalTitle").textContent = index >= 0 ? "Edit product." : "Add product.";
+      $("fTitle").value = p.title || ""; $("fArtist").value = p.artist || ""; $("fPrice").value = p.price || ""; $("fCategory").value = Array.isArray(p.category) ? p.category.join(", ") : ""; $("fImage").value = p.image || ""; $("fLink").value = p.link || ""; $("fDrive").value = p["drive-link"] || ""; $("fYoutube").value = p.youtube || ""; $("fMyThumb").value = p["myprod-thumb"] || ""; $("fCredit").value = p.imageCredit || "";
+      $("productModal").classList.add("open"); $("productModal").setAttribute("aria-hidden", "false"); $("fTitle").focus();
     }
-    function closeEditor(){ $("productModal").classList.remove("open"); $("productModal").setAttribute("aria-hidden","true"); }
+    function closeEditor() { $("productModal").classList.remove("open"); $("productModal").setAttribute("aria-hidden", "true"); }
 
-    $("productForm").addEventListener("submit", e=>{e.preventDefault(); const item={title:$("fTitle").value.trim(),artist:$("fArtist").value.trim(),price:$("fPrice").value.trim(),category:$("fCategory").value.split(",").map(x=>x.trim()).filter(Boolean),image:$("fImage").value.trim(),link:$("fLink").value.trim(),youtube:$("fYoutube").value.trim()}; const drive=$("fDrive").value.trim(); const thumb=$("fMyThumb").value.trim(); const credit=$("fCredit").value.trim(); if(drive)item["drive-link"]=drive; if(thumb)item["myprod-thumb"]=thumb; if(credit)item.imageCredit=credit; if(editIndex>=0) products[editIndex]={...products[editIndex],...item}; else products.push(item); closeEditor(); render(); showToast(editIndex>=0?"Product updated in workspace.":"Product added to workspace.");});
-    $("catalogBody").addEventListener("click",e=>{const btn=e.target.closest("button[data-edit],button[data-copy],button[data-delete]");if(!btn)return;const i=Number(btn.dataset.edit??btn.dataset.copy??btn.dataset.delete);if(btn.dataset.edit!==undefined)openEditor(i);if(btn.dataset.copy!==undefined){products.splice(i+1,0,structuredClone(products[i]));render();showToast("Product duplicated.");}if(btn.dataset.delete!==undefined){if(confirm(`Delete “${products[i]?.title||"this product"}” from the workspace?`)){products.splice(i,1);render();showToast("Product removed from workspace.");}}});
-    $("addProductBtn").onclick=()=>openEditor(-1); $("closeModalBtn").onclick=closeEditor; $("cancelModalBtn").onclick=closeEditor; $("productModal").addEventListener("click",e=>{if(e.target===$("productModal"))closeEditor()}); $("searchInput").addEventListener("input",render); $("typeFilter").addEventListener("change",render);
-    $("logoutBtn").onclick=async()=>{await signOut(auth);location.replace("login-page.html")}; $("openUserDashboardBtn").onclick=()=>location.assign("dashboard.html");
+    $("productForm").addEventListener("submit", e => { e.preventDefault(); const item = { title: $("fTitle").value.trim(), artist: $("fArtist").value.trim(), price: $("fPrice").value.trim(), category: $("fCategory").value.split(",").map(x => x.trim()).filter(Boolean), image: $("fImage").value.trim(), link: $("fLink").value.trim(), youtube: $("fYoutube").value.trim() }; const drive = $("fDrive").value.trim(); const thumb = $("fMyThumb").value.trim(); const credit = $("fCredit").value.trim(); if (drive) item["drive-link"] = drive; if (thumb) item["myprod-thumb"] = thumb; if (credit) item.imageCredit = credit; if (editIndex >= 0) products[editIndex] = { ...products[editIndex], ...item }; else products.push(item); closeEditor(); render(); showToast(editIndex >= 0 ? "Product updated in workspace." : "Product added to workspace."); });
+    $("catalogBody").addEventListener("click", e => { const btn = e.target.closest("button[data-edit],button[data-copy],button[data-delete]"); if (!btn) return; const i = Number(btn.dataset.edit ?? btn.dataset.copy ?? btn.dataset.delete); if (btn.dataset.edit !== undefined) openEditor(i); if (btn.dataset.copy !== undefined) { products.splice(i + 1, 0, structuredClone(products[i])); render(); showToast("Product duplicated."); } if (btn.dataset.delete !== undefined) { if (confirm(`Delete “${products[i]?.title || "this product"}” from the workspace?`)) { products.splice(i, 1); render(); showToast("Product removed from workspace."); } } });
+    $("addProductBtn").onclick = () => openEditor(-1); $("closeModalBtn").onclick = closeEditor; $("cancelModalBtn").onclick = closeEditor; $("productModal").addEventListener("click", e => { if (e.target === $("productModal")) closeEditor() }); $("searchInput").addEventListener("input", render); $("typeFilter").addEventListener("change", render);
+    $("logoutBtn").onclick = async () => { await signOut(auth); location.replace("login-page.html") }; $("openUserDashboardBtn").onclick = () => location.assign("dashboard.html");
 
-    function catalogSource(){ return `const products = ${JSON.stringify(products,null,2)};\n\nif (typeof module !== "undefined") {\n  module.exports = products;\n}\n\n// Dashboard bridge\nwindow.TuneTrackCatalog = products;\n`; }
-    async function saveCatalog(){
-      const blob=new Blob([catalogSource()],{type:"application/javascript"});
-      if("showSaveFilePicker" in window){
-        try{const handle=await window.showSaveFilePicker({suggestedName:"data-catalog-local.js",types:[{description:"JavaScript",accept:{"application/javascript":[".js"]}}]});const writable=await handle.createWritable();await writable.write(blob);await writable.close();showToast("Catalog file saved.");return;}catch(e){if(e?.name==="AbortError")return;console.warn(e)}
+    function catalogSource() { return `const products = ${JSON.stringify(products, null, 2)};\n\nif (typeof module !== "undefined") {\n  module.exports = products;\n}\n\n// Dashboard bridge\nwindow.TuneTrackCatalog = products;\n`; }
+    async function saveCatalog() {
+      const blob = new Blob([catalogSource()], { type: "application/javascript" });
+      if ("showSaveFilePicker" in window) {
+        try { const handle = await window.showSaveFilePicker({ suggestedName: "data-catalog-local.js", types: [{ description: "JavaScript", accept: { "application/javascript": [".js"] } }] }); const writable = await handle.createWritable(); await writable.write(blob); await writable.close(); showToast("Catalog file saved."); return; } catch (e) { if (e?.name === "AbortError") return; console.warn(e) }
       }
-      const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="data-catalog-local.js";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);showToast("Catalog file downloaded. Replace the site's local file.");
+      const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "data-catalog-local.js"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); showToast("Catalog file downloaded. Replace the site's local file.");
     }
-    $("exportBtn").onclick=saveCatalog;
-    $("importBtn").onclick=()=>$("importInput").click();
-    $("importInput").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;try{const text=await file.text();const match=text.match(/const\s+products\s*=\s*(\[[\s\S]*?\])\s*;/);if(!match)throw new Error("Could not find catalog array.");const parsed=Function(`"use strict"; return (${match[1]});`)();if(!Array.isArray(parsed))throw new Error("Catalog is not an array.");products.splice(0,products.length,...parsed);render();showToast(`Imported ${parsed.length} products.`);}catch(err){alert(`Import failed: ${err.message}`)}finally{e.target.value=""}});
+    $("exportBtn").onclick = saveCatalog;
+    $("importBtn").onclick = () => $("importInput").click();
+    $("importInput").addEventListener("change", async e => { const file = e.target.files?.[0]; if (!file) return; try { const text = await file.text(); const match = text.match(/const\s+products\s*=\s*(\[[\s\S]*?\])\s*;/); if (!match) throw new Error("Could not find catalog array."); const parsed = Function(`"use strict"; return (${match[1]});`)(); if (!Array.isArray(parsed)) throw new Error("Catalog is not an array."); products.splice(0, products.length, ...parsed); render(); showToast(`Imported ${parsed.length} products.`); } catch (err) { alert(`Import failed: ${err.message}`) } finally { e.target.value = "" } });
 
-    onAuthStateChanged(auth,async user=>{
-      if(!user){location.replace("login-page.html");return;}
-      try{const token=await getIdTokenResult(user,true);if(token?.claims?.admin!==true){location.replace("dashboard.html");return;}$("adminIdentity").textContent=`ADMIN VERIFIED / ${user.displayName||user.email||"Mintune"}`;gate.classList.add("hidden");app.hidden=false;render();}
-      catch(err){console.error(err);location.replace("login-page.html")}
+    onAuthStateChanged(auth, async user => {
+      if (!user) { location.replace("login-page.html"); return; }
+      try { const token = await getIdTokenResult(user, true); if (token?.claims?.admin !== true) { location.replace("dashboard.html"); return; } $("adminIdentity").textContent = `ADMIN VERIFIED / ${user.displayName || user.email || "Mintune"}`; gate.classList.add("hidden"); app.hidden = false; render(); }
+      catch (err) { console.error(err); location.replace("login-page.html") }
     });
   </script>
 </body>
+
 </html>

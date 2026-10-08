@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <meta name="color-scheme" content="dark">
   <title>TuneTrack</title>
-
+  <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+  <link rel="shortcut icon" href="assets/images/favicon.ico">
   <meta name="tunetrack-page-title" content="TuneTrack — Multitrack, Sequencer, Preset">
   <!-- Space Mono Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,6 +23,7 @@
   <!-- Chrome: force one native document scroller. Safari is untouched. -->
   <style id="chrome-native-scroll-fix">
     @supports selector(:has(*)) {
+
       html.chrome-native-scroll,
       html.chrome-native-scroll body,
       html.chrome-native-scroll .page-wrapper {
@@ -118,10 +120,10 @@
         <nav aria-label="Main navigation" class="swiss-header-nav">
           <a href="index.html">Home</a>
           <a class="is-active" href="catalog-page.html">Discover on Store</a>
-                <a href="blog-list.html">Papers</a>
-                <a href="contactus.html">Contact</a>
-                <a href="community-gate.html">Community</a>
-                <a href="https://linktr.ee/tunetrackid" target="_blank">Connect with Us</a>
+          <a href="blog-list.html">Papers</a>
+          <a href="contactus.html">Contact</a>
+          <a href="community-gate.html">Community</a>
+          <a href="https://linktr.ee/tunetrackid" target="_blank">Connect with Us</a>
         </nav>
         <div class="swiss-header-right">
 
@@ -1021,39 +1023,39 @@ Please add this address to the Tunetrack newsletter mailing list.
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <!-- TuneTrack local catalog data source -->
   <script src="assets/js/data-catalog-local.js"></script>
-  
-<script id="chrome-forced-native-trackpad-scroll">
-(() => {
-  const ua = navigator.userAgent || "";
-  const isChrome =
-    /Chrome\//.test(ua) &&
-    !/Edg\//.test(ua) &&
-    !/OPR\//.test(ua);
 
-  if (!isChrome) return;
+  <script id="chrome-forced-native-trackpad-scroll">
+    (() => {
+      const ua = navigator.userAgent || "";
+      const isChrome =
+        /Chrome\//.test(ua) &&
+        !/Edg\//.test(ua) &&
+        !/OPR\//.test(ua);
 
-  /*
-   * HARD FALLBACK:
-   * Do not cancel wheel events and do not touch Lenis.
-   * Chrome gets a passive wheel listener that directly advances the
-   * document scroll position. This works even if another listener
-   * interferes with the browser's normal wheel default action.
-   */
-  window.addEventListener("wheel", (event) => {
-    if (!event.deltaY) return;
+      if (!isChrome) return;
 
-    const scroller = document.scrollingElement || document.documentElement;
-    const max = Math.max(0, scroller.scrollHeight - window.innerHeight);
-    const next = Math.max(0, Math.min(max, scroller.scrollTop + event.deltaY));
+      /*
+       * HARD FALLBACK:
+       * Do not cancel wheel events and do not touch Lenis.
+       * Chrome gets a passive wheel listener that directly advances the
+       * document scroll position. This works even if another listener
+       * interferes with the browser's normal wheel default action.
+       */
+      window.addEventListener("wheel", (event) => {
+        if (!event.deltaY) return;
 
-    if (next !== scroller.scrollTop) {
-      scroller.scrollTop = next;
-    }
-  }, { passive: true, capture: true });
-})();
-</script>
+        const scroller = document.scrollingElement || document.documentElement;
+        const max = Math.max(0, scroller.scrollHeight - window.innerHeight);
+        const next = Math.max(0, Math.min(max, scroller.scrollTop + event.deltaY));
 
-<script src="assets/js/product-page.js"></script>
+        if (next !== scroller.scrollTop) {
+          scroller.scrollTop = next;
+        }
+      }, { passive: true, capture: true });
+    })();
+  </script>
+
+  <script src="assets/js/product-page.js"></script>
   <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 
