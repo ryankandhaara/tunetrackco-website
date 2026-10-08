@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     logoTilesGrid.innerHTML = promoProducts.map((product) => {
       const categories = Array.isArray(product.category) ? product.category.join(' / ') : (product.category || 'PRODUCT');
       const price = product.price || 'VIEW PRODUCT';
-      const href = product.link || 'catalog-page.html';
+      const href = `product-page.html?item=${encodeURIComponent(product.title)}`;
       return `
         <article class="logo-tile-item product-logo-tile" data-logo-name="${escapeHtml(product.title)}">
           <a href="${escapeHtml(href)}" class="logo-tile-link">
