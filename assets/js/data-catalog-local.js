@@ -11,19 +11,6 @@
 // ### exclusivePage = halaman khusus exclusive
 
 const products = [
-    {
-    "title": "Hark (Israel & New Breed)",
-    "artist": "Israel & New Breed",
-    "price": "IDR 120.000",
-    "category": [
-      "praise"
-    ],
-    "image": "assets/thumbnail/002_Yesus-Raja-JPCC.jpg",
-    "link": "exclusive.html",
-    "gumroadLink": "",
-    "youtube": "",
-    "exclusive": true,
-  },
   {
     "title": "Yesus Raja (JPCC)",
     "artist": "JPCC Worship",
@@ -55,12 +42,12 @@ const products = [
     "artist": "Symphony Worship Family",
     "price": "Free",
     "category": [
-      "praise"
+      "worship",
+      "freebies"
     ],
     "image": "assets/thumbnail/004_Sambutlah-Dia.jpg",
-    "link": "exclusive.html",
     "drive-link": "https://drive.google.com/drive/folders/1WRnCDXTGLgqV7xiuiHWy7AYpUxa_Uoje?usp=sharing",
-    "gumroadLink": "",
+    "freeLink": "https://ttco.vercel.app/login-page.html",
     "youtube": "",
     "exclusive": true,
   },
@@ -98,7 +85,7 @@ const products = [
       "worship"
     ],
     "image": "assets/thumbnail/fajar terangi dunia.jpg",
-    "link": "http://lynk.id/gudangsequencer/43dpxgq5g8ox",
+    "link": "",
     "gumroadLink": "",
     "youtube": "8VMIEMFqCbk",
     "imageCredit": "Assets of Steve Tabalujan & Friends",
@@ -113,9 +100,8 @@ const products = [
       "freebies"
     ],
     "image": "assets/thumbnail/008_Yang-Terutama.jpg",
-    "link": "pg-yangterutamasw2.html",
     "drive-link": "https://drive.google.com/file/d/12kmrwTuePHOh-13MzUhl7U0zzX_mZFpK/view?usp=sharing",
-    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/gfawvf",
+    "freeLink": "https://ttco.vercel.app/login-page.html",
     "youtube": "",
     "imageCredit": "Assets of Symphony Worship",
     "exclusive": false
@@ -129,9 +115,8 @@ const products = [
       "freebies"
     ],
     "image": "assets/thumbnail/planetshaker.jpg",
-    "link": "https://lynk.id/gudangsequencer/kld9dpk4gp79",
-    "drive-link": "",
-    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/cimabz?wanted=true",
+    "drive-link": "https://drive.google.com/drive/folders/1IlLkDwKrPDyRPK7Vjs8VXaXO5oZZ0OBu?usp=sharing",
+    "freeLink": "https://ttco.vercel.app/login-page.html",
     "youtube": "https://www.youtube.com/watch?v=AX_9JU4VEY8",
     "exclusive": false
   },
@@ -157,9 +142,8 @@ const products = [
       "freebies"
     ],
     "image": "assets/thumbnail/penulis hidupku.jpg",
-    "link": "pg-penulishidupku.html",
     "drive-link": "https://drive.google.com/drive/folders/1q3H1uXiuOtKeuwbocQmxMQgAmCxHHamT?usp=drive_link",
-    "gumroadLink": "",
+    "freeLink": "https://ttco.vercel.app/login-page.html",
     "youtube": "",
     "exclusive": false
   },
@@ -199,9 +183,8 @@ const products = [
       "freebies"
     ],
     "image": "assets/thumbnail/nothing is impossible.jpg",
-    "link": "https://lynk.id/gudangsequencer/k2l48wg2317o",
+    "freeLink": "https://ttco.vercel.app/login-page.html",
     "drive-link": "https://drive.google.com/drive/folders/1ufnKO_gVuPSWrkwmFJQtUtFYiNCa1uRR?usp=sharing",
-    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/hochpv?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=uRvnYO50Dg8",
     "exclusive": false
   },
@@ -291,12 +274,12 @@ const products = [
     "artist": "UNDVD ft. NDC Worship",
     "price": "Free",
     "category": [
-      "praise"
+      "praise",
+      "freebies"
     ],
     "image": "assets/thumbnail/021_Bukti-Kasihmu.jpg",
-    "link": "https://lynk.id/gudangsequencer/49zn00oe0207",
     "drive-link": "https://drive.google.com/file/d/1Q4p-9VfgQw2az6CdAQTLppUcrX_sSUQM/view?usp=drive_link",
-    "gumroadLink": "",
+    "freeLink": "https://ttco.vercel.app/login-page.html",
     "youtube": "https://www.youtube.com/watch?v=6zy1qXeNXSc",
     "exclusive": false
   },
@@ -309,9 +292,8 @@ const products = [
       "freebies"
     ],
     "image": "assets/thumbnail/022_Trima-kasih-Tuhan.jpg",
-    "link": "https://lynk.id/gudangsequencer/okx7yo67kwjo",
+    "freeLink": "https://ttco.vercel.app/login-page.html",
     "drive-link": "https://drive.google.com/file/d/1_MYpvLGGDpe_dCeYfz7Yv3sDuwTifT3R/view?usp=drive_link",
-    "gumroadLink": "",
     "youtube": "https://www.youtube.com/watch?v=T97RUz3B_FM",
     "exclusive": false
   },
@@ -324,9 +306,8 @@ const products = [
       "rearrangement"
     ],
     "image": "assets/thumbnail/023_Tiap-Langkahku.jpg",
-    "link": "https://lynk.id/gudangsequencer/210x2gjnokle",
+    "freeLink": "https://ttco.vercel.app/login-page.html",
     "drive-link": "https://drive.google.com/drive/folders/1DQMR3TLyBtzvIG8LDaQJ1dRueUYdWIft?usp=drive_link",
-    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/nhtznz?wanted=true",
     "youtube": "",
     "exclusive": false
   },
@@ -348,12 +329,12 @@ const products = [
     "artist": "Gospel Project",
     "price": "Free",
     "category": [
-      "rearrangement"
+      "rearrangement",
+      "freebies"
     ],
     "image": "assets/thumbnail/allah sumber kuatku gospel project.jpg",
-    "link": "https://lynk.id/gudangsequencer/jn0p6yd769rm",
+    "freeLink": "https://ttco.vercel.app/login-page.html",
     "drive-link": "https://drive.google.com/drive/folders/1BMc-zdTSDE4MsSGHsKXq9I52x5ilHQEo?usp=drive_link",
-    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/xjueub?wanted=true",
     "youtube": "",
     "exclusive": false
   },
@@ -390,11 +371,11 @@ const products = [
     "price": "IDR 120.000",
     "category": [
       "praise",
-      "rearrangement"
+      "rearrangement",
+      "freebies"
     ],
     "image": "assets/thumbnail/028_NOEL.jpg",
-    "link": "https://lynk.id/gudangsequencer/mryvlqgjw772",
-    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/epovj?wanted=true",
+    "freeLink": "https://ttco.vercel.app/login-page.html",
     "youtube": "https://www.youtube.com/watch?v=16psPH-ZiJc",
     "exclusive": true
   },
@@ -908,9 +889,8 @@ const products = [
       "freebies"
     ],
     "image": "assets/thumbnail/elevation worship 2.jpg",
-    "link": "https://lynk.id/gudangsequencer/nk89qpwwd06n",
+    "freeLink": "https://ttco.vercel.app/login-page.html",
     "drive-link": "https://drive.google.com/drive/folders/1ocbPybyfMwEb0spqovbvImOwZTb1kK5C?usp=sharing",
-    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/axfdo?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=b01nYd3Lv14",
     "exclusive": false
   },
@@ -971,12 +951,12 @@ const products = [
     "artist": "Symphony Worship Family",
     "price": "Free",
     "category": [
-      "praise"
+      "praise",
+      "freebies"
     ],
     "image": "assets/thumbnail/kuteringat.jpg",
     "drive-link": "https://drive.google.com/file/d/1OpIooyeKaD6b8HymdHDSpUZpZHxFfaup/view?usp=drive_link",
-    "link": "https://lynk.id/gudangsequencer/6qk6ldgroy1g",
-    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/ooqscr?wanted=true",
+    "freeLink": "https://ttco.vercel.app/login-page.html",
     "youtube": "https://www.youtube.com/watch?v=dZ9uosoi-Pk",
     "exclusive": false
   },
@@ -1003,9 +983,8 @@ const products = [
       "freebies"
     ],
     "image": "assets/thumbnail/074_Praise.jpg",
-    "link": "https://lynk.id/gudangsequencer/1o35kj6v9jm3",
     "drive-link": "https://drive.google.com/file/d/16xGPUtypGzL5S-PLDglIqXmdw0_si04U/view?usp=drive_link",
-    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/lmxzue?wanted=true",
+    "freeLink": "https://ttco.vercel.app/login-page.html",
     "youtube": "https://www.youtube.com/watch?v=uCpk8AEwMV4",
     "exclusive": false
   },

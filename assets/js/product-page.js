@@ -865,19 +865,41 @@ if (tracklistCat) {
 
     const indonesia = $("#tunetrackIndonesiaPayment");
     const global = $("#tunetrackGlobalPayment");
+    const claim = $("#tunetrackClaimProduct");
+    const freeMessage = $("#tunetrackFreeProductMessage");
+
+    // Free products with a freeLink must be claimed through TTCO instead of
+    // checking out through the usual Lynk.id / Gumroad payment destinations.
+    const isTTCOFreeProduct =
+      /^free$/i.test(String(product?.price || "").trim()) &&
+      Boolean(String(product?.freeLink || "").trim());
 
     if (indonesia) {
       const url = String(product?.link || "").trim();
       indonesia.href = url || "#";
-      indonesia.classList.toggle("is-disabled", !url);
-      indonesia.setAttribute("aria-disabled", url ? "false" : "true");
+      indonesia.classList.toggle("is-disabled", isTTCOFreeProduct || !url);
+      indonesia.setAttribute("aria-disabled", isTTCOFreeProduct || !url ? "true" : "false");
+      indonesia.setAttribute("tabindex", isTTCOFreeProduct || !url ? "-1" : "0");
     }
 
     if (global) {
       const url = String(product?.gumroadLink || "").trim();
       global.href = url || "#";
-      global.classList.toggle("is-disabled", !url);
-      global.setAttribute("aria-disabled", url ? "false" : "true");
+      global.classList.toggle("is-disabled", isTTCOFreeProduct || !url);
+      global.setAttribute("aria-disabled", isTTCOFreeProduct || !url ? "true" : "false");
+      global.setAttribute("tabindex", isTTCOFreeProduct || !url ? "-1" : "0");
+    }
+
+    if (claim) {
+      const url = isTTCOFreeProduct ? String(product.freeLink).trim() : "";
+      claim.href = url || "#";
+      claim.hidden = !isTTCOFreeProduct;
+      claim.setAttribute("aria-disabled", url ? "false" : "true");
+      claim.setAttribute("tabindex", url ? "0" : "-1");
+    }
+
+    if (freeMessage) {
+      freeMessage.hidden = !isTTCOFreeProduct;
     }
   };
 
@@ -1030,6 +1052,12 @@ if (tracklistCat) {
 
     $("#tunetrackGlobalPayment")?.addEventListener("click", (event) => {
       if ($("#tunetrackGlobalPayment")?.classList.contains("is-disabled")) {
+        event.preventDefault();
+      }
+    });
+
+    $("#tunetrackClaimProduct")?.addEventListener("click", (event) => {
+      if ($("#tunetrackClaimProduct")?.getAttribute("aria-disabled") === "true") {
         event.preventDefault();
       }
     });

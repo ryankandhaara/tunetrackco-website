@@ -1054,8 +1054,29 @@
                 <div class="connect-status">TUNETRACK / INSTAGRAM</div>
             </div>
 
+            <div id="step-watch-minute" style="display:none;">
+                <div class="eyebrow" style="margin-bottom: 12px;">Step 01 / 02</div>
+                <h2 class="step-heading">Watch the video.</h2>
+                <p class="step-desc">Watch the video for one minute. Keep this page open and in focus to continue.</p>
+                <div class="player-wrapper" style="margin-bottom: 18px;">
+                    <div class="player-header">
+                        <span class="eyebrow" style="margin-bottom:0;">Playback</span>
+                        <span class="eyebrow" id="minute-watch-state" style="margin-bottom:0;color:#666;">READY</span>
+                    </div>
+                    <div class="youtube-player-body">
+                        <div class="youtube-shell" id="minute-video-shell">
+                            <div id="minute-youtube-player" aria-label="TuneTrack video player"></div>
+                        </div>
+                    </div>
+                    <div class="liquid-progress-track" aria-label="One minute watch progress">
+                        <div class="liquid-progress-fill" id="minute-timer-progress"></div>
+                    </div>
+                </div>
+                <button class="btn-outline" id="btn-next-minute-watch" disabled>Next</button>
+            </div>
+
             <div class="step" id="step-4">
-                <div class="eyebrow" style="margin-bottom: 12px;">Step 04 / 04</div>
+                <div class="eyebrow" style="margin-bottom: 12px;">Step 02 / 02</div>
                 <h2 class="step-heading">Support the creator.</h2>
                 <p class="step-desc">If TuneTrack has been useful to you, you can support the creator here. This is the
                     final step.</p>
@@ -1844,7 +1865,7 @@
                 return;
             }
 
-            const embedUrl = `https://www.youtube.com/embed/${encodeURIComponent(videoId)}?autoplay=1&mute=1&controls=0&disablekb=1&fs=0&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&enablejsapi=1&origin=${encodeURIComponent(location.origin)}`;
+            const embedUrl = `https://www.youtube.com/embed/${encodeURIComponent(videoId)}?autoplay=1&mute=0&controls=0&disablekb=1&fs=0&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&enablejsapi=1&origin=${encodeURIComponent(location.origin)}`;
 
             let settled = false;
             let watchdog = null;
@@ -1916,7 +1937,8 @@
                             onReady: (event) => {
                                 if (token !== youtubeLoadToken || settled) return;
                                 try {
-                                    event.target.mute();
+                                    event.target.unMute();
+                                    event.target.setVolume(100);
                                     event.target.playVideo();
                                 } catch (_) { }
                             },
@@ -2018,6 +2040,18 @@
         };
 
         const switchStep = (stepIndex) => {
+            // HARD GATE: every route to Support (legacy step index 4) must pass
+            // through the dedicated one-minute video first. This also blocks
+            // old saved-social shortcuts and stale handlers from skipping it.
+            if (stepIndex === 4 && !minuteGateComplete) {
+                document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+                const requiredVideoStep = document.getElementById('step-watch-minute');
+                if (requiredVideoStep) requiredVideoStep.style.display = 'block';
+                modal.classList.add('minute-watch-mode');
+                setStatus('WATCH THE VIDEO FOR 1 MINUTE');
+                startMinuteWatchGate();
+                return;
+            }
             document.querySelectorAll('.step').forEach((el, i) => {
                 el.classList.toggle('active', i === stepIndex);
             });
@@ -2036,9 +2070,14 @@
         const openGate = () => {
             gate.classList.add('active');
             setProcessLocked(false);
-            // Simplified unlock flow: open directly on Support Us.
-            switchStep(4);
-            setStatus('SUPPORT THE CREATOR');
+            // Always start at the mandatory video step, regardless of any
+            // previously verified social state or legacy navigation state.
+            document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+            const requiredVideoStep = document.getElementById('step-watch-minute');
+            if (requiredVideoStep) requiredVideoStep.style.display = 'block';
+            modal.classList.add('minute-watch-mode');
+            setStatus('WATCH THE VIDEO FOR 1 MINUTE');
+            startMinuteWatchGate();
             gsap.fromTo('.modal', { y: 30, scale: 0.96, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.55, ease: 'expo.out' });
         };
 
@@ -2152,9 +2191,11 @@
         document.getElementById('btn-open-gate')?.addEventListener('click', openGate);
         closeGateBtn?.addEventListener('click', closeGate);
         document.getElementById('btn-begin')?.addEventListener('click', () => {
-            // Keep the legacy button handler safe if this step is reached by stale UI.
-            switchStep(4);
-            setStatus('SUPPORT THE CREATOR');
+            // Mandatory first step: never let Begin jump directly to Support.
+            document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+            minuteStep.style.display = 'block';
+            setStatus('WATCH THE VIDEO FOR 1 MINUTE');
+            startMinuteWatchGate();
         });
         document.getElementById('btn-already-verified-continue')?.addEventListener('click', () => {
             if (!verifiedSocial.has('youtube')) return;
@@ -2255,7 +2296,12 @@
         });
 
         document.getElementById('btn-support-done')?.addEventListener('click', async () => {
-            // Social/video verification is no longer required to claim a product.
+            // Defense in depth: never allow claim/support completion before the
+            // one-minute video gate has completed, even if a stale UI is visible.
+            if (!minuteGateComplete) {
+                switchStep(4);
+                return;
+            }
             switchStep(5);
             setStatus('CLAIMING YOUR PRODUCT…');
             const ok = await finishAndDeposit();
@@ -2425,6 +2471,192 @@
         runIntroAnimation();
         setTimeout(updateProductFromCatalog, 0);
         window.addEventListener('load', updateProductFromCatalog, { once: true });
+
+        // Dedicated one-minute video gate. Scoped to the new step only.
+        // Exactly five videos. Pick a fresh random video on every page load.
+        const minuteVideoUrls = [
+            'https://youtu.be/FNSDVSVeBys?si=N_a6xCXXIK-iEDgT',
+            'https://youtu.be/vZVKpKjjSuM?si=Ymc-F0d6kNZEJEhG',
+            'https://youtu.be/1zgoaHX3R2g?si=T_GTOxmj-MGgR6OV',
+            'https://youtu.be/w5MVnFrIVEE?si=GZvCII-vGXxDkkgr',
+            'https://youtu.be/8pdsm06WE6c?si=4hbrpYzOWCtqsRT_'
+        ];
+        let minutePlayer = null;
+        let minuteRemaining = 60;
+        let minuteTimer = null;
+        let minutePlaybackActive = false;
+        let minuteGateComplete = false;
+        let minuteApiLoading = null;
+        const minuteState = document.getElementById('minute-watch-state');
+        const minuteTimerText = document.getElementById('minute-timer-text');
+        const minuteTimerProgress = document.getElementById('minute-timer-progress');
+        const minuteNextButton = document.getElementById('btn-next-minute-watch');
+        const minuteStep = document.getElementById('step-watch-minute');
+
+        const updateMinuteWatchUI = () => {
+            const seconds = Math.max(0, minuteRemaining);
+            if (minuteTimerText) minuteTimerText.textContent = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+            minuteTimerProgress.style.width = `${((60 - seconds) / 60) * 100}%`;
+        };
+        const stopMinuteTimer = () => {
+            if (minuteTimer) window.clearInterval(minuteTimer);
+            minuteTimer = null;
+        };
+        const minutePageActive = () => document.visibilityState === 'visible' && document.hasFocus() && minuteStep.style.display !== 'none';
+        const startMinuteTimer = () => {
+            if (minuteTimer || minuteGateComplete || !minutePlaybackActive || !minutePageActive()) return;
+            minuteTimer = window.setInterval(() => {
+                if (!minutePageActive() || !minutePlaybackActive) return;
+                minuteRemaining = Math.max(0, minuteRemaining - 1);
+                updateMinuteWatchUI();
+                if (minuteRemaining <= 0) {
+                    stopMinuteTimer();
+                    minuteGateComplete = true;
+                    document.body.classList.add('minute-gate-complete');
+                    minuteState.textContent = 'COMPLETE';
+                    minuteState.style.color = '#66ffb3';
+                    minuteNextButton.disabled = false;
+                    setStatus('VIDEO WATCH COMPLETE');
+                }
+            }, 1000);
+        };
+        const loadMinuteYouTubeApi = () => {
+            if (window.YT && window.YT.Player) return Promise.resolve();
+            if (minuteApiLoading) return minuteApiLoading;
+            minuteApiLoading = new Promise((resolve, reject) => {
+                const oldReady = window.onYouTubeIframeAPIReady;
+                window.onYouTubeIframeAPIReady = () => {
+                    if (typeof oldReady === 'function') oldReady();
+                    resolve();
+                };
+                if (!document.querySelector('script[data-tt-youtube-api]')) {
+                    const script = document.createElement('script');
+                    script.src = 'https://www.youtube.com/iframe_api';
+                    script.async = true;
+                    script.dataset.ttYoutubeApi = '1';
+                    script.onerror = reject;
+                    document.head.appendChild(script);
+                }
+                window.setTimeout(() => window.YT?.Player && resolve(), 5000);
+            });
+            return minuteApiLoading;
+        };
+        async function startMinuteWatchGate() {
+            document.body.classList.toggle('minute-gate-complete', minuteGateComplete);
+            if (minutePlayer || minuteGateComplete) return;
+            minuteState.textContent = 'LOADING PLAYER';
+            minuteState.style.color = '';
+            try {
+                await loadMinuteYouTubeApi();
+                // Shuffle once per page load, then try the remaining videos if
+                // YouTube reports that the selected video cannot be embedded.
+                const shuffledVideos = [...minuteVideoUrls].sort(() => Math.random() - 0.5);
+                let attemptIndex = 0;
+                const createMinutePlayer = () => {
+                    const url = shuffledVideos[attemptIndex % shuffledVideos.length];
+                    const videoId = youtubeIdFromUrl(url);
+                    attemptIndex += 1;
+                    if (!videoId) {
+                        minuteState.textContent = 'INVALID VIDEO LINK';
+                        return;
+                    }
+                    minutePlaybackActive = false;
+                    stopMinuteTimer();
+                    minuteState.textContent = 'READY TO PLAY';
+                    minuteState.style.color = '';
+                    try { minutePlayer?.destroy?.(); } catch (_) {}
+                    minutePlayer = new YT.Player('minute-youtube-player', {
+                        videoId,
+                        playerVars: {
+                            autoplay: 1,
+                            controls: 0,
+                            disablekb: 1,
+                            rel: 0,
+                            fs: 0,
+                            cc_load_policy: 0,
+                            iv_load_policy: 3,
+                            playsinline: 1,
+                            enablejsapi: 1,
+                            origin: location.origin
+                        },
+                        events: {
+                            onReady: event => {
+                                minuteState.textContent = 'STARTING VIDEO';
+                                // Keep YouTube audio unmuted at full volume.
+                                // Safari may require a direct user gesture before audible playback can start.
+                                try {
+                                    event.target.unMute();
+                                    event.target.setVolume(100);
+                                    event.target.playVideo();
+                                } catch (_) {
+                                    minuteState.textContent = 'PRESS PLAY';
+                                }
+                            },
+                            onStateChange: event => {
+                                if (!window.YT?.PlayerState) return;
+                                if (event.data === YT.PlayerState.PLAYING) {
+                                    minutePlaybackActive = true;
+                                    minuteState.textContent = 'PLAYING';
+                                    minuteState.style.color = '';
+                                    startMinuteTimer();
+                                } else {
+                                    minutePlaybackActive = false;
+                                    stopMinuteTimer();
+                                    if (!minuteGateComplete) {
+                                        minuteState.textContent = event.data === YT.PlayerState.PAUSED ? 'PAUSED' : 'WAITING';
+                                    }
+                                }
+                            },
+                            onError: () => {
+                                minutePlaybackActive = false;
+                                stopMinuteTimer();
+                                if (attemptIndex < shuffledVideos.length) {
+                                    minuteState.textContent = 'TRYING ANOTHER VIDEO';
+                                    window.setTimeout(createMinutePlayer, 250);
+                                } else {
+                                    minuteState.textContent = 'VIDEO UNAVAILABLE — CHECK EMBED PERMISSIONS';
+                                }
+                            }
+                        }
+                    });
+                };
+                createMinutePlayer();
+            } catch (_) {
+                minuteState.textContent = 'VIDEO COULD NOT LOAD';
+            }
+        }
+        document.addEventListener('visibilitychange', () => {
+            if (!minuteStep || minuteStep.style.display === 'none' || minuteGateComplete) return;
+            if (!minutePageActive()) {
+                stopMinuteTimer();
+                try { minutePlayer?.pauseVideo?.(); } catch (_) {}
+            } else if (minutePlaybackActive) {
+                try { minutePlayer?.playVideo?.(); } catch (_) {}
+                startMinuteTimer();
+            }
+        });
+        window.addEventListener('blur', () => {
+            if (minuteStep?.style.display !== 'none' && !minuteGateComplete) {
+                stopMinuteTimer();
+                try { minutePlayer?.pauseVideo?.(); } catch (_) {}
+            }
+        });
+        window.addEventListener('focus', () => {
+            if (minuteStep?.style.display !== 'none' && !minuteGateComplete) {
+                try { minutePlayer?.playVideo?.(); } catch (_) {}
+                startMinuteTimer();
+            }
+        });
+        minuteNextButton?.addEventListener('click', () => {
+            if (!minuteGateComplete) return;
+            stopMinuteTimer();
+            minuteStep.style.display = 'none';
+            modal.classList.remove('minute-watch-mode');
+            // This unlock flow intentionally skips the legacy social steps.
+            // After the minute gate, show Support the creator, then Claim Product.
+            switchStep(4);
+            setStatus('SUPPORT THE CREATOR');
+        });
     </script>
 
 
@@ -2801,6 +3033,53 @@
         }
     </style>
 
+
+<style id="TT-MANDATORY-MINUTE-GATE-GUARD">
+/* Hard guard: Support the creator must remain invisible until the minute gate is complete. */
+#step-4 { display: none !important; }
+body.minute-gate-complete #step-4.active { display: block !important; }
+#step-watch-minute { display: none; }
+#step-watch-minute[style*="display: block"] { display: block !important; }
+</style>
+
+
+<style id="TT-MINUTE-PLAYER-DESKTOP-FIX">
+/* The minute gate's YouTube iframe inherited the legacy hidden/unclickable player styles. */
+#step-watch-minute #minute-youtube-player,
+#step-watch-minute #minute-youtube-player iframe {
+    display: block !important;
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    filter: none !important;
+    border: 0 !important;
+    z-index: 2 !important;
+}
+#step-watch-minute #minute-video-shell { position: relative !important; isolation: isolate; }
+@media (min-width: 769px) {
+    #gate-modal.minute-watch-mode {
+        width: min(74vw, 608px) !important;
+        max-width: 608px !important;
+        max-height: 92vh;
+        overflow-y: auto;
+        padding: 27px 30px !important;
+    }
+    #step-watch-minute .step-heading { font-size: clamp(36px, 3.7vw, 46px); }
+    #step-watch-minute .step-desc { margin-bottom: 26px; font-size: 14px; }
+    #step-watch-minute .player-wrapper { margin-bottom: 14px !important; }
+}
+</style>
+
 </body>
 
 </html>
+<style id="TT-MINUTE-WATCH-STEP">
+#step-watch-minute .youtube-shell { position:relative; width:100%; aspect-ratio:16/9; min-height:0; background:#000; overflow:hidden; }
+#step-watch-minute #minute-youtube-player, #step-watch-minute #minute-youtube-player iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+#step-watch-minute .btn-outline:disabled { opacity:.3; cursor:not-allowed; }
+@media(max-width:600px) { #step-watch-minute .step-heading { font-size:clamp(32px,9vw,46px); } #step-watch-minute .step-desc { margin-bottom:22px; font-size:14px; } #step-watch-minute .player-wrapper { margin-bottom:14px!important; } #step-watch-minute .player-header { padding:0 12px; } }
+</style>

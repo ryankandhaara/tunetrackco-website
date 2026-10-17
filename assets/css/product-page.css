@@ -462,6 +462,15 @@ img, svg { display: block; max-width: 100%; }
   margin-bottom: 2px;
 }
 
+.tunetrack-free-product-message {
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--pageText);
+  border-left: 2px solid var(--accent);
+  padding: 2px 0 2px 9px;
+  margin: 0 0 2px;
+}
+
 .tunetrack-payment-option {
   position: relative;
   display: grid;
