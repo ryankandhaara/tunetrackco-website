@@ -2621,32 +2621,7 @@
             white-space: nowrap;
         }
     </style>
-    <script src="assets/js/blog-list-data.js"></script>
-    <script>
-        (function () {
-            function esc(s) { return String(s ?? '').replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[c] }); }
-            var params = new URLSearchParams(window.location.search);
-            var slug = params.get('slug') || 'penulis-hidupku';
-            var article = window.getTunetrackBlog(slug);
-            if (!article) {
-                document.title = 'Tunetrack — Papers';
-                return;
-            }
-            document.title = article.pageTitle || 'Tunetrack — Papers';
-            var desc = document.querySelector('meta[name="description"]');
-            if (desc && article.metaDescription) desc.setAttribute('content', article.metaDescription);
-            var media = document.getElementById('singleHeroMedia');
-            var title = document.getElementById('singleTitle');
-            var bottom = document.getElementById('singleHeroBottom');
-            var aside = document.getElementById('singleAside');
-            var copy = document.getElementById('singleArticleCopy');
-            if (media) media.innerHTML = article.heroMediaHtml || '';
-            if (title) { title.innerHTML = esc(article.heroTitle || ''); if (article.heroTitleStyle) title.setAttribute('style', article.heroTitleStyle); }
-            if (bottom) bottom.innerHTML = article.heroBottomHtml || '';
-            if (aside) aside.innerHTML = article.asideHtml || '';
-            if (copy) copy.innerHTML = article.articleHtml || '';
-        })();
-    </script>
+
 
 
 
@@ -6996,57 +6971,53 @@ Please add this address to the Tunetrack newsletter mailing list.
             }
         }
     </style>
-    <script src="assets/js/blog-list-data.js"></script>
+    <script src="assets/js/blog-list-data.js?v=20261017-2"></script>
     <script>
         (function () {
             'use strict';
 
             function renderSingleBlog() {
-                var slug = new URLSearchParams(window.location.search).get('slug') || '';
-                var post = window.getTunetrackBlog ? window.getTunetrackBlog(slug) : null;
+                var slug = new URLSearchParams(window.location.search).get('slug') || 'penulis-hidupku';
+                var store = window.TUNETRACK_BLOGS;
+                // Prefer the canonical article map directly; retain compatibility with the site's helper.
+                var post = store && store.articles && store.articles[slug];
+                if (!post && typeof window.getTunetrackBlog === 'function') {
+                    try { post = window.getTunetrackBlog(slug); } catch (error) { console.error('[Tunetrack Papers] Blog lookup failed:', error); }
+                }
 
                 if (!post) {
-                    console.error('[Tunetrack Papers] Article not found:', slug);
+                    console.error('[Tunetrack Papers] Article not found:', slug, 'Available slugs:', Object.keys((store && store.articles) || {}));
+                    document.documentElement.setAttribute('data-blog-render-error', 'article-not-found');
                     return;
                 }
 
-                document.title = post.pageTitle || ('Tunetrack — ' + (post.heroTitle || ''));
-
+                document.title = post.pageTitle || ('Tunetrack — ' + (post.heroTitle || 'Papers'));
                 var meta = document.querySelector('meta[name="description"]');
                 if (meta && post.metaDescription) meta.setAttribute('content', post.metaDescription);
 
-                var hero = document.querySelector('.single-hero-media');
-                if (hero && post.heroMediaHtml != null) {
-                    hero.innerHTML = post.heroMediaHtml;
-                }
+                var hero = document.getElementById('singleHeroMedia') || document.querySelector('.single-hero-media');
+                if (hero) hero.innerHTML = post.heroMediaHtml || '';
 
-                var title = document.querySelector('.single-title');
+                var title = document.getElementById('singleTitle') || document.querySelector('.single-title');
                 if (title) {
-                    title.innerHTML = post.heroTitle || '';
+                    title.textContent = post.heroTitle || '';
                     if (post.heroTitleStyle) title.setAttribute('style', post.heroTitleStyle);
                 }
 
-                var heroBottom = document.querySelector('.single-hero-bottom');
-                if (heroBottom && post.heroBottomHtml != null) {
-                    heroBottom.innerHTML = post.heroBottomHtml;
-                }
+                var heroBottom = document.getElementById('singleHeroBottom') || document.querySelector('.single-hero-bottom');
+                if (heroBottom) heroBottom.innerHTML = post.heroBottomHtml || '';
 
-                var aside = document.querySelector('.article-aside');
-                if (aside && post.asideHtml != null) {
-                    aside.innerHTML = post.asideHtml;
-                }
+                var aside = document.getElementById('singleAside') || document.querySelector('.article-aside');
+                if (aside) aside.innerHTML = post.asideHtml || '';
 
-                var article = document.querySelector('.article-copy');
-                if (article && post.articleHtml != null) {
-                    article.innerHTML = post.articleHtml;
-                }
+                var article = document.getElementById('singleArticleCopy') || document.querySelector('.article-copy');
+                if (article) article.innerHTML = post.articleHtml || '';
 
                 document.documentElement.setAttribute('data-blog-slug', slug);
+                document.documentElement.removeAttribute('data-blog-render-error');
             }
 
-            // This script is at the end of <body>, so the full template DOM exists.
-            // Render synchronously BEFORE the template's existing DOMContentLoaded
-            // interactions initialize. This keeps the original UI/animation scripts.
+            // This is intentionally at the end of <body>: data and template nodes exist now.
             renderSingleBlog();
         })();
     </script>
