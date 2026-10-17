@@ -2035,8 +2035,10 @@
 
         const openGate = () => {
             gate.classList.add('active');
-            switchStep(0);
             setProcessLocked(false);
+            // Simplified unlock flow: open directly on Support Us.
+            switchStep(4);
+            setStatus('SUPPORT THE CREATOR');
             gsap.fromTo('.modal', { y: 30, scale: 0.96, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.55, ease: 'expo.out' });
         };
 
@@ -2149,7 +2151,11 @@
 
         document.getElementById('btn-open-gate')?.addEventListener('click', openGate);
         closeGateBtn?.addEventListener('click', closeGate);
-        document.getElementById('btn-begin')?.addEventListener('click', () => switchStep(1));
+        document.getElementById('btn-begin')?.addEventListener('click', () => {
+            // Keep the legacy button handler safe if this step is reached by stale UI.
+            switchStep(4);
+            setStatus('SUPPORT THE CREATOR');
+        });
         document.getElementById('btn-already-verified-continue')?.addEventListener('click', () => {
             if (!verifiedSocial.has('youtube')) return;
             if (verifiedSocial.has('instagram_tunetrack')) {
@@ -2249,7 +2255,7 @@
         });
 
         document.getElementById('btn-support-done')?.addEventListener('click', async () => {
-            if (!verifiedSocial.has('youtube') || !verifiedSocial.has('instagram_tunetrack')) return;
+            // Social/video verification is no longer required to claim a product.
             switchStep(5);
             setStatus('CLAIMING YOUR PRODUCT…');
             const ok = await finishAndDeposit();
@@ -2269,10 +2275,10 @@
             });
         });
 
-        // Verification UI is deliberately visual-only for this release, but the result
-        // is persisted to Firestore and therefore becomes a real account-level state.
+        // Claim ownership directly after the Support Us step. Firebase auth and
+        // the existing Firestore ownership/claim/notification writes remain intact.
         const claimProduct = async () => {
-            if (!isWatched || verifiedSocial.size < 2 || !firebase?.db || !currentUser) return false;
+            if (!firebase?.db || !currentUser) throw new Error('Firebase account is not ready.');
             const key = productKey();
             const ref = firebase.doc(firebase.db, 'users', currentUser.uid);
             const catalogDownloadLinks = PRODUCT?.downloadLinks && typeof PRODUCT.downloadLinks === 'object'
@@ -2308,10 +2314,6 @@
                     claimedAt: claim.claimedAt,
                     source: claim.source
                 }),
-                socialUnlocks: {
-                    youtube: verifiedSocial.has('youtube'),
-                    instagram_tunetrack: verifiedSocial.has('instagram_tunetrack')
-                },
                 updatedAt: firebase.serverTimestamp()
             }, { merge: true });
 
@@ -2342,11 +2344,14 @@
         };
 
         const finishAndDeposit = async () => {
-            if (!isWatched || verifiedSocial.size < 2) return false;
             const claimingStatus = document.getElementById('claiming-status');
             try {
+                if (!firebase?.db || !currentUser) {
+                    throw new Error('Firebase account is not ready. Please sign in again.');
+                }
                 if (claimingStatus) claimingStatus.textContent = 'SAVING YOUR ENTITLEMENT…';
-                await claimProduct();
+                const claimed = await claimProduct();
+                if (!claimed) throw new Error('The product claim could not be saved.');
                 if (claimingStatus) claimingStatus.textContent = 'CLAIM VERIFIED. TAKING YOU TO YOUR PRODUCTS…';
                 window.setTimeout(() => {
                     window.location.replace('dashboard.html#my-products');
@@ -2425,6 +2430,8 @@
 
     <style id="FREEBIE-UNLOCK-FLOW-OVERRIDE">
         /* Freebie unlock flow — scoped to this page/process only. */
+        /* Legacy video/social steps are bypassed; Support Us and Claim remain active. */
+        #step-0, #step-1, #step-2, #step-3, #step-social-complete { display: none !important; }
         .gate-overlay {
             z-index: 5000 !important;
         }

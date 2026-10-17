@@ -1,17 +1,28 @@
+// ### title = nama / judul produk
+// ### artist = nama artis / band / creator
+// ### price = harga produk
+// ### category = kategori produk
+// ### image = thumbnail / cover produk
+// ### link = halaman produk
+// ### drive-link = link download Google Drive
+// ### gumroadLink = link checkout / delivery Gumroad
+// ### youtube = link preview YouTube
+// ### exclusive = status produk exclusive
+// ### exclusivePage = halaman khusus exclusive
+
 const products = [
-  {
-    "title": "Dia Sanggup",
-    "artist": "Symphony Worship Family",
+    {
+    "title": "Hark (Israel & New Breed)",
+    "artist": "Israel & New Breed",
     "price": "IDR 120.000",
     "category": [
-      "worship"
+      "praise"
     ],
-    "image": "assets/thumbnail/dia sanggup.jpg",
+    "image": "assets/thumbnail/002_Yesus-Raja-JPCC.jpg",
     "link": "exclusive.html",
     "gumroadLink": "",
     "youtube": "",
-    "exclusive": false,
-    "exclusivePage": "exclusive.html"
+    "exclusive": true,
   },
   {
     "title": "Yesus Raja (JPCC)",
@@ -20,12 +31,11 @@ const products = [
     "category": [
       "worship"
     ],
-    "image": "assets/thumbnail/02_Yesus-Raja-JPCC.jpg",
+    "image": "assets/thumbnail/002_Yesus-Raja-JPCC.jpg",
     "link": "exclusive.html",
     "gumroadLink": "",
     "youtube": "",
     "exclusive": false,
-    "exclusivePage": "exclusive.html"
   },
   {
     "title": "HIS LIFE Christmas Medley",
@@ -39,7 +49,6 @@ const products = [
     "gumroadLink": "",
     "youtube": "",
     "exclusive": true,
-    "exclusivePage": "exclusive.html"
   },
   {
     "title": "Sambutlah Dia",
@@ -54,7 +63,6 @@ const products = [
     "gumroadLink": "",
     "youtube": "",
     "exclusive": true,
-    "exclusivePage": "exclusive.html"
   },
   {
     "title": "NOEL med. Gloria",
@@ -68,7 +76,6 @@ const products = [
     "gumroadLink": "",
     "youtube": "",
     "exclusive": true,
-    "exclusivePage": "exclusive.html"
   },
   {
     "title": "Allah Sanggup (GKDI Concert)",
@@ -82,7 +89,6 @@ const products = [
     "gumroadLink": "",
     "youtube": "",
     "exclusive": false,
-    "exclusivePage": "exclusive.html"
   },
   {
     "title": "Fajar Terangi Dunia",
@@ -97,7 +103,6 @@ const products = [
     "youtube": "8VMIEMFqCbk",
     "imageCredit": "Assets of Steve Tabalujan & Friends",
     "exclusive": false,
-    "exclusivePage": "exclusive.html"
   },
   {
     "title": "Yang Terutama",
@@ -109,8 +114,8 @@ const products = [
     ],
     "image": "assets/thumbnail/008_Yang-Terutama.jpg",
     "link": "pg-yangterutamasw2.html",
-    "drive-link": "https://voltdsecretvault.gumroad.com/l/gfawvf",
-    "gumroadLink": "",
+    "drive-link": "https://drive.google.com/file/d/12kmrwTuePHOh-13MzUhl7U0zzX_mZFpK/view?usp=sharing",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/gfawvf",
     "youtube": "",
     "imageCredit": "Assets of Symphony Worship",
     "exclusive": false
@@ -126,7 +131,7 @@ const products = [
     "image": "assets/thumbnail/planetshaker.jpg",
     "link": "https://lynk.id/gudangsequencer/kld9dpk4gp79",
     "drive-link": "",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/cimabz?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=AX_9JU4VEY8",
     "exclusive": false
   },
@@ -168,7 +173,7 @@ const products = [
     ],
     "image": "assets/thumbnail/this is living.jpg",
     "link": "https://lynk.id/gudangsequencer/zy845zp59d8g",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/hobrba?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=vWOt21Gbjkk",
     "exclusive": false
   },
@@ -196,7 +201,7 @@ const products = [
     "image": "assets/thumbnail/nothing is impossible.jpg",
     "link": "https://lynk.id/gudangsequencer/k2l48wg2317o",
     "drive-link": "https://drive.google.com/drive/folders/1ufnKO_gVuPSWrkwmFJQtUtFYiNCa1uRR?usp=sharing",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/hochpv?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=uRvnYO50Dg8",
     "exclusive": false
   },
@@ -321,7 +326,7 @@ const products = [
     "image": "assets/thumbnail/023_Tiap-Langkahku.jpg",
     "link": "https://lynk.id/gudangsequencer/210x2gjnokle",
     "drive-link": "https://drive.google.com/drive/folders/1DQMR3TLyBtzvIG8LDaQJ1dRueUYdWIft?usp=drive_link",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/nhtznz?wanted=true",
     "youtube": "",
     "exclusive": false
   },
@@ -334,7 +339,7 @@ const products = [
     ],
     "image": "assets/thumbnail/allah kita heran dan besar gospel project.jpg",
     "link": "https://lynk.id/gudangsequencer/3v9kv95403qo",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/tqavjz?wanted=true",
     "youtube": "",
     "exclusive": false
   },
@@ -348,7 +353,7 @@ const products = [
     "image": "assets/thumbnail/allah sumber kuatku gospel project.jpg",
     "link": "https://lynk.id/gudangsequencer/jn0p6yd769rm",
     "drive-link": "https://drive.google.com/drive/folders/1BMc-zdTSDE4MsSGHsKXq9I52x5ilHQEo?usp=drive_link",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/xjueub?wanted=true",
     "youtube": "",
     "exclusive": false
   },
@@ -361,7 +366,7 @@ const products = [
     ],
     "image": "assets/thumbnail/026_Friend-of-God-Arr.jpg",
     "link": "https://lynk.id/gudangsequencer/oykp3mvv9mwd",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/yestik?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=_4fPtZ1SMhI",
     "exclusive": false
   },
@@ -375,7 +380,7 @@ const products = [
     ],
     "image": "assets/thumbnail/planetshaker.jpg",
     "link": "https://lynk.id/gudangsequencer/oykp3mvv9mwd",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/ifapxm?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=p70yhv3bxz4",
     "exclusive": true
   },
@@ -389,7 +394,7 @@ const products = [
     ],
     "image": "assets/thumbnail/028_NOEL.jpg",
     "link": "https://lynk.id/gudangsequencer/mryvlqgjw772",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/epovj?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=16psPH-ZiJc",
     "exclusive": true
   },
@@ -403,7 +408,7 @@ const products = [
     ],
     "image": "assets/thumbnail/029_Joy-to-the-World-2017.jpg",
     "link": "https://lynk.id/gudangsequencer/wmpg0404o2jv",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/zpefgt?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=6Fhb8_Ccytk",
     "exclusive": true
   },
@@ -417,7 +422,7 @@ const products = [
     ],
     "image": "assets/thumbnail/030_O-Holy-Night.jpg",
     "link": "https://lynk.id/gudangsequencer/1rzjn7n8edx2",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/yldwv?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=ycdlT8vn1HA",
     "exclusive": true
   },
@@ -431,7 +436,7 @@ const products = [
     ],
     "image": "assets/thumbnail/031_Silent-Night.jpg",
     "link": "https://lynk.id/gudangsequencer/1rzjn7n8edx2",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/ccdkc?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=ycdlT8vn1HA",
     "exclusive": true
   },
@@ -445,7 +450,7 @@ const products = [
     ],
     "image": "assets/thumbnail/032_Angels-We-Have-Heard-On-High.jpg",
     "link": "https://lynk.id/gudangsequencer/n3r1k444dr3n",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/tlaqh?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=npmCb4yhJjw",
     "exclusive": true
   },
@@ -459,7 +464,7 @@ const products = [
     ],
     "image": "assets/thumbnail/planetshaker.jpg",
     "link": "https://lynk.id/gudangsequencer/okn2roo0ojg1",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/jtetrb?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=b831MMtXdaw",
     "exclusive": true
   },
@@ -473,7 +478,7 @@ const products = [
     ],
     "image": "assets/thumbnail/its christmas.jpg",
     "link": "https://lynk.id/gudangsequencer/vdngnrgkjkk1",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/lnvixn?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=_SDgCQh74-w",
     "exclusive": true
   },
@@ -486,7 +491,7 @@ const products = [
     ],
     "image": "assets/thumbnail/elevation worship 2.jpg",
     "link": "https://lynk.id/gudangsequencer/6z1lyz9j4k12",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/psmnd?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=U0n1__DcfAI",
     "exclusive": false
   },
@@ -499,7 +504,7 @@ const products = [
     ],
     "image": "assets/thumbnail/planetshaker.jpg",
     "link": "https://lynk.id/gudangsequencer/woqlqdkedrzp",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/egkvoq?wanted=true",
     "youtube": "",
     "exclusive": false
   },
@@ -512,7 +517,7 @@ const products = [
     ],
     "image": "assets/thumbnail/037_Praise-Opening.jpg",
     "link": "https://lynk.id/gudangsequencer/21lklwv7yg6l",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/stzap?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=asV-MhzSDYY",
     "exclusive": false
   },
@@ -525,7 +530,7 @@ const products = [
     ],
     "image": "assets/thumbnail/in jesus name asia.jpg",
     "link": "https://lynk.id/gudangsequencer/523vkzqj9m9y",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/qkhbu?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=1ll4EqvxvDk",
     "exclusive": false
   },
@@ -539,7 +544,7 @@ const products = [
     ],
     "image": "assets/thumbnail/039_This-is-the-Day-Reimagined.jpg",
     "link": "https://lynk.id/gudangsequencer/nyxyzxqkpop4",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/ectfi?wanted=true",
     "youtube": "",
     "exclusive": false
   },
@@ -552,7 +557,7 @@ const products = [
     ],
     "image": "assets/thumbnail/planetshaker.jpg",
     "link": "https://lynk.id/gudangsequencer/9kqon61317me",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/ihspm?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=P56B3_nYYuM",
     "exclusive": false
   },
@@ -565,7 +570,7 @@ const products = [
     ],
     "image": "assets/thumbnail/041_Real-Love-HXL-25.jpg",
     "link": "https://lynk.id/gudangsequencer/x9rv4o160kp0",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/kgmzj?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=6y73U5KwPKU",
     "exclusive": false
   },
@@ -578,7 +583,7 @@ const products = [
     ],
     "image": "assets/thumbnail/elevation worship 2.jpg",
     "link": "https://lynk.id/gudangsequencer/l9w339mkkzy3",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/agelt?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=U0n1__DcfAI",
     "exclusive": false
   },
@@ -591,7 +596,7 @@ const products = [
     ],
     "image": "assets/thumbnail/043_Fill-the-Room.jpg",
     "link": "https://lynk.id/gudangsequencer/wxv3d8lmk9y1",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/lgvai?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=v0XYCvjMxCM",
     "exclusive": false
   },
@@ -604,7 +609,7 @@ const products = [
     ],
     "image": "assets/thumbnail/044_Now-Aint-that-Something.jpg",
     "link": "https://lynk.id/gudangsequencer/j6p02601zn32",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/ckvlij?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=jwD0jRME674",
     "exclusive": false
   },
@@ -617,7 +622,7 @@ const products = [
     ],
     "image": "assets/thumbnail/045_Goodbye-Yesterday.jpg",
     "link": "https://lynk.id/gudangsequencer/qe85oo2xz88l",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/egtdka?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=1qjOJP2qyeE",
     "exclusive": false
   },
@@ -630,7 +635,7 @@ const products = [
     ],
     "image": "assets/thumbnail/this is living.jpg",
     "link": "https://lynk.id/gudangsequencer/qe85oo2xz88l",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/kgmzj?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=Uf01L4lsetM",
     "exclusive": false
   },
@@ -643,7 +648,7 @@ const products = [
     ],
     "image": "assets/thumbnail/047_O-Come-Medley-Carol-of-The-Bells.jpg",
     "link": "https://lynk.id/gudangsequencer/k67pqnk1xd1j",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/wnllz?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=f2M9YjNKSMc",
     "exclusive": true
   },
@@ -669,7 +674,7 @@ const products = [
     ],
     "image": "assets/thumbnail/049_I-Speak-Jesus.jpg",
     "link": "https://lynk.id/gudangsequencer/o4xzq3zdg36w",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/gymzmm?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=2G4QoUhy2Ac",
     "exclusive": false
   },
@@ -682,7 +687,7 @@ const products = [
     ],
     "image": "assets/thumbnail/lakewood.jpg",
     "link": "https://lynk.id/gudangsequencer/3417ervkxq64",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/msvfwm?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=XG7NnClqymE",
     "exclusive": false
   },
@@ -695,7 +700,7 @@ const products = [
     ],
     "image": "assets/thumbnail/051_You-Are-Good-in-LA.jpg",
     "link": "https://lynk.id/gudangsequencer/9248oz68oz1z",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/wohmcj?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=40FwQ03nkPg",
     "exclusive": false
   },
@@ -708,7 +713,7 @@ const products = [
     ],
     "image": "assets/thumbnail/052_You-Are-Good-Original.jpg",
     "link": "https://lynk.id/gudangsequencer/9248oz68oz1z",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/spitis?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=-hl-HCpqr3I",
     "exclusive": false
   },
@@ -721,7 +726,7 @@ const products = [
     ],
     "image": "assets/thumbnail/053_Impossible-Possible.jpg",
     "link": "https://lynk.id/gudangsequencer/q20wwz5p6kpv",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/hwius?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=rsnpOg0elQQ",
     "exclusive": false
   },
@@ -734,7 +739,7 @@ const products = [
     ],
     "image": "assets/thumbnail/echo elevation.jpg",
     "link": "https://lynk.id/gudangsequencer/r054qee22vrz",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/tuhipo?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=uCpk8AEwMV4",
     "exclusive": false
   },
@@ -760,7 +765,7 @@ const products = [
     ],
     "image": "assets/thumbnail/kamsahamnida.jpg",
     "link": "https://lynk.id/gudangsequencer/0nv6vwezvy75",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/bofxmx?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=4jiSNvl2rFs",
     "exclusive": false
   },
@@ -773,7 +778,7 @@ const products = [
     ],
     "image": "assets/thumbnail/057_This-is-our-Time.jpg",
     "link": "https://lynk.id/gudangsequencer/0v3m7n37r606",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/hnfjfu?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=MeP4C6XOwNo",
     "exclusive": false
   },
@@ -786,7 +791,7 @@ const products = [
     ],
     "image": "assets/thumbnail/058_Trust-in-God.jpg",
     "link": "https://lynk.id/gudangsequencer/32jn4zewe1n3",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/lpehuu?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=-vSvhs8vmtA",
     "exclusive": false
   },
@@ -799,7 +804,7 @@ const products = [
     ],
     "image": "assets/thumbnail/059_Terangmu.jpg",
     "link": "https://lynk.id/gudangsequencer/d3rgvnx61v3m",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/xfwecn?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=FBT6IhDIvvc",
     "exclusive": false
   },
@@ -812,7 +817,7 @@ const products = [
     ],
     "image": "assets/thumbnail/060_Selidiki-Aku.jpg",
     "link": "https://lynk.id/gudangsequencer/3o3z826jojwr",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/vnkijy?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=UY6Bl9rfYWs",
     "exclusive": false
   },
@@ -825,7 +830,7 @@ const products = [
     ],
     "image": "assets/thumbnail/061_Nyata-Sempurna.jpg",
     "link": "https://lynk.id/gudangsequencer/ovro6541or6g",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/kofmnt?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=hXEh9H2rqUk",
     "exclusive": false
   },
@@ -838,7 +843,7 @@ const products = [
     ],
     "image": "assets/thumbnail/hari terbaik.jpg",
     "link": "https://lynk.id/gudangsequencer/p5xjj25e22g1",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/bpedjc?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=cXbOneetRg4",
     "exclusive": false
   },
@@ -851,7 +856,7 @@ const products = [
     ],
     "image": "assets/thumbnail/bangkit dan puji dia.jpg",
     "link": "https://lynk.id/gudangsequencer/zkddzxk1xwk9",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/qpgbsu?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=cOL_k5rF0k8",
     "exclusive": false
   },
@@ -864,7 +869,7 @@ const products = [
     ],
     "image": "assets/thumbnail/ndc worship.jpg",
     "link": "https://lynk.id/gudangsequencer/rp2x7v3v652p",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/lxtey?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=sCT7BUfys3c",
     "exclusive": false
   },
@@ -877,7 +882,7 @@ const products = [
     ],
     "image": "assets/thumbnail/065_Raja-atas-Sgalanya.jpg",
     "link": "https://lynk.id/gudangsequencer/mwjr892o57lk",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/jruidq?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=Hu-abx9EvkE",
     "exclusive": false
   },
@@ -890,7 +895,7 @@ const products = [
     ],
     "image": "assets/thumbnail/066_Sejarah-Hidupku.jpg",
     "link": "https://lynk.id/gudangsequencer/v5wwqmno7n72",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/lpdwwy?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=5X1osyPwl1E",
     "exclusive": false
   },
@@ -905,7 +910,7 @@ const products = [
     "image": "assets/thumbnail/elevation worship 2.jpg",
     "link": "https://lynk.id/gudangsequencer/nk89qpwwd06n",
     "drive-link": "https://drive.google.com/drive/folders/1ocbPybyfMwEb0spqovbvImOwZTb1kK5C?usp=sharing",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/axfdo?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=b01nYd3Lv14",
     "exclusive": false
   },
@@ -918,7 +923,7 @@ const products = [
     ],
     "image": "assets/thumbnail/068_Bukti-Kasihmu-NDC.jpg",
     "link": "https://lynk.id/gudangsequencer/pq0l8or7m184",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/mmlmg?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=oIoyodPbsqc",
     "exclusive": false
   },
@@ -931,7 +936,7 @@ const products = [
     ],
     "image": "assets/thumbnail/bestindo music.jpg",
     "link": "https://lynk.id/gudangsequencer/nywv21v0k6x8",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/xonta?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=tEgeFrkJOv0",
     "exclusive": false
   },
@@ -944,7 +949,7 @@ const products = [
     ],
     "image": "assets/thumbnail/02_Yesus-Raja-JPCC.jpg",
     "link": "https://lynk.id/gudangsequencer/g4yl32on4kod",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/gvlvoh?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=7cGejz0xUIE",
     "exclusive": false
   },
@@ -957,7 +962,7 @@ const products = [
     ],
     "image": "assets/thumbnail/071_Satu-Persembahan.jpg",
     "link": "https://lynk.id/gudangsequencer/vrdn2qwpr515",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/lrtbtv?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=DdzOXzUvR-g",
     "exclusive": false
   },
@@ -971,7 +976,7 @@ const products = [
     "image": "assets/thumbnail/kuteringat.jpg",
     "drive-link": "https://drive.google.com/file/d/1OpIooyeKaD6b8HymdHDSpUZpZHxFfaup/view?usp=drive_link",
     "link": "https://lynk.id/gudangsequencer/6qk6ldgroy1g",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/ooqscr?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=dZ9uosoi-Pk",
     "exclusive": false
   },
@@ -985,7 +990,7 @@ const products = [
     ],
     "image": "assets/thumbnail/073_Dia-Raja-WN.jpg",
     "link": "https://lynk.id/gudangsequencer/pr4211y82ye2",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/ogaesq?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=O9fCbsDVkhU",
     "exclusive": false
   },
@@ -1000,7 +1005,7 @@ const products = [
     "image": "assets/thumbnail/074_Praise.jpg",
     "link": "https://lynk.id/gudangsequencer/1o35kj6v9jm3",
     "drive-link": "https://drive.google.com/file/d/16xGPUtypGzL5S-PLDglIqXmdw0_si04U/view?usp=drive_link",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/lmxzue?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=uCpk8AEwMV4",
     "exclusive": false
   },
@@ -1014,7 +1019,7 @@ const products = [
     ],
     "image": "assets/thumbnail/075_Aku-Diberkati-2025-Remix.jpg",
     "link": "https://lynk.id/gudangsequencer/lj309y3vnpvd",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/xhcrpc?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=Kl-cyDe4IZ8",
     "exclusive": false
   },
@@ -1028,7 +1033,7 @@ const products = [
     ],
     "image": "assets/thumbnail/076_Nyalakan-Apimu.jpg",
     "link": "https://lynk.id/gudangsequencer/vp0xlye26vjk",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/bwnfhh?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=jAeh7dFrJtQ",
     "exclusive": false
   },
@@ -1042,7 +1047,7 @@ const products = [
     ],
     "image": "assets/thumbnail/077_Kunaikkan-Syukurku-2025.jpg",
     "link": "https://lynk.id/gudangsequencer/lwelm3rlddgk",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/abdpsu?wanted=true",
     "youtube": "",
     "exclusive": false
   },
@@ -1056,7 +1061,7 @@ const products = [
     ],
     "image": "assets/thumbnail/078_Dari-Pulau-Gita-Sorga.jpg",
     "link": "https://lynk.id/gudangsequencer/vkvoex2704zq",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/uyhwe?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=mvLgfT6osAY",
     "exclusive": false
   },
@@ -1070,7 +1075,7 @@ const products = [
     ],
     "image": "assets/thumbnail/079_Ajaib-kau-Tuhan.jpg",
     "link": "https://lynk.id/gudangsequencer/0vdrz2krz9rn",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/hrromk?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=gWkFx5drzLU",
     "exclusive": false
   },
@@ -1084,7 +1089,7 @@ const products = [
     ],
     "image": "assets/thumbnail/080_Endless-Praise.jpg",
     "link": "https://lynk.id/gudangsequencer/p1d6okxxd054",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/trndq?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=KxjMZ87WWKY",
     "exclusive": false
   },
@@ -1098,7 +1103,7 @@ const products = [
     ],
     "image": "assets/thumbnail/081_Oleh-Darah-Anak-Domba.jpg",
     "link": "https://lynk.id/gudangsequencer/l20mv78q6y56",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/txjyvc?wanted=true",
     "youtube": "https://www.youtube.com/watch?v=k7gZphY-Cvg",
     "exclusive": false
   }
