@@ -19,8 +19,8 @@ const products = [
       "worship"
     ],
     "image": "assets/thumbnail/002_Yesus-Raja-JPCC.jpg",
-    "link": "exclusive.html",
-    "gumroadLink": "",
+    "link": "https://lynk.id/gudangsequencer/y5wznwv17eex",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/qftsi",
     "youtube": "",
     "exclusive": false,
   },
@@ -32,8 +32,8 @@ const products = [
       "praise"
     ],
     "image": "assets/thumbnail/003_HIS-LIFE-Christmas-Medley.jpg",
-    "link": "exclusive.html",
-    "gumroadLink": "",
+    "link": "https://lynk.id/gudangsequencer/595g05z3r8yp",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/dmkdlv",
     "youtube": "",
     "exclusive": true,
   },
@@ -52,19 +52,6 @@ const products = [
     "exclusive": true,
   },
   {
-    "title": "NOEL med. Gloria",
-    "artist": "Various Artist",
-    "price": "IDR 120.000",
-    "category": [
-      "praise"
-    ],
-    "image": "assets/thumbnail/005_NOEL-med-Gloria.jpg",
-    "link": "exclusive.html",
-    "gumroadLink": "",
-    "youtube": "",
-    "exclusive": true,
-  },
-  {
     "title": "Allah Sanggup (GKDI Concert)",
     "artist": "GKDI Official",
     "price": "IDR 120.000",
@@ -72,8 +59,8 @@ const products = [
       "praise"
     ],
     "image": "assets/thumbnail/006_Allah-Sanggup-GKDI-Concert.jpg",
-    "link": "exclusive.html",
-    "gumroadLink": "",
+    "link": "https://lynk.id/gudangsequencer/zo49l438l49r",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/vmhpzx",
     "youtube": "",
     "exclusive": false,
   },
@@ -85,8 +72,8 @@ const products = [
       "worship"
     ],
     "image": "assets/thumbnail/fajar terangi dunia.jpg",
-    "link": "",
-    "gumroadLink": "",
+    "link": "https://lynk.id/gudangsequencer/4vr9gx57m2dx",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/etzvy",
     "youtube": "8VMIEMFqCbk",
     "imageCredit": "Assets of Steve Tabalujan & Friends",
     "exclusive": false,
@@ -129,7 +116,7 @@ const products = [
     ],
     "image": "assets/thumbnail/010_Puji-dia-Yesus-Sukacitaku.jpg",
     "link": "https://lynk.id/gudangsequencer/4vrx9x4v1lv9",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/qhfhpz",
     "youtube": "",
     "exclusive": false
   },
@@ -170,7 +157,7 @@ const products = [
     ],
     "image": "assets/thumbnail/013_Yesus-Kumenyembahmu.jpg",
     "link": "https://lynk.id/gudangsequencer/43dpxgq5g8ox",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/ivjvcv",
     "youtube": "https://www.youtube.com/watch?v=B21Vo4dePno",
     "exclusive": false
   },
@@ -191,14 +178,13 @@ const products = [
   {
     "title": "Lebih dari Pemenang 2026",
     "artist": "Symphony Worship",
-    "price": "IDR 120.000",
+    "price": "Free",
     "category": [
       "praise",
       "rearrangement"
     ],
     "image": "assets/thumbnail/015_Lebih-dari-Pemenang-2026.jpg",
-    "link": "https://lynk.id/gudangsequencer/8dv8w2kyl3kd",
-    "gumroadLink": "",
+    "freeLink": "https://ttco.vercel.app/login-page.html",
     "youtube": "https://www.youtube.com/watch?v=9rxBhGfH_ss",
     "imageCredit": "Assets of Symphony Worship",
     "exclusive": false
@@ -212,7 +198,7 @@ const products = [
     ],
     "image": "assets/thumbnail/016_Allah-Sanggup.jpg",
     "link": "https://lynk.id/gudangsequencer/w08zo73m7y7z",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/vyrzrz",
     "youtube": "https://www.youtube.com/watch?v=anrvF7cCHrI",
     "exclusive": false
   },
@@ -225,7 +211,7 @@ const products = [
     ],
     "image": "assets/thumbnail/017_Sperti-Bapa-Sayang-Anaknya.jpg",
     "link": "https://lynk.id/gudangsequencer/olm3qd20r82y",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/rmiiu",
     "youtube": "https://www.youtube.com/watch?v=uEVEO4Nu5iU",
     "exclusive": false
   },
@@ -239,7 +225,7 @@ const products = [
     ],
     "image": "assets/thumbnail/018_Mari-Menari-2-0.jpg",
     "link": "https://lynk.id/gudangsequencer/gw6onoo5meng",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/vxwbwa",
     "youtube": "https://www.youtube.com/watch?v=-hl-HCpqr3I",
     "exclusive": false
   },
@@ -252,7 +238,7 @@ const products = [
     ],
     "image": "assets/thumbnail/019_Api-Pantekosta-Medley.jpg",
     "link": "https://lynk.id/gudangsequencer/m07l2dmr83n6",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/lukaf",
     "youtube": "https://www.youtube.com/watch?v=NzUfqjbt-m0",
     "exclusive": false
   },
@@ -265,7 +251,7 @@ const products = [
     ],
     "image": "assets/thumbnail/020_Kecaplah-dan-Lihatlah.jpg",
     "link": "https://lynk.id/gudangsequencer/e5ke29g86jxd",
-    "gumroadLink": "",
+    "gumroadLink": "https://voltdsecretvault.gumroad.com/l/qfktor",
     "youtube": "https://www.youtube.com/watch?v=t3QKjMOMAas",
     "exclusive": false
   },
