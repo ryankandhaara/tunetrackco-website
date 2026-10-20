@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Tunetrack — Thank you for your support friends</title>
+  <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+  <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root {
+      --tilt-x: 0deg;
+      --tilt-y: 0deg;
+      --glare-x: 50%;
+      --glare-y: 30%;
+      --accent-glow: rgba(255, 255, 255, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Host Grotesk', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      background: #000000;
+      color: #ffffff;
+      touch-action: none;
+    }
+
+    /* Background Canvases */
+    #fluid-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    #fx-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 15;
+      pointer-events: none;
+    }
+
+    /* Subtle Awwwards Film Grain Overlay */
+    .noise-overlay {
+      position: fixed;
+      inset: -50%;
+      width: 200%;
+      height: 200%;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.045;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      /* Keep the grain texture static to avoid continuous compositing work. */
+    }
+
+    @keyframes grainShift {
+      0%, 100% { transform: translate(0, 0); }
+      10% { transform: translate(-2%, -3%); }
+      20% { transform: translate(3%, 2%); }
+      30% { transform: translate(-3%, 4%); }
+      40% { transform: translate(2%, -2%); }
+      50% { transform: translate(-1%, 3%); }
+      60% { transform: translate(4%, -1%); }
+      70% { transform: translate(-2%, -4%); }
+      80% { transform: translate(1%, 3%); }
+      90% { transform: translate(-3%, 1%); }
+    }
+
+    /* Ambient Soft Vignette & Top Highlight like reference image */
+    .ambient-lighting {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      background:
+        radial-gradient(120% 70% at 50% 0%, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 65%),
+        radial-gradient(90% 90% at 50% 50%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.14) 100%);
+    }
+
+    /* Editorial Headline Styling (Matching IKEA Reference Screenshot) */
+    .editorial-headline {
+      font-family: 'Host Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.75rem, 3.65vw, 3.65rem);
+      line-height: 1.12;
+      letter-spacing: -0.035em;
+      perspective: 1000px;
+      overflow-wrap: break-word;
+    }
+
+    /* Larger, more impactful headline on mobile screens */
+    @media (max-width: 640px) {
+      .editorial-headline {
+        font-size: clamp(2.35rem, 7.8vw, 3.1rem);
+        line-height: 1.08;
+        letter-spacing: -0.04em;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .editorial-headline {
+        font-size: clamp(2.45rem, 8.6vw, 3.2rem);
+      }
+    }
+
+    @media (max-width: 360px) {
+      .editorial-headline {
+        font-size: 2.55rem;
+      }
+    }
+
+    /* Word-by-word 3D Kinetic Animation */
+    .word-wrap {
+      display: inline-block;
+      overflow: visible;
+      margin-right: 0.26em;
+      perspective: 800px;
+    }
+
+    .word-inner {
+      display: inline-block;
+      will-change: transform, opacity, filter;
+      transform-origin: 50% 100%;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  color 0.3s ease,
+                  text-shadow 0.3s ease;
+    }
+
+    .word-inner:hover {
+      transform: translateY(-4px) scale(1.03) rotate(-1deg);
+      text-shadow: 0 12px 28px rgba(255, 255, 255, 0.38);
+    }
+
+    @keyframes wordIn {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, 48px, -60px) rotateX(-68deg) scale(0.92);
+        filter: blur(10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) rotateX(0deg) scale(1);
+        filter: blur(0px);
+      }
+    }
+
+    @keyframes wordOut {
+      0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) rotateX(0deg) scale(1);
+        filter: blur(0px);
+      }
+      100% {
+        opacity: 0;
+        transform: translate3d(0, -38px, 40px) rotateX(55deg) scale(0.94);
+        filter: blur(8px);
+      }
+    }
+
+    .animate-word-in {
+      animation: wordIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .animate-word-out {
+      animation: wordOut 0.38s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+    }
+
+    /* Inline "DOWNLOAD MORE FREEBIES" Link — Matching Reference Secondary Text Tone + Required Underline */
+    .freebies-cta-link {
+      position: relative;
+      display: inline;
+      color: rgba(255, 255, 255, 0.68);
+      text-decoration: underline;
+      text-decoration-thickness: 2.5px;
+      text-underline-offset: 7px;
+      text-decoration-color: rgba(255, 255, 255, 0.58);
+      transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  text-decoration-color 0.35s ease,
+                  text-shadow 0.35s ease,
+                  letter-spacing 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .freebies-cta-link:hover {
+      color: #ffffff;
+      text-decoration-color: #ffffff;
+      text-shadow: 0 0 32px rgba(255, 255, 255, 0.65);
+    }
+
+    .freebies-cta-arrow {
+      display: inline-block;
+      margin-left: 0.18em;
+      font-weight: 600;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .freebies-cta-link:hover .freebies-cta-arrow {
+      transform: translate(5px, -4px) scale(1.08);
+    }
+
+    /* 3D Hero Emoji Stage (Positioned & Tilted Exactly Like the Striped Pillow in Reference) */
+    .emoji-stage-perspective {
+      perspective: 1400px;
+      transform-style: preserve-3d;
+    }
+
+    .emoji-3d-wrapper {
+      position: relative;
+      width: clamp(240px, 31vw, 410px);
+      height: clamp(240px, 31vw, 410px);
+      transform-style: preserve-3d;
+      transform: rotateZ(-11deg) rotateX(var(--tilt-y)) rotateY(var(--tilt-x));
+      transition: transform 0.12s ease-out;
+      will-change: transform;
+    }
+
+    .emoji-float-idle {
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      animation: pillowFloat 5.4s ease-in-out infinite;
+    }
+
+    @keyframes pillowFloat {
+      0%, 100% {
+        transform: translate3d(0px, 0px, 0px) rotateZ(0deg);
+      }
+      50% {
+        transform: translate3d(-6px, -18px, 28px) rotateZ(2.5deg);
+      }
+    }
+
+    /* Emoji Click Morph Spring Animation */
+    @keyframes emojiMorphPop {
+      0% {
+        transform: scale(1) rotateY(0deg) rotateZ(0deg);
+        filter: brightness(1) drop-shadow(0 32px 45px rgba(0, 0, 0, 0.28));
+      }
+      35% {
+        transform: scale(0.72) rotateY(160deg) rotateZ(-18deg);
+        filter: brightness(1.45) blur(2px) drop-shadow(0 12px 20px rgba(0, 0, 0, 0.15));
+      }
+      70% {
+        transform: scale(1.14) rotateY(375deg) rotateZ(6deg);
+        filter: brightness(1.15) drop-shadow(0 45px 65px rgba(0, 0, 0, 0.36));
+      }
+      100% {
+        transform: scale(1) rotateY(360deg) rotateZ(0deg);
+        filter: brightness(1) drop-shadow(0 32px 45px rgba(0, 0, 0, 0.28));
+      }
+    }
+
+    .emoji-morphing {
+      animation: emojiMorphPop 0.78s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+    }
+
+    .emoji-svg-container {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 32px 44px rgba(25, 10, 30, 0.26))
+              drop-shadow(0 8px 18px rgba(25, 10, 30, 0.15));
+      transform-style: preserve-3d;
+    }
+
+    /* Dynamic Specular Glare Overlay on 3D Emoji */
+    .emoji-glare {
+      position: absolute;
+      inset: 6%;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(
+        circle at var(--glare-x) var(--glare-y),
+        rgba(255, 255, 255, 0.42) 0%,
+        rgba(255, 255, 255, 0.08) 32%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      mix-blend-mode: overlay;
+      z-index: 10;
+    }
+
+    /* Internal Live SVG Animations for the 5 3D Emojis */
+    @keyframes pulseBeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.055); }
+    }
+    @keyframes noteFloat1 {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.95; }
+      50% { transform: translate(-10px, -16px) rotate(-12deg); opacity: 1; }
+    }
+    @keyframes noteFloat2 {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(12px, -14px) rotate(14deg); }
+    }
+    @keyframes visorSweep {
+      0%, 100% { transform: translateX(-25px); opacity: 0.55; }
+      50% { transform: translateX(25px); opacity: 0.95; }
+    }
+    @keyframes flameFlickerOuter {
+      0%, 100% { transform: scaleY(1) scaleX(1) skewX(0deg); }
+      33% { transform: scaleY(1.05) scaleX(0.97) skewX(-2deg); }
+      66% { transform: scaleY(0.97) scaleX(1.03) skewX(2.5deg); }
+    }
+    @keyframes flameFlickerCore {
+      0%, 100% { transform: scale(1) translateY(0); }
+      50% { transform: scale(1.08, 1.12) translateY(-5px); }
+    }
+    @keyframes orbitStar {
+      0% { transform: rotate(0deg) translateX(8px) rotate(0deg); }
+      50% { transform: rotate(180deg) translateX(8px) rotate(-180deg) scale(1.12); }
+      100% { transform: rotate(360deg) translateX(8px) rotate(-360deg); }
+    }
+    @keyframes thrusterPulse {
+      0%, 100% { transform: scaleY(1) scaleX(1); opacity: 0.95; }
+      50% { transform: scaleY(1.22) scaleX(0.88); opacity: 1; }
+    }
+    @keyframes sparkleTwinkle {
+      0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.95; }
+      50% { transform: scale(1.24) rotate(18deg); opacity: 1; }
+    }
+    @keyframes eyeBlink {
+      0%, 92%, 100% { transform: scaleY(1); }
+      96% { transform: scaleY(0.12); }
+    }
+
+    .anim-beat { transform-origin: center; animation: pulseBeat 1.8s ease-in-out infinite; }
+    .anim-note-1 { transform-origin: center; animation: noteFloat1 3.2s ease-in-out infinite; }
+    .anim-note-2 { transform-origin: center; animation: noteFloat2 2.7s ease-in-out infinite 0.5s; }
+    .anim-visor { transform-origin: center; animation: visorSweep 2.8s ease-in-out infinite; }
+    .anim-flame-outer { transform-origin: 50% 85%; animation: flameFlickerOuter 2.1s ease-in-out infinite; }
+    .anim-flame-core { transform-origin: 50% 85%; animation: flameFlickerCore 1.4s ease-in-out infinite; }
+    .anim-orbit { transform-origin: center; animation: orbitStar 4.5s linear infinite; }
+    .anim-thruster { transform-origin: 50% 20%; animation: thrusterPulse 0.45s ease-in-out infinite; }
+    .anim-sparkle { transform-origin: center; animation: sparkleTwinkle 2.2s ease-in-out infinite; }
+    .anim-blink { transform-origin: center; animation: eyeBlink 4.2s ease-in-out infinite; }
+
+    /* Right-side Vertical Pagination Indicator (Matching Reference Screenshot) */
+    .right-rail-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.45);
+      transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .right-rail-dot.active {
+      height: 28px;
+      background: #ffffff;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+    }
+
+    /* Glassmorphic UI Controls */
+    .glass-pill {
+      background: rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .glass-pill:hover {
+      background: rgba(255, 255, 255, 0.28);
+      border-color: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Full-screen hero video background */
+    html, body { background: #000000 !important; }
+    .video-background {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.55);
+    z-index: 0;
+    pointer-events: none;
+    }
+    .video-background-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: rgba(0, 0, 0, 0.22);
+    }
+    #fluid-canvas, .noise-overlay, .ambient-lighting { display: none !important; }
+  </style>
+</head>
+<body class="relative select-none">
+
+  <!-- Full-screen video background -->
+  <video class="video-background" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+    <source src="/assets/videos/video-hero-index.mp4" type="video/mp4">
+  </video>
+  <div class="video-background-overlay"></div>
+
+  <!-- 1. REAL-TIME FLUID MESH GRADIENT CANVAS (Mouse & Touch Reactive) -->
+  <canvas id="fluid-canvas"></canvas>
+
+  <!-- 2. FILM GRAIN & AMBIENT VIGNETTE -->
+  <div class="noise-overlay"></div>
+  <div class="ambient-lighting"></div>
+
+  <!-- 3. INTERACTIVE PARTICLE BURST & TRAIL CANVAS -->
+  <canvas id="fx-canvas"></canvas>
+
+  <!-- 5. MAIN LAYOUT (Matches Reference Screenshot Proportions & Positions) -->
+  <main class="relative z-20 w-full h-full flex flex-col justify-between px-6 sm:px-12 md:px-16 lg:px-24 py-7 sm:py-10">
+
+    <!-- CENTER STAGE: Left Editorial Statement + Right 3D Animated Vector Emoji + Far-Right Rail -->
+    <section class="relative w-full flex-1 flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-4 my-auto py-2">
+
+      <!-- LEFT COLUMN: 3 Rotating Inter Headlines + Underlined Freebies Link -->
+      <div class="w-full lg:w-[62%] xl:w-[60%] z-20 text-left pr-0 lg:pr-6">
+        <!-- Small Interactive Status Pill -->
+        <div class="inline-flex items-center gap-2 mb-3 sm:mb-5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-[10px] sm:text-xs font-medium tracking-widest uppercase text-white/90">
+          <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+          <span id="slide-counter-badge">MESSAGE 01 / 03 — MOVE CURSOR OR TOUCH</span>
+        </div>
+
+        <!-- Dynamic Headline Container -->
+        <h1 id="headline-container" class="editorial-headline select-none">
+          <!-- Populated dynamically with staggered 3D kinetic words + underlined link -->
+        </h1>
+      </div>
+
+      <!-- RIGHT COLUMN: 3D Live-Animated Vector Emoji (Size & Tilt Matching Reference Pillow) -->
+      <div class="relative w-full lg:w-[38%] flex items-center justify-center lg:justify-end lg:pr-10 z-20">
+        <div class="emoji-stage-perspective relative flex flex-col items-center">
+
+          <!-- Interactive 3D Wrapper -->
+          <div id="emoji-3d-trigger"
+               role="button"
+               tabindex="0"
+               aria-label="Click to morph 3D Emoji"
+               data-cursor="emoji"
+               data-cursor-text="CLICK 3D"
+               class="emoji-3d-wrapper group">
+            <div class="emoji-float-idle relative">
+              <div class="emoji-glare"></div>
+              <!-- 3D SVG Vector Emoji Injected Here -->
+              <div id="emoji-svg-mount" class="emoji-svg-container"></div>
+            </div>
+          </div>
+
+          <!-- Subtle Floating Hint Pill Below 3D Emoji -->
+          <div class="mt-2 sm:mt-4 inline-flex items-center gap-2 px-3.5 py-1 rounded-full glass-pill text-[10px] sm:text-[11px] font-medium tracking-wider uppercase text-white/90 pointer-events-none">
+            <span>CLICK 3D EMOJI TO CHANGE</span>
+            <span id="emoji-index-badge" class="font-bold text-white">1/5</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAR-RIGHT VERTICAL PAGINATION RAIL (Exactly like reference screenshot) -->
+      <aside class="hidden sm:flex flex-col items-center justify-center gap-2.5 absolute right-0 top-1/2 -translate-y-1/2 z-30">
+        <!-- 3 Text Slide Bars/Dots -->
+        <button type="button" data-slide="0" aria-label="Message 1" class="right-rail-btn p-1.5 group">
+          <div class="right-rail-dot active" id="rail-dot-0"></div>
+        </button>
+        <button type="button" data-slide="1" aria-label="Message 2" class="right-rail-btn p-1.5 group">
+          <div class="right-rail-dot" id="rail-dot-1"></div>
+        </button>
+        <button type="button" data-slide="2" aria-label="Message 3" class="right-rail-btn p-1.5 group">
+          <div class="right-rail-dot" id="rail-dot-2"></div>
+        </button>
+
+        <div class="w-1 h-3"></div>
+
+        <!-- 5 Mini Emoji Dots -->
+        <div class="flex flex-col items-center gap-1.5 opacity-75">
+          <span class="emoji-rail-mini w-1.5 h-1.5 rounded-full bg-white transition-all duration-300" data-emoji-dot="0"></span>
+          <span class="emoji-rail-mini w-1 h-1 rounded-full bg-white/40 transition-all duration-300" data-emoji-dot="1"></span>
+          <span class="emoji-rail-mini w-1 h-1 rounded-full bg-white/40 transition-all duration-300" data-emoji-dot="2"></span>
+          <span class="emoji-rail-mini w-1 h-1 rounded-full bg-white/40 transition-all duration-300" data-emoji-dot="3"></span>
+          <span class="emoji-rail-mini w-1 h-1 rounded-full bg-white/40 transition-all duration-300" data-emoji-dot="4"></span>
+        </div>
+      </aside>
+    </section>
+
+    <!-- BOTTOM CENTER TRIGGER (Matches "Desliza" + Circular Down Arrow Button in Reference) -->
+    <footer class="w-full flex flex-col items-center justify-center gap-2 z-20">
+      <span id="bottom-action-label" class="text-[11px] sm:text-xs font-semibold tracking-wide text-white/90">
+        Switch text (1/3)
+      </span>
+      <button id="next-text-btn"
+              type="button"
+              data-cursor="link"
+              data-cursor-text="NEXT"
+              aria-label="Switch to next thank you message"
+              class="magnetic-el group w-10 h-10 sm:w-11 sm:h-11 rounded-full glass-pill flex items-center justify-center text-white shadow-lg hover:scale-110 active:scale-95 transition-all duration-300">
+        <svg class="w-4 h-4 sm:w-5 sm:h-5 transform group-hover:translate-y-0.5 transition-transform duration-300"
+             fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+      </button>
+    </footer>
+
+  </main>
+
+  <!-- INFO / AUDIO MODAL TOAST (Non-intrusive Awwwards HUD notification) -->
+  <div id="hud-toast"
+       class="fixed top-20 right-6 sm:right-12 md:right-16 z-40 max-w-xs px-4 py-3 rounded-2xl glass-pill text-xs text-white/95 shadow-2xl opacity-0 pointer-events-none translate-y-[-10px] transition-all duration-500">
+    <div class="font-bold tracking-wider uppercase mb-1 flex items-center justify-between">
+      <span>Interactive Synth & Fluid HUD</span>
+      <span id="hud-audio-state" class="px-1.5 py-0.5 rounded bg-white/20 text-[10px]">ON</span>
+    </div>
+    <p class="text-white/80 leading-relaxed">
+      Move cursor or drag touch to bend the fluid gradient. Click the 3D Emoji (5 models) or bottom arrow (3 messages) for WebAudio harmonic chords.
+    </p>
+  </div>
+
+  <script>
+    /********************************************************************
+     * 1. DATA: 3 TEXT VARIATIONS + 5 LIVE-ANIMATED 3D VECTOR EMOJIS
+     ********************************************************************/
+    const FREEBIES_URL = "https://ttco.vercel.app/freebies-update.html";
+
+    const TEXT_SLIDES = [
+      {
+        id: 1,
+        mainText: "You’re helping us create a better place for music producers everywhere.",
+        ctaText: "Download more freebies"
+      },
+      {
+        id: 2,
+        mainText: "Thank you for being part of something we’re building with passion.",
+        ctaText: "Download more freebies"
+      },
+      {
+        id: 3,
+        mainText: "Your support makes it possible for us to keep creating, building, and growing.",
+        ctaText: "Download more freebies"
+      }
+    ];
+
+    /*
+     * 5 Ultra-Detailed 3D Vector Emojis (All with multi-stop 3D radial lighting,
+     * inner specular highlights, ambient occlusion shadows, and live internal animations)
+     */
+    const EMOJI_3D_MODELS = [
+      {
+        name: "3D PRODUCER PULSE",
+        // Palette inspired directly by the reference image's warm pink/coral/rose/peach gradient
+        palette: [
+          { r: 229, g: 194, b: 205 }, // Soft top blush
+          { r: 218, g: 138, b: 156 }, // Warm rose mid
+          { r: 242, g: 120, b: 92 },  // Vibrant coral-orange accent
+          { r: 192, g: 112, b: 148 }  // Deep mauve-pink base
+        ],
+        chord: [261.63, 329.63, 392.00, 493.88], // Cmaj7 warm synth
+        svg: `
+          <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+            <defs>
+              <!-- 3D Sphere Base Gradient -->
+              <radialGradient id="prodSphere" cx="35%" cy="28%" r="70%">
+                <stop offset="0%" stop-color="#FFF4B8"/>
+                <stop offset="28%" stop-color="#FFD43B"/>
+                <stop offset="68%" stop-color="#FF8800"/>
+                <stop offset="100%" stop-color="#B83200"/>
+              </radialGradient>
+              <!-- Rim Bounce Light -->
+              <radialGradient id="prodRim" cx="75%" cy="82%" r="55%">
+                <stop offset="0%" stop-color="#FF6392" stop-opacity="0.7"/>
+                <stop offset="100%" stop-color="#FF6392" stop-opacity="0"/>
+              </radialGradient>
+              <!-- 3D Headphone Arch -->
+              <linearGradient id="hpBand" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#4A5568"/>
+                <stop offset="45%" stop-color="#1A202C"/>
+                <stop offset="100%" stop-color="#090D16"/>
+              </linearGradient>
+              <!-- 3D Earcup Coral/Orange Striped Pillows (Nod to Reference Pillow!) -->
+              <linearGradient id="earcupGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FF7A45"/>
+                <stop offset="50%" stop-color="#F759AB"/>
+                <stop offset="100%" stop-color="#9E1068"/>
+              </linearGradient>
+              <!-- Sunglass Visor Chrome -->
+              <linearGradient id="visorChrome" x1="0%" y1="0%" x2="100%" y2="80%">
+                <stop offset="0%" stop-color="#1E1B4B"/>
+                <stop offset="40%" stop-color="#312E81"/>
+                <stop offset="75%" stop-color="#EC4899"/>
+                <stop offset="100%" stop-color="#F59E0B"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Floating 3D Musical Notes -->
+            <g class="anim-note-1">
+              <path d="M72 95 V52 L106 44 V87" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="64" cy="96" r="11" fill="#FFFFFF"/>
+              <circle cx="98" cy="88" r="11" fill="#FFE066"/>
+            </g>
+            <g class="anim-note-2">
+              <path d="M332 88 V54 L356 49" stroke="#FFE066" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="323" cy="90" r="11" fill="#FFE066"/>
+            </g>
+
+            <!-- Headphone Headband 3D Arch -->
+            <path d="M78 205 C78 92, 322 92, 322 205" stroke="url(#hpBand)" stroke-width="26" stroke-linecap="round"/>
+            <path d="M90 190 C90 105, 310 105, 310 190" stroke="#A0AEC0" stroke-width="4" stroke-linecap="round" opacity="0.45"/>
+
+            <!-- Main 3D Glossy Face Sphere -->
+            <circle cx="200" cy="215" r="118" fill="url(#prodSphere)"/>
+            <circle cx="200" cy="215" r="118" fill="url(#prodRim)"/>
+            <!-- Top Specular Gloss Highlight -->
+            <ellipse cx="162" cy="142" rx="52" ry="26" transform="rotate(-18 162 142)" fill="white" opacity="0.55"/>
+
+            <!-- Pulsing Studio Earcups -->
+            <g class="anim-beat">
+              <!-- Left Earcup -->
+              <rect x="44" y="162" width="48" height="106" rx="24" fill="url(#earcupGrad)" stroke="#FFFFFF" stroke-width="3" stroke-opacity="0.35"/>
+              <rect x="54" y="176" width="12" height="78" rx="6" fill="#FFFFFF" opacity="0.35"/>
+              <!-- Right Earcup -->
+              <rect x="308" y="162" width="48" height="106" rx="24" fill="url(#earcupGrad)" stroke="#FFFFFF" stroke-width="3" stroke-opacity="0.35"/>
+              <rect x="320" y="176" width="12" height="78" rx="6" fill="#FFFFFF" opacity="0.35"/>
+            </g>
+
+            <!-- 3D Futuristic Producer Visor Sunglasses -->
+            <g>
+              <path d="M104 190 Q200 172 296 190 L284 238 Q242 248 200 226 Q158 248 116 238 Z" fill="url(#visorChrome)" stroke="#FFFFFF" stroke-width="5"/>
+              <!-- Animated Light Glare Across Visor -->
+              <g class="anim-visor">
+                <polygon points="150,186 175,184 152,236 128,234" fill="#FFFFFF" opacity="0.65"/>
+                <polygon points="184,184 194,184 172,235 162,235" fill="#FFFFFF" opacity="0.35"/>
+              </g>
+            </g>
+
+            <!-- Confident 3D Half-Smile with Glossy Lip Highlight -->
+            <path d="M158 268 Q200 298 244 266" stroke="#6B1D00" stroke-width="12" stroke-linecap="round"/>
+            <path d="M166 274 Q200 296 236 272" stroke="#FF9E7D" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+          </svg>
+        `
+      },
+      {
+        name: "3D VOLUMETRIC LIT FLAME",
+        palette: [
+          { r: 247, g: 168, b: 138 },
+          { r: 235, g: 98, b: 112 },
+          { r: 250, g: 135, b: 65 },
+          { r: 176, g: 58, b: 98 }
+        ],
+        chord: [293.66, 369.99, 440.00, 554.37], // Dmaj7 bright warmth
+        svg: `
+          <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+            <defs>
+              <radialGradient id="flameOuter" cx="45%" cy="30%" r="72%">
+                <stop offset="0%" stop-color="#FFE066"/>
+                <stop offset="35%" stop-color="#FF7A00"/>
+                <stop offset="75%" stop-color="#E01E5A"/>
+                <stop offset="100%" stop-color="#6B0938"/>
+              </radialGradient>
+              <radialGradient id="flameMid" cx="50%" cy="40%" r="60%">
+                <stop offset="0%" stop-color="#FFF9DB"/>
+                <stop offset="45%" stop-color="#FFC700"/>
+                <stop offset="100%" stop-color="#FF4D00"/>
+              </radialGradient>
+              <radialGradient id="flameInner" cx="50%" cy="55%" r="50%">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="65%" stop-color="#FFF3BF"/>
+                <stop offset="100%" stop-color="#FFD43B"/>
+              </radialGradient>
+            </defs>
+
+            <!-- Floating 3D Heat Embers -->
+            <circle cx="96" cy="118" r="14" fill="#FFD43B" class="anim-note-1"/>
+            <circle cx="312" cy="136" r="10" fill="#FF7A00" class="anim-note-2"/>
+            <circle cx="290" cy="78" r="16" fill="#FFE066" class="anim-orbit"/>
+
+            <!-- Outer Sculpted 3D Flame Body -->
+            <g class="anim-flame-outer">
+              <path d="M206 38 C235 96, 326 142, 322 242 C318 318, 262 362, 198 362 C134 362, 78 314, 78 240 C78 178, 118 134, 136 108 C134 144, 152 162, 162 156 C148 112, 178 68, 206 38 Z"
+                    fill="url(#flameOuter)"/>
+              <!-- 3D Clay Specular Rim -->
+              <ellipse cx="148" cy="215" rx="26" ry="58" transform="rotate(-18 148 215)" fill="#FFFFFF" opacity="0.28"/>
+            </g>
+
+            <!-- Mid Volumetric Flame Layer -->
+            <g class="anim-flame-core">
+              <path d="M204 114 C224 156, 282 188, 278 256 C275 308, 240 344, 198 344 C156 344, 122 308, 122 256 C122 204, 168 164, 204 114 Z"
+                    fill="url(#flameMid)"/>
+              <!-- Inner White-Hot Core -->
+              <path d="M200 186 C214 214, 244 236, 242 276 C240 308, 222 332, 198 332 C174 332, 156 308, 156 276 C156 242, 184 218, 200 186 Z"
+                    fill="url(#flameInner)"/>
+            </g>
+
+            <!-- Cute 3D Expressive Eyes on the Flame Core -->
+            <g class="anim-blink">
+              <ellipse cx="176" cy="272" rx="10" ry="14" fill="#2B0918"/>
+              <circle cx="173" cy="267" r="4" fill="#FFFFFF"/>
+              <ellipse cx="224" cy="272" rx="10" ry="14" fill="#2B0918"/>
+              <circle cx="221" cy="267" r="4" fill="#FFFFFF"/>
+            </g>
+            <path d="M188 292 Q200 302 212 292" stroke="#2B0918" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+        `
+      },
+      {
+        name: "3D COSMIC STARBURST",
+        palette: [
+          { r: 198, g: 175, b: 235 },
+          { r: 158, g: 132, b: 222 },
+          { r: 236, g: 142, b: 188 },
+          { r: 112, g: 98, b: 196 }
+        ],
+        chord: [329.63, 415.30, 493.88, 622.25], // Emaj7 cosmic shimmer
+        svg: `
+          <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+            <defs>
+              <radialGradient id="starGold" cx="35%" cy="28%" r="72%">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="22%" stop-color="#FFF3BF"/>
+                <stop offset="55%" stop-color="#FCC419"/>
+                <stop offset="88%" stop-color="#E67700"/>
+                <stop offset="100%" stop-color="#9C36B5"/>
+              </radialGradient>
+              <linearGradient id="orbitRing" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/>
+                <stop offset="50%" stop-color="#F783AC" stop-opacity="0.5"/>
+                <stop offset="100%" stop-color="#7950F2" stop-opacity="0.1"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Back Orbiting Saturn Ring -->
+            <ellipse cx="200" cy="210" rx="164" ry="52" transform="rotate(-22 200 210)"
+                     stroke="url(#orbitRing)" stroke-width="14" stroke-linecap="round"/>
+
+            <!-- Main 3D Puffy Rounded 5-Point Star Body -->
+            <g class="anim-beat">
+              <path d="M200 48
+                       C218 48, 232 112, 248 124
+                       C264 136, 332 132, 338 150
+                       C344 168, 288 210, 282 228
+                       C276 246, 302 312, 286 324
+                       C270 336, 218 292, 200 292
+                       C182 292, 130 336, 114 324
+                       C98 312, 124 246, 118 228
+                       C112 210, 56 168, 62 150
+                       C68 132, 136 136, 152 124
+                       C168 112, 182 48, 200 48 Z"
+                    fill="url(#starGold)"/>
+              <!-- Glossy 3D Puffy Highlight -->
+              <ellipse cx="174" cy="146" rx="42" ry="22" transform="rotate(-24 174 146)" fill="#FFFFFF" opacity="0.65"/>
+            </g>
+
+            <!-- Star-Struck 3D Glossy Eyes -->
+            <g class="anim-blink">
+              <circle cx="166" cy="198" r="16" fill="#2B1142"/>
+              <circle cx="161" cy="193" r="6" fill="#FFFFFF"/>
+              <circle cx="234" cy="198" r="16" fill="#2B1142"/>
+              <circle cx="229" cy="193" r="6" fill="#FFFFFF"/>
+            </g>
+            <!-- Rosy 3D Cheeks -->
+            <ellipse cx="140" cy="216" rx="14" ry="8" fill="#F783AC" opacity="0.7"/>
+            <ellipse cx="260" cy="216" rx="14" ry="8" fill="#F783AC" opacity="0.7"/>
+            <!-- Happy Open Mouth -->
+            <path d="M182 222 Q200 246 218 222 Z" fill="#2B1142"/>
+
+            <!-- Orbiting Mini 3D Gem Stars -->
+            <g class="anim-sparkle">
+              <path d="M84 82 L92 102 L112 110 L92 118 L84 138 L76 118 L56 110 L76 102 Z" fill="#FFFFFF"/>
+              <path d="M324 268 L330 284 L346 290 L330 296 L324 312 L318 296 L302 290 L318 284 Z" fill="#FFF3BF"/>
+            </g>
+          </svg>
+        `
+      },
+      {
+        name: "3D SYNTH WAVE ROCKET",
+        palette: [
+          { r: 158, g: 210, b: 228 },
+          { r: 122, g: 168, b: 226 },
+          { r: 238, g: 148, b: 176 },
+          { r: 96, g: 128, b: 204 }
+        ],
+        chord: [349.23, 440.00, 523.25, 659.25], // Fmaj7 synth lift
+        svg: `
+          <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+            <defs>
+              <linearGradient id="rocketHull" x1="20%" y1="10%" x2="85%" y2="90%">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="55%" stop-color="#E2E8F0"/>
+                <stop offset="100%" stop-color="#94A3B8"/>
+              </linearGradient>
+              <linearGradient id="rocketNose" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FF8787"/>
+                <stop offset="50%" stop-color="#FA5252"/>
+                <stop offset="100%" stop-color="#C92A2A"/>
+              </linearGradient>
+              <radialGradient id="windowGlass" cx="35%" cy="30%" r="70%">
+                <stop offset="0%" stop-color="#E0F2FE"/>
+                <stop offset="40%" stop-color="#38BDF8"/>
+                <stop offset="100%" stop-color="#1E3A8A"/>
+              </radialGradient>
+            </defs>
+
+            <!-- Floating Space Clouds / Stars -->
+            <circle cx="82" cy="156" r="10" fill="#FFFFFF" opacity="0.85" class="anim-note-1"/>
+            <circle cx="318" cy="112" r="14" fill="#FFE066" class="anim-note-2"/>
+
+            <!-- Animated Thruster Plasma Plume -->
+            <g class="anim-thruster">
+              <path d="M162 292 C162 346, 200 378, 200 378 C200 378, 238 346, 238 292 Z" fill="#FF6B6B"/>
+              <path d="M174 292 C174 332, 200 356, 200 356 C200 356, 226 332, 226 292 Z" fill="#FFD43B"/>
+              <path d="M184 292 C184 316, 200 334, 200 334 C200 334, 216 316, 216 292 Z" fill="#FFFFFF"/>
+            </g>
+
+            <!-- Left & Right 3D Swept Fins -->
+            <path d="M132 214 C90 232, 78 278, 86 304 C108 292, 128 278, 146 272 Z" fill="url(#rocketNose)"/>
+            <path d="M268 214 C310 232, 322 278, 314 304 C292 292, 272 278, 254 272 Z" fill="url(#rocketNose)"/>
+
+            <!-- Main 3D Sculpted Rocket Fuselage -->
+            <path d="M200 44 C248 92, 272 162, 266 268 C240 284, 160 284, 134 268 C128 162, 152 92, 200 44 Z"
+                  fill="url(#rocketHull)"/>
+
+            <!-- Nose Cone -->
+            <path d="M200 44 C225 69, 244 102, 254 134 C218 144, 182 144, 146 134 C156 102, 175 69, 200 44 Z"
+                  fill="url(#rocketNose)"/>
+
+            <!-- Specular 3D Side Tube Highlight -->
+            <path d="M168 92 C156 142, 152 198, 156 254" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" opacity="0.75"/>
+
+            <!-- 3D Porthole Window -->
+            <circle cx="200" cy="194" r="38" fill="#CBD5E1"/>
+            <circle cx="200" cy="194" r="30" fill="url(#windowGlass)"/>
+            <ellipse cx="188" cy="182" rx="12" ry="7" transform="rotate(-30 188 182)" fill="#FFFFFF" opacity="0.8"/>
+
+            <!-- Thruster Nozzle Base -->
+            <rect x="156" y="272" width="88" height="22" rx="10" fill="#334155"/>
+          </svg>
+        `
+      },
+      {
+        name: "3D RUBY HEART HARMONY",
+        palette: [
+          { r: 238, g: 184, b: 198 },
+          { r: 226, g: 122, b: 152 },
+          { r: 244, g: 146, b: 118 },
+          { r: 184, g: 88, b: 128 }
+        ],
+        chord: [392.00, 493.88, 587.33, 739.99], // Gmaj7 euphoric chord
+        svg: `
+          <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+            <defs>
+              <radialGradient id="rubyHeart" cx="34%" cy="28%" r="72%">
+                <stop offset="0%" stop-color="#FFDEEB"/>
+                <stop offset="22%" stop-color="#FF6B9E"/>
+                <stop offset="60%" stop-color="#E6195E"/>
+                <stop offset="92%" stop-color="#8C0837"/>
+                <stop offset="100%" stop-color="#520320"/>
+              </radialGradient>
+              <radialGradient id="heartBounce" cx="72%" cy="80%" r="50%">
+                <stop offset="0%" stop-color="#FF922B" stop-opacity="0.75"/>
+                <stop offset="100%" stop-color="#FF922B" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="goldSpark" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="50%" stop-color="#FFE066"/>
+                <stop offset="100%" stop-color="#F59F00"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Volumetric 3D Beating Heart -->
+            <g class="anim-beat">
+              <path d="M200 344
+                       C200 344, 64 256, 64 152
+                       C64 94, 110 56, 156 56
+                       C184 56, 200 74, 200 94
+                       C200 74, 216 56, 244 56
+                       C290 56, 336 94, 336 152
+                       C336 256, 200 344, 200 344 Z"
+                    fill="url(#rubyHeart)"/>
+              <path d="M200 344
+                       C200 344, 64 256, 64 152
+                       C64 94, 110 56, 156 56
+                       C184 56, 200 74, 200 94
+                       C200 74, 216 56, 244 56
+                       C290 56, 336 94, 336 152
+                       C336 256, 200 344, 200 344 Z"
+                    fill="url(#heartBounce)"/>
+
+              <!-- Dual 3D Glossy Specular Lobes -->
+              <ellipse cx="132" cy="118" rx="38" ry="20" transform="rotate(-28 132 118)" fill="#FFFFFF" opacity="0.62"/>
+              <ellipse cx="256" cy="112" rx="24" ry="12" transform="rotate(-20 256 112)" fill="#FFFFFF" opacity="0.38"/>
+            </g>
+
+            <!-- Orbiting 3D Gold Sparkles -->
+            <g class="anim-sparkle">
+              <path d="M326 74 L336 102 L364 112 L336 122 L326 150 L316 122 L288 112 L316 102 Z" fill="url(#goldSpark)"/>
+              <path d="M76 244 L84 266 L106 274 L84 282 L76 304 L68 282 L46 274 L68 266 Z" fill="url(#goldSpark)"/>
+              <circle cx="312" cy="278" r="11" fill="#FFF3BF"/>
+            </g>
+          </svg>
+        `
+      }
+    ];
+
+    /********************************************************************
+     * 2. APPLICATION STATE
+     ********************************************************************/
+    const state = {
+      currentSlide: 0,
+      currentEmoji: 0,
+      isAnimatingText: false,
+      audioEnabled: true,
+      audioCtx: null,
+      // Normalized pointer coordinates (0..1)
+      mouseX: 0.65,
+      mouseY: 0.45,
+      targetMouseX: 0.65,
+      targetMouseY: 0.45,
+      velocityX: 0,
+      velocityY: 0,
+      hueShift: 0,
+      targetHueShift: 0,
+      // Smoothly interpolated palette colors
+      currentPalette: JSON.parse(JSON.stringify(EMOJI_3D_MODELS[0].palette)),
+      targetPalette: JSON.parse(JSON.stringify(EMOJI_3D_MODELS[0].palette))
+    };
+
+    /********************************************************************
+     * 3. WEB AUDIO API PROCEDURAL HARMONIC SYNTHESIZER
+     ********************************************************************/
+    function playSynthChord(frequencies, type = "emoji") {
+      if (!state.audioEnabled) return;
+      try {
+        if (!state.audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          state.audioCtx = new AudioContextClass();
+        }
+        if (state.audioCtx.state === "suspended") {
+          state.audioCtx.resume();
+        }
+
+        const now = state.audioCtx.currentTime;
+        frequencies.forEach((freq, idx) => {
+          const osc = state.audioCtx.createOscillator();
+          const gain = state.audioCtx.createGain();
+          const filter = state.audioCtx.createBiquadFilter();
+
+          osc.type = type === "emoji" ? "triangle" : "sine";
+          osc.frequency.setValueAtTime(freq, now + idx * 0.035);
+          osc.frequency.exponentialRampToValueAtTime(freq * 1.008, now + 0.65);
+
+          filter.type = "lowpass";
+          filter.frequency.setValueAtTime(1800, now);
+          filter.frequency.exponentialRampToValueAtTime(420, now + 0.7);
+
+          gain.gain.setValueAtTime(0.0001, now + idx * 0.035);
+          gain.gain.linearRampToValueAtTime(0.045 / frequencies.length, now + idx * 0.035 + 0.03);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.75 + idx * 0.05);
+
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(state.audioCtx.destination);
+
+          osc.start(now + idx * 0.035);
+          osc.stop(now + 0.85 + idx * 0.05);
+        });
+      } catch (e) {
+        // Ignore audio restrictions if user hasn't interacted yet
+      }
+    }
+
+    /********************************************************************
+     * 4. REAL-TIME FLUID GRADIENT CANVAS (MOUSE & TOUCH REACTIVE)
+     ********************************************************************/
+    const fluidCanvas = document.getElementById("fluid-canvas");
+    const fluidCtx = fluidCanvas.getContext("2d", { alpha: false });
+
+    // Render the fluid at reduced internal resolution; CSS scales it to the viewport.
+    // This preserves the gradient look while dramatically reducing canvas pixel work.
+    const FLUID_RENDER_SCALE = 0.55;
+    let fluidWidth = 0;
+    let fluidHeight = 0;
+
+    function resizeFluidCanvas() {
+      fluidWidth = Math.max(1, Math.round(window.innerWidth * FLUID_RENDER_SCALE));
+      fluidHeight = Math.max(1, Math.round(window.innerHeight * FLUID_RENDER_SCALE));
+      fluidCanvas.width = fluidWidth;
+      fluidCanvas.height = fluidHeight;
+    }
+
+    function lerp(a, b, t) {
+      return a + (b - a) * t;
+    }
+
+    // Shift RGB by dynamic cursor hue offset so dragging cursor morphs colors vividly
+    function shiftColorRGB(rgb, deg) {
+      const rad = (deg * Math.PI) / 180;
+      const cosA = Math.cos(rad);
+      const sinA = Math.sin(rad);
+      const r = rgb.r, g = rgb.g, b = rgb.b;
+
+      const nr = r * (0.299 + 0.701 * cosA + 0.168 * sinA) +
+                 g * (0.587 - 0.587 * cosA + 0.330 * sinA) +
+                 b * (0.114 - 0.114 * cosA - 0.497 * sinA);
+      const ng = r * (0.299 - 0.299 * cosA - 0.328 * sinA) +
+                 g * (0.587 + 0.413 * cosA + 0.035 * sinA) +
+                 b * (0.114 - 0.114 * cosA + 0.292 * sinA);
+      const nb = r * (0.299 - 0.300 * cosA + 1.250 * sinA) +
+                 g * (0.587 - 0.588 * cosA - 1.050 * sinA) +
+                 b * (0.114 + 0.886 * cosA - 0.203 * sinA);
+
+      return {
+        r: Math.min(255, Math.max(60, Math.round(nr))),
+        g: Math.min(255, Math.max(50, Math.round(ng))),
+        b: Math.min(255, Math.max(70, Math.round(nb)))
+      };
+    }
+
+    function renderFluidBackground(time) {
+      const t = time * 0.0006;
+
+      // Smoothly interpolate current palette toward active emoji palette
+      for (let i = 0; i < 4; i++) {
+        state.currentPalette[i].r = lerp(state.currentPalette[i].r, state.targetPalette[i].r, 0.04);
+        state.currentPalette[i].g = lerp(state.currentPalette[i].g, state.targetPalette[i].g, 0.04);
+        state.currentPalette[i].b = lerp(state.currentPalette[i].b, state.targetPalette[i].b, 0.04);
+      }
+
+      // Compute dynamic hue angle based on cursor X/Y position and movement speed
+      const cursorAngleOffset =
+        (state.mouseX - 0.5) * 95 +
+        (state.mouseY - 0.5) * 65 +
+        state.hueShift;
+
+      const c0 = shiftColorRGB(state.currentPalette[0], cursorAngleOffset * 0.6);
+      const c1 = shiftColorRGB(state.currentPalette[1], cursorAngleOffset);
+      const c2 = shiftColorRGB(state.currentPalette[2], -cursorAngleOffset * 1.15);
+      const c3 = shiftColorRGB(state.currentPalette[3], cursorAngleOffset * 0.85);
+
+      // 1. Base vertical linear gradient (Matches the top-light to bottom-warm pink aesthetic of screenshot)
+      const baseGrad = fluidCtx.createLinearGradient(0, 0, fluidWidth * 0.35, fluidHeight);
+      baseGrad.addColorStop(0, `rgb(${c0.r}, ${c0.g}, ${c0.b})`);
+      baseGrad.addColorStop(0.52, `rgb(${c1.r}, ${c1.g}, ${c1.b})`);
+      baseGrad.addColorStop(1, `rgb(${c3.r}, ${c3.g}, ${c3.b})`);
+      fluidCtx.fillStyle = baseGrad;
+      fluidCtx.fillRect(0, 0, fluidWidth, fluidHeight);
+
+      // 2. Interactive Primary Cursor Fluid Orb
+      const cursorPxX = state.mouseX * fluidWidth;
+      const cursorPxY = state.mouseY * fluidHeight;
+      const radius1 = Math.max(fluidWidth, fluidHeight) * 0.62;
+
+      const orb1 = fluidCtx.createRadialGradient(cursorPxX, cursorPxY, 10, cursorPxX, cursorPxY, radius1);
+      orb1.addColorStop(0, `rgba(${c2.r}, ${c2.g}, ${c2.b}, 0.72)`);
+      orb1.addColorStop(0.45, `rgba(${c1.r}, ${c1.g}, ${c1.b}, 0.35)`);
+      orb1.addColorStop(1, `rgba(${c1.r}, ${c1.g}, ${c1.b}, 0)`);
+      fluidCtx.fillStyle = orb1;
+      fluidCtx.fillRect(0, 0, fluidWidth, fluidHeight);
+
+      // 3. Secondary Counter-Orbiting Autonomous Fluid Blob
+      const blob2X = fluidWidth * (0.5 + 0.36 * Math.cos(t * 1.3 - state.mouseX * 2.5));
+      const blob2Y = fluidHeight * (0.5 + 0.34 * Math.sin(t * 1.1 + state.mouseY * 2.5));
+      const radius2 = Math.max(fluidWidth, fluidHeight) * 0.55;
+
+      const orb2 = fluidCtx.createRadialGradient(blob2X, blob2Y, 10, blob2X, blob2Y, radius2);
+      orb2.addColorStop(0, `rgba(${c0.r}, ${c0.g}, ${c0.b}, 0.68)`);
+      orb2.addColorStop(0.5, `rgba(${c3.r}, ${c3.g}, ${c3.b}, 0.25)`);
+      orb2.addColorStop(1, `rgba(${c3.r}, ${c3.g}, ${c3.b}, 0)`);
+      fluidCtx.fillStyle = orb2;
+      fluidCtx.fillRect(0, 0, fluidWidth, fluidHeight);
+
+      // 4. Tertiary Velocity-Stretched Glow behind the 3D Emoji
+      const emojiZoneX = fluidWidth * 0.72 + (state.mouseX - 0.5) * -90;
+      const emojiZoneY = fluidHeight * 0.52 + (state.mouseY - 0.5) * -90;
+      const radius3 = Math.max(fluidWidth, fluidHeight) * 0.42;
+
+      const orb3 = fluidCtx.createRadialGradient(emojiZoneX, emojiZoneY, 5, emojiZoneX, emojiZoneY, radius3);
+      orb3.addColorStop(0, `rgba(255, 235, 225, 0.36)`);
+      orb3.addColorStop(1, `rgba(255, 235, 225, 0)`);
+      fluidCtx.fillStyle = orb3;
+      fluidCtx.fillRect(0, 0, fluidWidth, fluidHeight);
+    }
+
+    /********************************************************************
+     * 5. PARTICLE SHOCKWAVE & CURSOR TRAIL FX ENGINE
+     ********************************************************************/
+    const fxCanvas = document.getElementById("fx-canvas");
+    const fxCtx = fxCanvas.getContext("2d");
+    const particles = [];
+    const shockwaves = [];
+
+    function resizeFxCanvas() {
+      fxCanvas.width = window.innerWidth;
+      fxCanvas.height = window.innerHeight;
+    }
+
+    function spawnEmojiBurst(x, y) {
+      // Shockwave ring
+      shockwaves.push({
+        x,
+        y,
+        radius: 20,
+        maxRadius: 290,
+        alpha: 0.85
+      });
+
+      // 42 3D-style confetti / spark particles
+      const colors = ["#FFFFFF", "#FFE066", "#FF7A45", "#F783AC", "#74C0FC"];
+      for (let i = 0; i < 42; i++) {
+        const angle = (Math.PI * 2 * i) / 42 + (Math.random() - 0.5) * 0.25;
+        const speed = 4 + Math.random() * 11;
+        particles.push({
+          x,
+          y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 2,
+          size: Math.random() * 7 + 3,
+          alpha: 1,
+          decay: 0.014 + Math.random() * 0.012,
+          color: colors[i % colors.length]
+        });
+      }
+    }
+
+    function renderFxCanvas() {
+      // No particle effects are visible most of the time; skip unnecessary full-canvas clears.
+      if (particles.length === 0 && shockwaves.length === 0) return;
+      fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+
+      // Render Shockwaves
+      for (let i = shockwaves.length - 1; i >= 0; i--) {
+        const sw = shockwaves[i];
+        sw.radius += (sw.maxRadius - sw.radius) * 0.12;
+        sw.alpha *= 0.91;
+
+        fxCtx.save();
+        fxCtx.beginPath();
+        fxCtx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
+        fxCtx.strokeStyle = `rgba(255, 255, 255, ${sw.alpha})`;
+        fxCtx.lineWidth = 2.5;
+        fxCtx.stroke();
+        fxCtx.restore();
+
+        if (sw.alpha < 0.02) shockwaves.splice(i, 1);
+      }
+
+      // Render Particles
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vx *= 0.96;
+        p.vy *= 0.96;
+        p.alpha -= p.decay;
+
+        if (p.alpha <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        fxCtx.save();
+        fxCtx.globalAlpha = Math.max(0, p.alpha);
+        fxCtx.fillStyle = p.color;
+        fxCtx.beginPath();
+        fxCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        fxCtx.fill();
+        fxCtx.restore();
+      }
+    }
+
+    /********************************************************************
+     * 6. KINETIC 3D TEXT RENDERER (3 VARIATIONS + UNDERLINED LINK)
+     ********************************************************************/
+    const headlineContainer = document.getElementById("headline-container");
+    const slideCounterBadge = document.getElementById("slide-counter-badge");
+    const bottomActionLabel = document.getElementById("bottom-action-label");
+
+    function renderSlideText(slideIndex, animate = true) {
+      const slide = TEXT_SLIDES[slideIndex];
+      const words = slide.mainText.split(" ");
+
+      // Update right rail dots & badges
+      for (let i = 0; i < 3; i++) {
+        const dot = document.getElementById(`rail-dot-${i}`);
+        if (dot) dot.classList.toggle("active", i === slideIndex);
+      }
+      slideCounterBadge.textContent = `MESSAGE 0${slideIndex + 1} / 03 — MOVE CURSOR OR TOUCH`;
+      bottomActionLabel.textContent = `Switch text (${slideIndex + 1}/3)`;
+
+      // Build word spans for the primary white statement
+      let html = "";
+      words.forEach((w, idx) => {
+        const delay = animate ? (idx * 0.032).toFixed(3) : 0;
+        const animClass = animate ? "animate-word-in" : "";
+        html += `
+          <span class="word-wrap">
+            <span class="word-inner text-white ${animClass}" style="animation-delay: ${delay}s">${w}</span>
+          </span>`;
+      });
+
+      // Build the inline underlined anchor to https://ttco.vercel.app/freebies-update.html
+      const ctaDelay = animate ? (words.length * 0.032 + 0.06).toFixed(3) : 0;
+      const ctaAnimClass = animate ? "animate-word-in" : "";
+
+      html += `
+        <span class="word-wrap">
+          <a href="${FREEBIES_URL}"
+             target="_blank"
+             rel="noopener noreferrer"
+             data-cursor="link"
+             data-cursor-text="OPEN LINK"
+             class="word-inner freebies-cta-link ${ctaAnimClass}"
+             style="animation-delay: ${ctaDelay}s">
+            ${slide.ctaText}<span class="freebies-cta-arrow">↗</span>
+          </a>
+        </span>
+      `;
+
+      headlineContainer.innerHTML = html;
+    }
+
+    function switchNextText(targetIndex = null) {
+      if (state.isAnimatingText) return;
+      const nextIdx = targetIndex !== null ? targetIndex : (state.currentSlide + 1) % TEXT_SLIDES.length;
+      if (nextIdx === state.currentSlide) return;
+
+      state.isAnimatingText = true;
+
+      // Play subtle harmonic chime
+      playSynthChord([440, 554.37, 659.25], "text");
+
+      // Shift fluid gradient hue slightly on text change
+      state.targetHueShift += 32;
+
+      // Animate current words out
+      const currentInners = headlineContainer.querySelectorAll(".word-inner");
+      currentInners.forEach((el, idx) => {
+        el.style.animationDelay = `${(idx * 0.012).toFixed(3)}s`;
+        el.classList.remove("animate-word-in");
+        el.classList.add("animate-word-out");
+      });
+
+      setTimeout(() => {
+        state.currentSlide = nextIdx;
+        renderSlideText(state.currentSlide, true);
+        setTimeout(() => {
+          state.isAnimatingText = false;
+        }, 550);
+      }, 320);
+    }
+
+    /********************************************************************
+     * 7. 5 LIVE-ANIMATED 3D EMOJIS (CLICK TO MORPH)
+     ********************************************************************/
+    const emojiTrigger = document.getElementById("emoji-3d-trigger");
+    const emojiSvgMount = document.getElementById("emoji-svg-mount");
+    const activeEmojiName = document.getElementById("active-emoji-name");
+    const emojiIndexBadge = document.getElementById("emoji-index-badge");
+
+    function mountEmojiModel(index, withPop = false) {
+      const model = EMOJI_3D_MODELS[index];
+      state.targetPalette = JSON.parse(JSON.stringify(model.palette));
+
+      if (activeEmojiName) {
+        activeEmojiName.textContent = `${model.name} (${index + 1}/5)`;
+      }
+      if (emojiIndexBadge) {
+        emojiIndexBadge.textContent = `${index + 1}/5`;
+      }
+
+      // Update mini rail dots
+      document.querySelectorAll("[data-emoji-dot]").forEach((dot, idx) => {
+        if (idx === index) {
+          dot.className = "emoji-rail-mini w-2 h-2 rounded-full bg-white shadow transition-all duration-300";
+        } else {
+          dot.className = "emoji-rail-mini w-1 h-1 rounded-full bg-white/40 transition-all duration-300";
+        }
+      });
+
+      if (withPop) {
+        emojiSvgMount.classList.remove("emoji-morphing");
+        void emojiSvgMount.offsetWidth; // trigger reflow
+        emojiSvgMount.classList.add("emoji-morphing");
+
+        setTimeout(() => {
+          emojiSvgMount.innerHTML = model.svg;
+        }, 220);
+      } else {
+        emojiSvgMount.innerHTML = model.svg;
+      }
+    }
+
+    function cycleNextEmoji(event) {
+      state.currentEmoji = (state.currentEmoji + 1) % EMOJI_3D_MODELS.length;
+      const model = EMOJI_3D_MODELS[state.currentEmoji];
+
+      // Determine center of emoji for particle burst
+      const rect = emojiTrigger.getBoundingClientRect();
+      const burstX = event?.clientX || (rect.left + rect.width / 2);
+      const burstY = event?.clientY || (rect.top + rect.height / 2);
+
+      spawnEmojiBurst(burstX, burstY);
+      playSynthChord(model.chord, "emoji");
+      mountEmojiModel(state.currentEmoji, true);
+    }
+
+    /********************************************************************
+     * 8. UNIFIED POINTER / TOUCH FLUID & 3D PARALLAX CONTROLLER
+     ********************************************************************/
+    function handlePointerMove(clientX, clientY) {
+      const prevX = state.targetMouseX * window.innerWidth;
+      const prevY = state.targetMouseY * window.innerHeight;
+      const vx = clientX - prevX;
+      const vy = clientY - prevY;
+
+      state.targetMouseX = Math.min(1, Math.max(0, clientX / window.innerWidth));
+      state.targetMouseY = Math.min(1, Math.max(0, clientY / window.innerHeight));
+
+      // Accumulate subtle hue velocity so swiping/moving cursor shifts gradient colors dynamically
+      const speed = Math.hypot(vx, vy);
+      if (speed > 2) {
+        state.targetHueShift = (state.targetHueShift + speed * 0.12) % 360;
+      }
+
+      // Compute 3D Tilt & Specular Glare for the 3D Emoji
+      const tiltX = ((state.targetMouseX - 0.5) * 34).toFixed(2);
+      const tiltY = ((0.5 - state.targetMouseY) * 30).toFixed(2);
+      const glareX = (25 + state.targetMouseX * 55).toFixed(1);
+      const glareY = (15 + state.targetMouseY * 55).toFixed(1);
+
+      document.documentElement.style.setProperty("--tilt-x", `${tiltX}deg`);
+      document.documentElement.style.setProperty("--tilt-y", `${tiltY}deg`);
+      document.documentElement.style.setProperty("--glare-x", `${glareX}%`);
+      document.documentElement.style.setProperty("--glare-y", `${glareY}%`);
+    }
+
+    window.addEventListener("mousemove", (e) => {
+      handlePointerMove(e.clientX, e.clientY);
+    }, { passive: true });
+
+    window.addEventListener("touchstart", (e) => {
+      if (e.touches.length > 0) {
+        const t = e.touches[0];
+        handlePointerMove(t.clientX, t.clientY);
+      }
+    }, { passive: true });
+
+    window.addEventListener("touchmove", (e) => {
+      if (e.touches.length > 0) {
+        const t = e.touches[0];
+        handlePointerMove(t.clientX, t.clientY);
+      }
+    }, { passive: true });
+
+    /********************************************************************
+     * 9. EVENT LISTENERS (CLICKS, WHEEL, KEYBOARD, HUD TOAST)
+     ********************************************************************/
+    emojiTrigger.addEventListener("click", (e) => {
+      cycleNextEmoji(e);
+    });
+
+    emojiTrigger.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        cycleNextEmoji();
+      }
+    });
+
+    document.getElementById("next-text-btn").addEventListener("click", () => {
+      switchNextText();
+    });
+
+    document.querySelectorAll(".right-rail-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const idx = parseInt(btn.getAttribute("data-slide"), 10);
+        switchNextText(idx);
+      });
+    });
+
+    // Scroll wheel to switch text slides like the "Desliza" reference
+    let wheelCooldown = false;
+    window.addEventListener("wheel", (e) => {
+      if (wheelCooldown || Math.abs(e.deltaY) < 25) return;
+      wheelCooldown = true;
+      if (e.deltaY > 0) {
+        switchNextText((state.currentSlide + 1) % TEXT_SLIDES.length);
+      } else {
+        switchNextText((state.currentSlide - 1 + TEXT_SLIDES.length) % TEXT_SLIDES.length);
+      }
+      setTimeout(() => { wheelCooldown = false; }, 850);
+    }, { passive: true });
+
+    window.addEventListener("resize", () => {
+      resizeFxCanvas();
+    });
+
+    /********************************************************************
+     * 10. MAIN 60FPS ANIMATION LOOP
+     ********************************************************************/
+    let lastRenderTime = 0;
+    const FRAME_INTERVAL = 1000 / 30; // 30fps is sufficient for the soft fluid motion.
+
+    function animateLoop(timestamp) {
+      requestAnimationFrame(animateLoop);
+      if (document.hidden) return;
+      if (timestamp - lastRenderTime < FRAME_INTERVAL) return;
+      lastRenderTime = timestamp;
+
+      // Smooth lerp for fluid cursor & hue
+      state.mouseX = lerp(state.mouseX, state.targetMouseX, 0.08);
+      state.mouseY = lerp(state.mouseY, state.targetMouseY, 0.08);
+      state.hueShift = lerp(state.hueShift, state.targetHueShift, 0.05);
+
+      // Fluid gradient intentionally disabled; the background is pure black.
+      renderFxCanvas();
+    }
+
+    // Initialize everything on window load
+    window.onload = function () {
+      resizeFxCanvas();
+      mountEmojiModel(0, false);
+      renderSlideText(0, true);
+      requestAnimationFrame(animateLoop);
+    };
+  </script>
+</body>
+</html>
