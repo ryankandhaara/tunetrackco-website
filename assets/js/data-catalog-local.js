@@ -140,7 +140,7 @@ const products = [
     "price": "120.000",
     "category": [
       "praise",
-      "freebies"
+      "worship"
     ],
     "image": "assets/thumbnail/this is living.jpg",
     "link": "https://lynk.id/gudangsequencer/zy845zp59d8g",
