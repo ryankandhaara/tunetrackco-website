@@ -186,6 +186,7 @@ const products = [
     "image": "assets/thumbnail/015_Lebih-dari-Pemenang-2026.jpg",
     "freeLink": "https://ttco.vercel.app/login-page.html",
     "youtube": "https://www.youtube.com/watch?v=9rxBhGfH_ss",
+    "drive-link": "https://drive.google.com/file/d/1vneBVHMcvSUOwhDZkzar3LJkewxCmoHu/view?usp=sharing",
     "imageCredit": "Assets of Symphony Worship",
     "exclusive": false
   },
