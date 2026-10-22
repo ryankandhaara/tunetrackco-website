@@ -8,6 +8,7 @@ const products = [
       "freebies"
     ],
     "image": "assets/images/thumbnail/O-Come-all-Ye-Faithful_unknown-artist_549_thumb.jpg",
+    "freeLink": "https://ttco.vercel.app/login-page.html",
     "link": "https://lynk.id/gudangsequencer/e8x1evqx524w",
     "gumroadLink": "https://voltdsecretvault.gumroad.com/l/hitlqw",
     "youtube": "https://youtu.be/mQgRyzrFc-A",
